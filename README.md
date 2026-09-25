@@ -2,10 +2,10 @@
 
 > Gamified, privacy-first math learning platform tailored for Swiss Secondary School (Sekundarstufe I, Niveau P). Built with interactive SVG visual models, live LaTeX rendering, custom touch keyboard, and local-first progress tracking.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-F20587?style=flat-square&logo=github)](https://flx-xlf.github.io/LottaMATH-demo/)
-[![Bundle Size](https://img.shields.io/badge/Bundle-<250_kB_gzipped-black?style=flat-square)](https://flx-xlf.github.io/LottaMATH-demo/)
-[![PWA](https://img.shields.io/badge/PWA-Installable-blue?style=flat-square)](https://flx-xlf.github.io/LottaMATH-demo/)
-[![Curriculum](https://img.shields.io/badge/Lehrplan-21_Sekundarstufe_I-10b981?style=flat-square)](https://flx-xlf.github.io/LottaMATH-demo/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-F20587?style=flat-square&logo=github)](https://flx-xlf.github.io/LottaMATH-DEMO/)
+[![Bundle Size](https://img.shields.io/badge/Bundle-<250_kB_gzipped-black?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
+[![PWA](https://img.shields.io/badge/PWA-Installable-blue?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
+[![Curriculum](https://img.shields.io/badge/Lehrplan-21_Sekundarstufe_I-10b981?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](LICENSE)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Tip_Me-FF5E5B?style=flat-square&logo=kofi)](https://ko-fi.com/flxxlf)
 
@@ -14,7 +14,7 @@
 ## 🧭 Live Demo
 
 Explore the fully interactive, client-side demo directly in your browser:  
-👉 **[https://flx-xlf.github.io/LottaMATH-demo/](https://flx-xlf.github.io/LottaMATH-demo/)**
+👉 **[https://flx-xlf.github.io/LottaMATH-DEMO/](https://flx-xlf.github.io/LottaMATH-DEMO/)**
 
 * **Pre-seeded Demo Profiles:**
   * 🐱 **Lotta:** Level 4 (*Algebra-Talent*), 680 XP, 5-day streak, Worlds 1–3 completed with 3 stars, and 2 active items in the *Fehler-Schmiede*.
@@ -81,8 +81,8 @@ Explore the fully interactive, client-side demo directly in your browser:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Flx-xlF/LottaMATH-demo.git
-cd LottaMATH-demo
+git clone https://github.com/Flx-xlF/LottaMATH-DEMO.git
+cd LottaMATH-DEMO
 
 # 2. Install dependencies
 npm install
