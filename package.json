@@ -1,0 +1,20 @@
+{
+  "name": "lottamath-demo",
+  "version": "1.0.0",
+  "description": "Interactive Demo of LottaMATH — Gamified Math Learning Platform for Swiss Secondary School (Sekundarstufe I)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "animejs": "^4.5.0",
+    "katex": "^0.16.21",
+    "sortablejs": "^1.15.6"
+  },
+  "devDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.63.3",
+    "vite": "^6.3.5"
+  }
+}
