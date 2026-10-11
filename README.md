@@ -24,6 +24,52 @@ Explore the fully interactive, client-side demo directly in your browser:
 
 ---
 
+## 📐 Autonomous Chapter Generation: The "Golden Rule Set"
+
+A central architectural feature of **LottaMATH** is its pedagogical compilation pipeline, governed by a strict **"Golden Rule Set"**.
+
+Instead of hand-coding every individual exercise, UI interaction, and diagram for a new syllabus topic, the pipeline accepts raw curriculum material and automatically synthesizes cohesive, classroom-ready learning chapters.
+
+```
+  ┌────────────────────────────────┐         ┌───────────────────────────────┐
+  │        Curriculum Input        │         │        LottaMATH Engine       │
+  │ • Learning objectives (Ziele)  │ ──────> │      [ Golden Rule Set ]      │
+  │ • Theoretical explanations     │         │ • Pedagogical structure       │
+  │ • Example tasks & calculations │         │ • Cognitive load constraints  │
+  └────────────────────────────────┘         └───────────────┬───────────────┘
+                                                             │
+                                                             ▼
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │                         Generated Learning World                         │
+  │  • Real-world intro scenarios     • Vector SVG sketches & area models    │
+  │  • Multi-modal question types     • 3-tier hints & mistake explanations  │
+  │  • Calibrated mental math numbers • Formatted KaTeX mathematical terms   │
+  └──────────────────────────────────────────────────────────────────────────┘
+```
+
+### 📥 Inputs
+The pipeline works with standard curriculum resources:
+* **Learning Objectives (*Lernziele*):** Standard competencies (such as Swiss *Lehrplan 21*, Sekundarstufe I).
+* **Theory & Concepts:** Explanations, definitions, and formula derivations.
+* **Sample Calculations & Tasks:** Representative exercises, parameter sets, and step sequences.
+
+### ⚙️ What the System Generates
+Governed by the rule set, the pipeline translates the input into complete interactive chapters:
+
+* 📖 **Contextual Introductions:** Real-world scenarios grounded in everyday student experiences (e.g., game scoring, mobile subscriptions, discounts, room planning) that frame the concept before introducing formal notation.
+* 📐 **Visual Models & SVG Sketches:** Programmatically generated geometric sketches, area models (*Rechteckmodelle*), coordinate grids, and visual proofs—with consistent dimensions and anti-spoiler labeling.
+* 🧩 **Differentiated Question Sets:** A balanced mix of question formats (Multiple Choice, Touch Keypad Fill-in, Drag-to-Group categorization, Drag-to-Order step sequencing, and Multi-Step Builders) while preventing near-duplicate clones.
+* 🧠 **Calibrated Mental Math:** Values and intermediate steps are constrained to numbers that are straightforward to calculate mentally, keeping the student's working memory focused on algebraic and geometric structure.
+* 🪜 **Scaffolded 3-Tier Hints:** Progressive guidance (conceptual prompt $\rightarrow$ methodological clue $\rightarrow$ complete solution path), accompanied by explanations of common pitfalls (*Fehler-Fallen*).
+* 🛡️ **Anti-Spoiler Integrity:** Defensive pre-scrambling of choices, secured placeholders, and runtime shuffling to prevent answer guessing based on UI layout.
+* ✍️ **Standard KaTeX Typesetting:** Clean typography for all mathematical terms, fractions, exponents, and Swiss notation conventions.
+* 🎯 **Review Cards & Exam Pools:** High-yield summary cards and randomized, timed mock exam pools aligned with Swiss grading scales (1.0–6.0).
+
+> [!NOTE]
+> **Curriculum to Code:** The rule set standardizes quality across topics, translating raw teaching goals into consistent, interactive web exercises without manual per-question scripting.
+
+---
+
 ## ✨ Key Features
 
 ### 1. 📐 Aligned with Swiss Curriculum (Lehrplan 21 / Sekundarstufe I)
