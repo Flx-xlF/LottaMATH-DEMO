@@ -45,6 +45,8 @@ export function seedDemoData() {
     },
   ];
   localStorage.setItem(PROFILES_KEY, JSON.stringify(demoProfiles));
+  localStorage.setItem("lottamath_recovery_code_demo-lotta", "LOTA-9K2P");
+  localStorage.setItem("lottamath_recovery_code_demo-nico", "NICO-7M4X");
 
   // Seed Lotta: Level 4, 760 XP, 5-day streak, Worlds 1-2 + World 9 started, 2 mistakes in vault
   const lottaState = {

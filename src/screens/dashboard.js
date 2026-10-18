@@ -14,6 +14,8 @@ import { renderCatMascot } from '../components/catMascot.js';
 import { getRandomMessage } from '../data/catMessages.js';
 import { getActiveProfile, getFriendlyPlayerName } from '../engine/profileManager.js';
 import { isPremium } from '../engine/subscriptionManager.js';
+import { openSyncAndLinkModal } from '../components/profilePicker.js';
+import { ensureLocalRecoveryCode } from '../engine/syncService.js';
 
 /**
  * Simple HTML escape to prevent XSS
@@ -45,6 +47,7 @@ export function renderDashboard(container, gameState, callbacks = {}) {
   const playerName = activeProfile ? activeProfile.nickname : 'du';
   const userIsPremium = isPremium(subscriptionStatus);
   const isSubscribed = Boolean(subscriptionStatus && subscriptionStatus.valid);
+  const activeRecoveryCode = activeProfile ? ensureLocalRecoveryCode(activeProfile.id) : null;
 
   const screenEl = document.createElement('div');
   screenEl.className = 'screen dashboard-screen flex-col gap-xl';
@@ -71,8 +74,12 @@ export function renderDashboard(container, gameState, callbacks = {}) {
         <div class="dropdown-header">
           <div class="dropdown-name">${activeProfile ? escapeHtml(activeProfile.nickname) : 'Gast'}</div>
           ${isSubscribed ? '<div class="premium-badge">⭐ Premium</div>' : ''}
+          ${activeRecoveryCode ? `<div class="dropdown-sync-code text-muted" style="font-size: 0.82rem; font-family: 'SF Mono', monospace; letter-spacing: 0.06em; margin-top: 4px; color: var(--color-primary-light);">🔑 ${escapeHtml(activeRecoveryCode)}</div>` : ''}
         </div>
         <div class="dropdown-divider"></div>
+        <button type="button" class="dropdown-item" id="dropdown-sync-btn">
+          🔗 Sync-Code & Geräte-Sync
+        </button>
         <button type="button" class="dropdown-item" id="dropdown-switch-btn">
           👤 Profil wechseln
         </button>
@@ -160,6 +167,7 @@ export function renderDashboard(container, gameState, callbacks = {}) {
       if (paretoTextEl) {
         paretoTextEl.innerHTML = currentSubject.paretoText;
       }
+      renderVaultCard();
       renderTopicCards();
     });
     subjectBtns.push({ b: btn, id: subj.id });
@@ -188,65 +196,70 @@ export function renderDashboard(container, gameState, callbacks = {}) {
   screenEl.appendChild(paretoCard);
   const paretoTextEl = paretoCard.querySelector('#dashboard-pareto-text');
 
-  // 3.6. Fehler-Schmiede Card (Lottas Mistake Vault)
-  const mistakeCount = getMistakeCount(gameState);
+  // 3.6. Fehler-Schmiede Card (Scoped to Active Subject)
   const vaultCard = document.createElement('div');
   vaultCard.className = 'dashboard__vault-card glass-card flex-col gap-sm';
-  vaultCard.style.borderLeft = mistakeCount > 0 ? '4px solid var(--color-error)' : '4px solid var(--color-success)';
-  vaultCard.style.background = mistakeCount > 0 ? 'rgba(255, 68, 68, 0.06)' : 'rgba(0, 204, 136, 0.06)';
-  vaultCard.style.padding = '1rem 1.15rem';
-  vaultCard.style.borderRadius = 'var(--radius-md, 12px)';
-
-  if (mistakeCount > 0) {
-    vaultCard.innerHTML = `
-      <div class="flex-between" style="align-items: center;">
-        <div class="flex-row gap-sm" style="align-items: center;">
-          <span style="font-size: 1.4rem;">🛠️</span>
-          <span style="font-weight: 700; font-size: 1rem; color: var(--color-text);">
-            Fehler-Schmiede
-          </span>
-        </div>
-        <span class="badge" style="background: var(--color-error); color: #fff; font-weight: 700; font-size: 0.8rem; padding: 3px 8px; border-radius: 12px;">
-          ${mistakeCount} ${mistakeCount === 1 ? 'Knacknuss' : 'Knacknüsse'}
-        </span>
-      </div>
-      <div class="text-muted" style="font-size: 0.85rem; line-height: 1.45;">
-        Hier sammeln sich knifflige Aufgaben, die nicht auf Anhieb geklappt haben. Trainiere sie gezielt, um sie endgültig zu meistern!
-      </div>
-      <button type="button" class="btn btn--primary" id="dashboard-vault-btn" style="margin-top: 0.25rem; font-size: 0.95rem; min-height: 42px;">
-        Knacknüsse trainieren 💪
-      </button>
-    `;
-  } else {
-    vaultCard.innerHTML = `
-      <div class="flex-between" style="align-items: center;">
-        <div class="flex-row gap-sm" style="align-items: center;">
-          <span style="font-size: 1.4rem;">🌟</span>
-          <span style="font-weight: 700; font-size: 1rem; color: var(--color-text);">
-            Fehler-Schmiede: Alles gemeistert!
-          </span>
-        </div>
-        <span class="badge" style="background: var(--color-success); color: #fff; font-weight: 700; font-size: 0.8rem; padding: 3px 8px; border-radius: 12px;">
-          0 offen ✓
-        </span>
-      </div>
-      <div class="text-muted" style="font-size: 0.85rem; line-height: 1.45;">
-        Saubere Arbeit${getFriendlyPlayerName(playerName) ? ', ' + escapeHtml(getFriendlyPlayerName(playerName)) : ''}! Du hast momentan keine offenen Knacknüsse im Speicher. Weiter so! 🐾
-      </div>
-    `;
-  }
   screenEl.appendChild(vaultCard);
 
-  const vaultBtn = vaultCard.querySelector('#dashboard-vault-btn');
-  if (vaultBtn) {
-    vaultBtn.addEventListener('click', () => {
-      if (!userIsPremium) {
-        onUpgrade();
-      } else {
-        onVaultMode();
-      }
-    });
+  function renderVaultCard() {
+    const mistakeCount = getMistakeCount(gameState, activeSubjectId);
+    vaultCard.style.borderLeft = mistakeCount > 0 ? '4px solid var(--color-error)' : '4px solid var(--color-success)';
+    vaultCard.style.background = mistakeCount > 0 ? 'rgba(255, 68, 68, 0.06)' : 'rgba(0, 204, 136, 0.06)';
+    vaultCard.style.padding = '1rem 1.15rem';
+    vaultCard.style.borderRadius = 'var(--radius-md, 12px)';
+
+    if (mistakeCount > 0) {
+      vaultCard.innerHTML = `
+        <div class="flex-between" style="align-items: center;">
+          <div class="flex-row gap-sm" style="align-items: center;">
+            <span style="font-size: 1.4rem;">🛠️</span>
+            <span style="font-weight: 700; font-size: 1rem; color: var(--color-text);">
+              Fehler-Schmiede · ${escapeHtml(currentSubject.name)}
+            </span>
+          </div>
+          <span class="badge" style="background: var(--color-error); color: #fff; font-weight: 700; font-size: 0.8rem; padding: 3px 8px; border-radius: 12px;">
+            ${mistakeCount} ${mistakeCount === 1 ? 'Knacknuss' : 'Knacknüsse'}
+          </span>
+        </div>
+        <div class="text-muted" style="font-size: 0.85rem; line-height: 1.45;">
+          Hier sammeln sich knifflige Aufgaben aus ${escapeHtml(currentSubject.name)}, die nicht auf Anhieb geklappt haben. Trainiere sie gezielt, um sie endgültig zu meistern!
+        </div>
+        <button type="button" class="btn btn--primary" id="dashboard-vault-btn" style="margin-top: 0.25rem; font-size: 0.95rem; min-height: 42px;">
+          Knacknüsse trainieren 💪
+        </button>
+      `;
+    } else {
+      vaultCard.innerHTML = `
+        <div class="flex-between" style="align-items: center;">
+          <div class="flex-row gap-sm" style="align-items: center;">
+            <span style="font-size: 1.4rem;">🌟</span>
+            <span style="font-weight: 700; font-size: 1rem; color: var(--color-text);">
+              Fehler-Schmiede · ${escapeHtml(currentSubject.name)}
+            </span>
+          </div>
+          <span class="badge" style="background: var(--color-success); color: #fff; font-weight: 700; font-size: 0.8rem; padding: 3px 8px; border-radius: 12px;">
+            0 offen ✓
+          </span>
+        </div>
+        <div class="text-muted" style="font-size: 0.85rem; line-height: 1.45;">
+          Saubere Arbeit${getFriendlyPlayerName(playerName) ? ', ' + escapeHtml(getFriendlyPlayerName(playerName)) : ''}! Du hast momentan keine offenen Knacknüsse in ${escapeHtml(currentSubject.name)}. Weiter so! 🐾
+        </div>
+      `;
+    }
+
+    const vaultBtn = vaultCard.querySelector('#dashboard-vault-btn');
+    if (vaultBtn) {
+      vaultBtn.addEventListener('click', () => {
+        if (!userIsPremium) {
+          onUpgrade();
+        } else {
+          onVaultMode();
+        }
+      });
+    }
   }
+
+  renderVaultCard();
 
   // 4. Topic Accordion Section (Dynamic by Active Subject)
   const topicsSection = document.createElement('div');
@@ -484,6 +497,20 @@ export function renderDashboard(container, gameState, callbacks = {}) {
   document.addEventListener('click', closeDropdown);
 
   // Dropdown Action Listeners
+  const syncBtn = dropdown.querySelector('#dropdown-sync-btn');
+  if (syncBtn && activeProfile) {
+    syncBtn.addEventListener('click', () => {
+      dropdown.classList.remove('profile-dropdown-menu--open');
+      openSyncAndLinkModal(activeProfile, {
+        onStateChanged: () => {
+          if (typeof callbacks.onStateChanged === 'function') {
+            callbacks.onStateChanged();
+          }
+        },
+      });
+    });
+  }
+
   const switchBtn = dropdown.querySelector('#dropdown-switch-btn');
   switchBtn.addEventListener('click', (e) => {
     dropdown.classList.remove('profile-dropdown-menu--open');

@@ -91,3 +91,23 @@ export function getTopic(topicId) {
 export function getTopicForWorld(worldId) {
   return TOPICS.find((t) => t.worldIds.includes(Number(worldId))) || null;
 }
+
+/**
+ * Determines the subject ('mathe' or 'nt') for a given question ID
+ * @param {string} questionId
+ * @returns {'mathe'|'nt'}
+ */
+export function getSubjectForQuestionId(questionId) {
+  if (!questionId || typeof questionId !== 'string') return 'mathe';
+  if (questionId.startsWith('exam_nt_')) return 'nt';
+  if (questionId.startsWith('exam_')) return 'mathe';
+
+  const match = questionId.match(/^w(\d+)_/);
+  if (match) {
+    const worldId = Number(match[1]);
+    const topic = getTopicForWorld(worldId);
+    if (topic && topic.subjectId) return topic.subjectId;
+    if (worldId >= 9) return 'nt';
+  }
+  return 'mathe';
+}

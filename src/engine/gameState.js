@@ -4,7 +4,7 @@
  */
 
 import { checkAchievements } from '../data/achievements.js';
-import { getTopicForWorld } from '../data/topics.js';
+import { getTopicForWorld, getSubjectForQuestionId } from '../data/topics.js';
 
 import { getActiveProfileId, getStateKey } from './profileManager.js';
 import { debouncedPush, pullState, mergeStates } from './syncService.js';
@@ -142,12 +142,25 @@ export function resolveMistake(state, questionId) {
 }
 
 /**
- * Gets the number of open mistakes in the vault
+ * Gets open mistakes in the vault, optionally filtered by subject ('mathe' or 'nt')
  * @param {Object} state 
+ * @param {string|null} [subjectId]
+ * @returns {Array<string>}
+ */
+export function getMistakesForSubject(state, subjectId = null) {
+  const vault = Array.isArray(state && state.mistakeVault) ? state.mistakeVault : [];
+  if (!subjectId) return vault;
+  return vault.filter((id) => getSubjectForQuestionId(id) === subjectId);
+}
+
+/**
+ * Gets the number of open mistakes in the vault, optionally filtered by subject
+ * @param {Object} state 
+ * @param {string|null} [subjectId]
  * @returns {number}
  */
-export function getMistakeCount(state) {
-  return Array.isArray(state && state.mistakeVault) ? state.mistakeVault.length : 0;
+export function getMistakeCount(state, subjectId = null) {
+  return getMistakesForSubject(state, subjectId).length;
 }
 
 /**

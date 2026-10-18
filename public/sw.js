@@ -3,7 +3,7 @@
  * Cache-first offline support for iPad Safari.
  */
 
-const CACHE_NAME = 'lottalearn-v14';
+const CACHE_NAME = 'lottalearn-v15';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -11,11 +11,11 @@ const ASSETS_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
-    // Removed self.skipWaiting() to allow the new SW to wait until safe
   );
 });
 
@@ -51,6 +51,25 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Network-First for HTML / Navigation requests to prevent stale PWA shells
+  const isHtmlNav = event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
+
+  if (isHtmlNav) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // Cache-First with background revalidation for static hashed assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {

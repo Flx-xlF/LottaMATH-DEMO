@@ -17,13 +17,14 @@ import {
   hasSeenIntro,
   markIntroSeen,
   syncOnLoad,
+  getMistakesForSubject,
 } from './engine/gameState.js';
 
 import { getQuestionsForLevel, getQuestionsByIds, scoreSession } from './engine/questionEngine.js';
 import { getLevel, getWorld } from './data/worlds.js';
 
 import { renderAuthGate } from './components/authGate.js';
-import { renderProfilePicker } from './components/profilePicker.js';
+import { renderProfilePicker, openSyncAndLinkModal } from './components/profilePicker.js';
 import {
   cleanupLegacyStorage,
   setActiveProfile,
@@ -251,11 +252,6 @@ class LottaMathApp {
         this.gameState = updateStreak(this.gameState);
         document.documentElement.setAttribute('data-theme', this.gameState.theme || 'dark');
 
-        // Ensure profile is registered with sync server if not already
-        if (!hasSyncToken(profile.id)) {
-          registerSyncProfile(profile.id, profile.nickname, profile.avatar).catch(() => {});
-        }
-
         // Check subscription status asynchronously
         try {
           this.subscriptionStatus = await verifySubscription();
@@ -403,6 +399,16 @@ class LottaMathApp {
           }
         };
 
+        indicator.addEventListener('click', async () => {
+          if (this.activeProfile) {
+            openSyncAndLinkModal(this.activeProfile, {
+              onStateChanged: () => {
+                this.handleRoute();
+              },
+            });
+          }
+        });
+
         const profileBtn = actionsContainer.querySelector('#profile-menu-btn') || actionsContainer.querySelector('#profile-switch-btn');
         if (profileBtn) {
           actionsContainer.insertBefore(indicator, profileBtn);
@@ -421,7 +427,8 @@ class LottaMathApp {
 
     // Route: #/vault (Fehler-Schmiede / Mistake Vault Practice)
     if (route === 'vault') {
-      const mistakeIds = (this.gameState && this.gameState.mistakeVault) || [];
+      const activeSubject = (this.gameState && this.gameState.activeSubject) || 'mathe';
+      const mistakeIds = getMistakesForSubject(this.gameState, activeSubject);
       const questions = getQuestionsByIds(mistakeIds);
 
       if (questions.length === 0) {
@@ -429,12 +436,14 @@ class LottaMathApp {
         return;
       }
 
+      const subjectName = activeSubject === 'nt' ? 'Natur & Technik' : 'Mathematik';
+
       this.currentScreen = renderQuiz(
         this.appContainer,
         {
           gameState: this.gameState,
           questions,
-          worldId: 1,
+          worldId: activeSubject === 'nt' ? 9 : 1,
           levelId: 'vault',
           isBoss: false,
           timeLimit: 0,
@@ -458,7 +467,7 @@ class LottaMathApp {
               worldId: 'vault',
               levelId: 'vault',
               levelNum: 1,
-              levelDef: { name: 'Fehler-Schmiede', icon: '🛠️' },
+              levelDef: { name: `Fehler-Schmiede (${subjectName})`, icon: '🛠️' },
             };
 
             this.navigate('#/results');

@@ -23,6 +23,10 @@ import {
   setSyncVersion,
   lookupByRecoveryCode,
   setRecoveryCode,
+  ensureLocalRecoveryCode,
+  syncNow,
+  mergeStates,
+  pushState,
 } from '../engine/syncService.js';
 
 /**
@@ -100,16 +104,14 @@ export function renderProfilePicker(container, options = {}) {
 
     // Render existing profiles
     profiles.forEach((profile) => {
-      const syncToken = getProfileSyncToken(profile.id);
-      const recoveryCode = getProfileRecoveryCode(profile.id);
-      const displayCode = recoveryCode || (syncToken ? `${syncToken.slice(0, 6)}…` : '☁️ Sync');
+      const displayCode = ensureLocalRecoveryCode(profile.id);
 
       const profileCard = document.createElement('div');
       profileCard.className = 'profile-card glass-card glass-card--interactive';
       profileCard.innerHTML = `
         <div class="profile-card__avatar">${escapeHtml(profile.avatar)}</div>
         <div class="profile-card__name">${escapeHtml(profile.nickname)}${nameOrdinals[profile.id] ? ' ' + nameOrdinals[profile.id] : ''}</div>
-        <div class="profile-card__sync-code" title="${syncToken || recoveryCode ? 'Sync-Code anzeigen' : 'Wird beim nächsten Online-Start registriert'}">
+        <div class="profile-card__sync-code" title="Sync-Code anzeigen & verknüpfen">
           🔑 ${displayCode}
         </div>
       `;
@@ -127,9 +129,10 @@ export function renderProfilePicker(container, options = {}) {
       const syncBadge = profileCard.querySelector('.profile-card__sync-code');
       syncBadge.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (syncToken || recoveryCode) {
-          showSyncCodeModal(recoveryCode || syncToken, profile.nickname);
-        }
+        openSyncAndLinkModal(profile, {
+          onComplete: () => render(),
+          onStateChanged: () => render(),
+        });
       });
 
       // Long-press detection (mobile: ≥600ms touch)
@@ -278,14 +281,28 @@ export function renderProfilePicker(container, options = {}) {
         }
         if (data.profile.recovery_code) {
           setRecoveryCode(data.profile.profile_id, data.profile.recovery_code);
+        } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
+          setRecoveryCode(data.profile.profile_id, rawInput);
         }
         if (data.state_version) {
           setSyncVersion(data.profile.profile_id, data.state_version);
         }
 
-        // Store state locally
-        if (data.state) {
-          localStorage.setItem(getStateKey(data.profile.profile_id), JSON.stringify(data.state));
+        // NON-DESTRUCTIVE PROGRESS PRESERVATION:
+        const targetId = data.profile.profile_id;
+        const targetKey = getStateKey(targetId);
+        let existingTargetState = null;
+        try {
+          const raw = localStorage.getItem(targetKey);
+          if (raw) existingTargetState = JSON.parse(raw);
+        } catch {
+          /* ignore */
+        }
+
+        const finalMerged = mergeStates(existingTargetState, data.state);
+        if (finalMerged) {
+          localStorage.setItem(targetKey, JSON.stringify(finalMerged));
+          pushState(targetId, finalMerged).catch(() => {});
         }
 
         statusEl.className = 'sync-link-status sync-link-status--success';
@@ -441,6 +458,9 @@ export function renderProfilePicker(container, options = {}) {
         <span class="profile-action-sheet__avatar">${escapeHtml(profile.avatar)}</span>
         <span class="profile-action-sheet__name">${escapeHtml(profile.nickname)}</span>
       </div>
+      <button type="button" class="profile-action-sheet__action" id="action-sync-profile">
+        🔑 Sync-Code & Verknüpfung
+      </button>
       <button type="button" class="profile-action-sheet__action" id="action-rename-profile">
         ✏️ Name bearbeiten
       </button>
@@ -463,6 +483,14 @@ export function renderProfilePicker(container, options = {}) {
 
     sheet.querySelector('#action-cancel').addEventListener('click', () => {
       overlay.remove();
+    });
+
+    sheet.querySelector('#action-sync-profile').addEventListener('click', () => {
+      overlay.remove();
+      openSyncAndLinkModal(profile, {
+        onComplete: () => render(),
+        onStateChanged: () => render(),
+      });
     });
 
     sheet.querySelector('#action-rename-profile').addEventListener('click', () => {
@@ -607,63 +635,9 @@ export function renderProfilePicker(container, options = {}) {
   }
 
   function showSyncCodeModal(code, nickname) {
-    const overlay = document.createElement('div');
-    overlay.className = 'sync-link-overlay flex-col flex-center';
-
-    overlay.innerHTML = `
-      <div class="sync-link-modal glass-card text-center flex-col gap-md">
-        <div style="font-size: 2.2rem;">🔑</div>
-        <h3 class="text-gradient" style="font-size: 1.3rem;">Sync-Code von ${escapeHtml(nickname)}</h3>
-        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.45;">
-          Mit diesem Code kannst du dein Profil auf einem anderen Gerät weiterverwenden oder nach einem Geräte-Reset wiederherstellen.
-        </p>
-
-        <div class="sync-code-display" style="
-          font-family: 'SF Mono', 'Fira Code', monospace;
-          font-size: 1.8rem;
-          font-weight: 700;
-          letter-spacing: 0.15em;
-          padding: 0.8rem 1.2rem;
-          border-radius: var(--radius-md);
-          background: var(--color-surface-elevated);
-          border: 2px solid var(--color-accent);
-          color: var(--color-text);
-          user-select: all;
-        ">${escapeHtml(code)}</div>
-
-        <div class="text-muted" style="font-size: 0.8rem; line-height: 1.5; text-align: left;">
-          <strong>So geht's:</strong><br>
-          1. Öffne LottaLEARN auf dem neuen Gerät.<br>
-          2. Tippe auf «Profil wiederherstellen».<br>
-          3. Gib diesen Code ein.
-        </div>
-
-        <div class="flex-row gap-sm" style="width: 100%;">
-          <button type="button" class="btn btn--secondary" id="sync-modal-close-btn" style="flex: 1;">
-            Schliessen
-          </button>
-          <button type="button" class="btn btn--primary" id="sync-modal-copy-btn" style="flex: 1.5;">
-            Kopieren 📋
-          </button>
-        </div>
-      </div>
-    `;
-
-    pickerEl.appendChild(overlay);
-
-    overlay.querySelector('#sync-modal-close-btn').addEventListener('click', () => {
-      overlay.remove();
-    });
-
-    overlay.querySelector('#sync-modal-copy-btn').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(code);
-        const btn = overlay.querySelector('#sync-modal-copy-btn');
-        btn.textContent = 'Kopiert! ✅';
-        setTimeout(() => { btn.textContent = 'Kopieren 📋'; }, 1500);
-      } catch {
-        prompt('Dein Sync-Code:', code);
-      }
+    openSyncAndLinkModal({ id: profile.id, nickname, avatar: profile.avatar }, {
+      onComplete: () => render(),
+      onStateChanged: () => render(),
     });
   }
 
@@ -688,4 +662,248 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+/**
+ * Opens the unified Sync & Device-Link modal for a profile.
+ * Can be opened from anywhere: Dashboard dropdown, Topbar sync icon, or Profile Picker.
+ * @param {Object} profile - { id, nickname, avatar }
+ * @param {Object} [options] - { onComplete, onStateChanged }
+ */
+export function openSyncAndLinkModal(profile, options = {}) {
+  const { onComplete = () => {}, onStateChanged = () => {} } = options;
+  if (!profile) return;
+
+  const recoveryCode = ensureLocalRecoveryCode(profile.id);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'sync-link-overlay flex-col flex-center';
+  overlay.style.zIndex = '2500';
+
+  overlay.innerHTML = `
+    <div class="sync-link-modal glass-card text-center flex-col gap-md" style="max-width: 460px; max-height: 90vh; overflow-y: auto;">
+      <div style="font-size: 2.2rem;">${escapeHtml(profile.avatar || '🔑')}</div>
+      <h3 class="text-gradient" style="font-size: 1.35rem; margin-bottom: 0;">Sync & Geräte-Verknüpfung</h3>
+      <div class="text-muted" style="font-size: 0.85rem; margin-top: -4px;">
+        Profil: <strong>${escapeHtml(profile.nickname)}</strong>
+      </div>
+
+      <!-- Section 1: Dein 8-Zeichen Sync-Code -->
+      <div class="glass-card" style="padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-align: center;">
+        <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary-light); margin-bottom: 6px;">
+          Dein persönlicher 8-Zeichen Sync-Code
+        </div>
+        <div class="sync-code-display" style="
+          font-family: 'SF Mono', 'Fira Code', monospace;
+          font-size: 1.8rem;
+          font-weight: 800;
+          letter-spacing: 0.15em;
+          padding: 0.6rem 1rem;
+          border-radius: var(--radius-md);
+          background: var(--color-surface-elevated);
+          border: 2px solid var(--color-accent);
+          color: var(--color-text);
+          user-select: all;
+          margin-bottom: 8px;
+        ">${escapeHtml(recoveryCode)}</div>
+        <p class="text-muted" style="font-size: 0.8rem; line-height: 1.4; margin: 0 0 10px 0;">
+          Mit diesem Code kannst du dein Profil jederzeit auf anderen Geräten weiterverwenden oder nach einem Reset wiederherstellen.
+        </p>
+        <div class="flex-row gap-sm" style="justify-content: center; flex-wrap: wrap;">
+          <button type="button" class="btn btn--secondary" id="modal-copy-code-btn" style="min-height: 38px; padding: 6px 14px; font-size: 0.85rem;">
+            Code kopieren 📋
+          </button>
+          <button type="button" class="btn btn--secondary" id="modal-sync-now-btn" style="min-height: 38px; padding: 6px 14px; font-size: 0.85rem;">
+            Jetzt synchronisieren 🔄
+          </button>
+        </div>
+        <div class="sync-link-status text-muted" id="modal-sync-status" style="margin-top: 6px; font-size: 0.8rem;"></div>
+      </div>
+
+      <!-- Section 2: Re-link / Mit bestehendem Code verknüpfen -->
+      <div class="glass-card" style="padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-align: left;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--color-text); margin-bottom: 4px;">
+          🔗 Mit anderem Gerät / Code verknüpfen
+        </div>
+        <p class="text-muted" style="font-size: 0.8rem; line-height: 1.35; margin: 0 0 8px 0;">
+          Fortschritte beider Geräte werden automatisch und verlustfrei zusammengeführt (Sterne, XP & Fehler).
+        </p>
+        <div class="flex-col gap-xs">
+          <input
+            type="text"
+            id="modal-link-input"
+            class="sync-link-input"
+            placeholder="Code eingeben (z.B. ABCD-EF78)..."
+            autocomplete="off"
+            autocapitalize="characters"
+            autocorrect="off"
+            spellcheck="false"
+            maxlength="32"
+            style="min-height: 42px; font-size: 0.9rem;"
+          />
+          <button type="button" class="btn btn--primary" id="modal-link-confirm-btn" style="min-height: 40px; font-size: 0.9rem; margin-top: 4px;">
+            Verknüpfen & Zusammenführen 🚀
+          </button>
+          <div class="sync-link-status text-muted" id="modal-link-status" style="margin-top: 4px; font-size: 0.8rem;"></div>
+        </div>
+      </div>
+
+      <div class="flex-row gap-sm" style="width: 100%;">
+        <button type="button" class="btn btn--secondary flex-1" id="modal-close-btn" style="min-height: 42px;">
+          Schliessen
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const copyBtn = overlay.querySelector('#modal-copy-code-btn');
+  const syncNowBtn = overlay.querySelector('#modal-sync-now-btn');
+  const syncStatus = overlay.querySelector('#modal-sync-status');
+  const linkInput = overlay.querySelector('#modal-link-input');
+  const linkConfirmBtn = overlay.querySelector('#modal-link-confirm-btn');
+  const linkStatus = overlay.querySelector('#modal-link-status');
+  const closeBtn = overlay.querySelector('#modal-close-btn');
+
+  closeBtn.addEventListener('click', () => {
+    overlay.remove();
+    onComplete();
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.remove();
+      onComplete();
+    }
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(recoveryCode);
+      copyBtn.textContent = 'Kopiert! ✅';
+      setTimeout(() => { copyBtn.textContent = 'Code kopieren 📋'; }, 1500);
+    } catch {
+      prompt('Dein Sync-Code:', recoveryCode);
+    }
+  });
+
+  syncNowBtn.addEventListener('click', async () => {
+    syncNowBtn.disabled = true;
+    syncNowBtn.textContent = 'Synchronisiere... ⏳';
+    syncStatus.className = 'sync-link-status text-muted';
+    syncStatus.textContent = 'Verbinde mit Cyon Cloud...';
+
+    const res = await syncNow(profile.id);
+    syncNowBtn.disabled = false;
+    syncNowBtn.textContent = 'Jetzt synchronisieren 🔄';
+
+    if (res.success) {
+      syncStatus.className = 'sync-link-status sync-link-status--success';
+      syncStatus.textContent = 'Erfolgreich synchronisiert! ✅';
+      onStateChanged();
+    } else {
+      syncStatus.className = 'sync-link-status sync-link-status--error';
+      syncStatus.textContent = (res.error || 'Sync fehlgeschlagen') + ' ⚠️';
+    }
+  });
+
+  const handleLink = async () => {
+    const rawInput = linkInput.value.trim().toUpperCase();
+    if (!rawInput) {
+      linkStatus.className = 'sync-link-status sync-link-status--error';
+      linkStatus.textContent = 'Bitte gib einen Code ein.';
+      linkInput.focus();
+      return;
+    }
+
+    linkConfirmBtn.disabled = true;
+    linkConfirmBtn.textContent = 'Verknüpfe... ⏳';
+    linkStatus.className = 'sync-link-status text-muted';
+    linkStatus.textContent = 'Lade Profildaten vom Server...';
+
+    try {
+      let data;
+      if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
+        data = await lookupByRecoveryCode(rawInput);
+      } else {
+        data = await linkProfile(rawInput.toLowerCase());
+      }
+
+      if (!data || !data.profile) {
+        linkStatus.className = 'sync-link-status sync-link-status--error';
+        linkStatus.textContent = 'Code nicht gefunden. Bitte überprüfe die Eingabe.';
+        linkConfirmBtn.disabled = false;
+        linkConfirmBtn.textContent = 'Verknüpfen & Zusammenführen 🚀';
+        return;
+      }
+
+      addLinkedProfile(
+        data.profile.profile_id,
+        data.profile.nickname,
+        data.profile.avatar
+      );
+
+      const tokenToStore = data.sync_token || (/^[a-f0-9]{32}$/i.test(rawInput) ? rawInput.toLowerCase() : null);
+      if (tokenToStore) {
+        setSyncToken(data.profile.profile_id, tokenToStore);
+      }
+      if (data.profile.recovery_code) {
+        setRecoveryCode(data.profile.profile_id, data.profile.recovery_code);
+      } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
+        setRecoveryCode(data.profile.profile_id, rawInput);
+      }
+      if (data.state_version) {
+        setSyncVersion(data.profile.profile_id, data.state_version);
+      }
+
+      const targetId = data.profile.profile_id;
+      const targetKey = getStateKey(targetId);
+      let existingTargetState = null;
+      try {
+        const raw = localStorage.getItem(targetKey);
+        if (raw) existingTargetState = JSON.parse(raw);
+      } catch { /* ignore */ }
+
+      let currentProfileState = null;
+      if (profile && profile.id) {
+        try {
+          const rawCurrent = localStorage.getItem(getStateKey(profile.id));
+          if (rawCurrent) currentProfileState = JSON.parse(rawCurrent);
+        } catch { /* ignore */ }
+      }
+
+      let finalState = mergeStates(existingTargetState, data.state);
+      if (currentProfileState) {
+        finalState = mergeStates(finalState, currentProfileState);
+      }
+
+      if (finalState) {
+        localStorage.setItem(targetKey, JSON.stringify(finalState));
+        pushState(targetId, finalState).catch(() => {});
+      }
+
+      linkStatus.className = 'sync-link-status sync-link-status--success';
+      linkStatus.textContent = `Profil «${data.profile.nickname}» erfolgreich verknüpft! 🎉`;
+
+      setTimeout(() => {
+        overlay.remove();
+        onStateChanged();
+        onComplete();
+      }, 900);
+    } catch (err) {
+      linkStatus.className = 'sync-link-status sync-link-status--error';
+      linkStatus.textContent = err.message || 'Verbindungsfehler. Bitte versuche es später.';
+      linkConfirmBtn.disabled = false;
+      linkConfirmBtn.textContent = 'Verknüpfen & Zusammenführen 🚀';
+    }
+  };
+
+  linkConfirmBtn.addEventListener('click', handleLink);
+  linkInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleLink();
+    }
+  });
 }

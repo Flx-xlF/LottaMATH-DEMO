@@ -11,7 +11,7 @@ const API_BASE = './api';
 /**
  * Standalone mock for demo environment on GitHub Pages (no PHP/MariaDB required).
  */
-async function mockFetch(url, options) {
+async function mockFetch(url, options = {}) {
   let body = {};
   try {
     body = JSON.parse(options.body || "{}");
@@ -22,16 +22,28 @@ async function mockFetch(url, options) {
 
   if (action === "register") {
     const token = "demo-sync-" + body.profile_id;
-    const code = "LMTH-" + (body.profile_id || "1").toUpperCase().slice(0, 4);
+    const code = getRecoveryCode(body.profile_id) || ensureLocalRecoveryCode(body.profile_id);
     data = { success: true, sync_token: token, recovery_code: code, profile_id: body.profile_id };
   } else if (action === "push") {
     data = { success: true, state: body.state, state_version: (body.state_version || 0) + 1 };
-  } else if (action === "lookup") {
-    const code = (body.recovery_code || "").toUpperCase();
+  } else if (action === "pull") {
     const profiles = JSON.parse(localStorage.getItem("lottamath_profiles") || "[]");
-    const match = profiles.find(p => {
+    const token = (options.headers && options.headers["X-Sync-Token"]) || "";
+    const profileId = token.replace("demo-sync-", "");
+    const match = profiles.find((p) => p.id === profileId);
+    const raw = profileId ? localStorage.getItem("lottamath_profile_" + profileId + "_state") : null;
+    data = {
+      success: true,
+      profile: match ? { profile_id: match.id, nickname: match.nickname, avatar: match.avatar, recovery_code: getRecoveryCode(match.id) } : null,
+      state: raw ? JSON.parse(raw) : null,
+      state_version: 1,
+    };
+  } else if (action === "lookup") {
+    const code = (body.recovery_code || "").trim().toUpperCase();
+    const profiles = JSON.parse(localStorage.getItem("lottamath_profiles") || "[]");
+    const match = profiles.find((p) => {
       const stored = localStorage.getItem("lottamath_recovery_code_" + p.id);
-      return stored && stored.toUpperCase() === code;
+      return stored && stored.trim().toUpperCase() === code;
     });
     if (match) {
       const raw = localStorage.getItem("lottamath_profile_" + match.id + "_state");
@@ -39,13 +51,22 @@ async function mockFetch(url, options) {
         success: true,
         sync_token: "demo-sync-" + match.id,
         recovery_code: code,
-        profile: match,
+        profile: {
+          profile_id: match.id,
+          nickname: match.nickname,
+          avatar: match.avatar,
+          recovery_code: code,
+        },
         state: raw ? JSON.parse(raw) : null,
         state_version: 1,
       };
     } else {
       return { ok: false, status: 404, json: async () => ({ error: "Code nicht gefunden" }) };
     }
+  } else if (action === "update_profile") {
+    data = { success: true };
+  } else if (action === "delete") {
+    data = { success: true };
   }
 
   return {
@@ -157,6 +178,46 @@ export function clearProfileSync(profileId) {
   }
 }
 
+export const RECOVERY_ALPHABET = 'ABCDEFGHJKMNPQRTUVWXYZ2346789';
+
+/**
+ * Generates an 8-character human-friendly sync/recovery code (XXXX-XXXX).
+ * Uses unambiguous uppercase letters and digits.
+ * @returns {string}
+ */
+export function generateClientRecoveryCode() {
+  const getRandomChar = () => {
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      return RECOVERY_ALPHABET[arr[0] % RECOVERY_ALPHABET.length];
+    }
+    return RECOVERY_ALPHABET[Math.floor(Math.random() * RECOVERY_ALPHABET.length)];
+  };
+
+  let p1 = '';
+  let p2 = '';
+  for (let i = 0; i < 4; i++) p1 += getRandomChar();
+  for (let i = 0; i < 4; i++) p2 += getRandomChar();
+  return `${p1}-${p2}`;
+}
+
+/**
+ * Ensures an 8-character recovery code exists locally for a profile.
+ * If missing, generates and saves one immediately.
+ * @param {string} profileId
+ * @returns {string}
+ */
+export function ensureLocalRecoveryCode(profileId) {
+  if (!profileId) return '';
+  let code = getRecoveryCode(profileId);
+  if (!code || !/^[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(code)) {
+    code = generateClientRecoveryCode();
+    setRecoveryCode(profileId, code);
+  }
+  return code;
+}
+
 /**
  * Gets the stored recovery code for a profile.
  * @param {string} profileId
@@ -191,7 +252,7 @@ export function setRecoveryCode(profileId, code) {
 
 /**
  * Gets the current global sync status.
- * @returns {'idle'|'syncing'|'synced'|'offline'|'error'}
+ * @returns {'idle'|'syncing'|'synced'|'offline'|'error'|'unregistered'}
  */
 export function getSyncStatus() {
   return _syncStatus;
@@ -199,7 +260,7 @@ export function getSyncStatus() {
 
 /**
  * Subscribes to sync status changes.
- * @param {(status: 'idle'|'syncing'|'synced'|'offline'|'error') => void} callback
+ * @param {(status: 'idle'|'syncing'|'synced'|'offline'|'error'|'unregistered') => void} callback
  * @returns {() => void} Unsubscribe function
  */
 export function onSyncStatusChange(callback) {
@@ -214,7 +275,7 @@ export function onSyncStatusChange(callback) {
 
 /**
  * Updates the internal sync status and notifies all listeners.
- * @param {'idle'|'syncing'|'synced'|'offline'|'error'} newStatus
+ * @param {'idle'|'syncing'|'synced'|'offline'|'error'|'unregistered'} newStatus
  */
 function _setStatus(newStatus) {
   if (_syncStatus !== newStatus) {
@@ -245,7 +306,11 @@ function _getLocalProfileData(profileId) {
  * Ensures a profile is registered with the sync server.
  * If no sync token exists locally, it attempts a lazy background registration.
  */
-async function ensureRegistered(profileId) {
+// In-flight registration promise cache to prevent concurrent registration race conditions
+const _regPromises = new Map();
+let _pendingPush = null;
+
+export async function ensureRegistered(profileId) {
   let token = getSyncToken(profileId);
   if (token) return token;
 
@@ -255,14 +320,14 @@ async function ensureRegistered(profileId) {
   _setStatus('syncing');
   token = await registerProfile(profile.id, profile.nickname, profile.avatar);
   if (!token) {
-    _setStatus('unregistered');
+    _setStatus(typeof navigator !== 'undefined' && navigator.onLine === false ? 'offline' : 'unregistered');
   }
   return token;
 }
 
 /**
  * Registers a new profile with the sync server to obtain a sync_token.
- * Idempotent: returns existing token if already registered.
+ * Idempotent: returns existing token if already registered, deduplicates concurrent requests.
  * @param {string} profileId
  * @param {string} nickname
  * @param {string} avatar
@@ -271,54 +336,74 @@ async function ensureRegistered(profileId) {
 export async function registerProfile(profileId, nickname, avatar) {
   if (!profileId || !nickname || !avatar) return null;
 
-  try {
-    const response = await mockFetch(`${API_BASE}/sync.php`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        action: 'register',
-        profile_id: profileId,
-        nickname,
-        avatar,
-      }),
-    });
+  const existingToken = getSyncToken(profileId);
+  if (existingToken) return existingToken;
 
-    if (!response.ok) {
-      console.warn('Sync registration returned non-ok status:', response.status);
-      return null;
-    }
-
-    const data = await response.json();
-    if (data && data.success && data.sync_token) {
-      setSyncToken(profileId, data.sync_token);
-      if (data.recovery_code) {
-        setRecoveryCode(profileId, data.recovery_code);
-      }
-      return data.sync_token;
-    }
-  } catch (err) {
-    console.warn('Sync registration network error (offline?):', err);
+  if (_regPromises.has(profileId)) {
+    return _regPromises.get(profileId);
   }
 
-  return null;
+  const localRecoveryCode = ensureLocalRecoveryCode(profileId);
+
+  const p = (async () => {
+    try {
+      const response = await mockFetch(`${API_BASE}/sync.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'register',
+          profile_id: profileId,
+          nickname,
+          avatar,
+          recovery_code: localRecoveryCode,
+        }),
+      });
+
+      if (!response.ok) {
+        console.warn('Sync registration returned non-ok status:', response.status);
+        return null;
+      }
+
+      const data = await response.json();
+      if (data && data.success && data.sync_token) {
+        setSyncToken(profileId, data.sync_token);
+        if (data.recovery_code) {
+          setRecoveryCode(profileId, data.recovery_code);
+        }
+        return data.sync_token;
+      }
+    } catch (err) {
+      console.warn('Sync registration network error (offline?):', err);
+    }
+    return null;
+  })();
+
+  _regPromises.set(profileId, p);
+  try {
+    return await p;
+  } finally {
+    _regPromises.delete(profileId);
+  }
 }
 
 /**
  * Pushes the current game state to the server.
  * @param {string} profileId
  * @param {Object} gameState
+ * @param {boolean} [retryOn401=true]
  * @returns {Promise<{success: boolean, state?: Object, state_version?: number}>}
  */
-export async function pushState(profileId, gameState) {
+export async function pushState(profileId, gameState, retryOn401 = true) {
   if (!gameState) {
     return { success: false };
   }
 
   const syncToken = await ensureRegistered(profileId);
   if (!syncToken) {
+    _pendingPush = { profileId, gameState };
     return { success: false };
   }
 
@@ -342,9 +427,15 @@ export async function pushState(profileId, gameState) {
     });
 
     if (!response.ok) {
+      if (response.status === 401 && retryOn401) {
+        // Stale token recovery: clear invalid token and retry once
+        setSyncToken(profileId, null);
+        return pushState(profileId, gameState, false);
+      }
       if (response.status === 401 || response.status === 400) {
         _setStatus('error');
       } else {
+        _pendingPush = { profileId, gameState };
         _setStatus('offline');
       }
       return { success: false };
@@ -355,6 +446,10 @@ export async function pushState(profileId, gameState) {
       if (data.state_version) {
         setSyncVersion(profileId, data.state_version);
       }
+      if (data.recovery_code) {
+        setRecoveryCode(profileId, data.recovery_code);
+      }
+      _pendingPush = null;
       _setStatus('synced');
       return data;
     }
@@ -363,6 +458,7 @@ export async function pushState(profileId, gameState) {
     return { success: false };
   } catch (err) {
     console.warn('Sync push network error:', err);
+    _pendingPush = { profileId, gameState };
     _setStatus('offline');
     return { success: false };
   }
@@ -389,9 +485,10 @@ export function debouncedPush(profileId, gameState) {
 /**
  * Pulls the latest game state for a profile from the server.
  * @param {string} profileId
+ * @param {boolean} [retryOn401=true]
  * @returns {Promise<{state: Object, state_version: number, profile: Object}|null>}
  */
-export async function pullState(profileId) {
+export async function pullState(profileId, retryOn401 = true) {
   const syncToken = await ensureRegistered(profileId);
   if (!syncToken) return null;
 
@@ -411,6 +508,11 @@ export async function pullState(profileId) {
     });
 
     if (!response.ok) {
+      if (response.status === 401 && retryOn401) {
+        // Stale token recovery: clear invalid token and retry once
+        setSyncToken(profileId, null);
+        return pullState(profileId, false);
+      }
       if (response.status === 401) {
         _setStatus('error');
       } else {
@@ -423,6 +525,9 @@ export async function pullState(profileId) {
     if (data && data.success && data.state) {
       if (data.state_version) {
         setSyncVersion(profileId, data.state_version);
+      }
+      if (data.profile && data.profile.recovery_code) {
+        setRecoveryCode(profileId, data.profile.recovery_code);
       }
       _setStatus('synced');
       return data;
@@ -438,9 +543,86 @@ export async function pullState(profileId) {
 }
 
 /**
+ * Triggers an immediate full bidirectional sync for a profile.
+ * Ensures registration, pulls latest server state, merges with local, and pushes back.
+ * @param {string} profileId
+ * @returns {Promise<{success: boolean, status: string, error?: string}>}
+ */
+export async function syncNow(profileId) {
+  if (!profileId) {
+    return { success: false, status: 'no_profile' };
+  }
+
+  _setStatus('syncing');
+
+  try {
+    const token = await ensureRegistered(profileId);
+    if (!token) {
+      const isOff = typeof navigator !== 'undefined' && navigator.onLine === false;
+      _setStatus(isOff ? 'offline' : 'unregistered');
+      return {
+        success: false,
+        status: isOff ? 'offline' : 'unregistered',
+        error: isOff ? 'Keine Internetverbindung' : 'Server-Registrierung fehlgeschlagen',
+      };
+    }
+
+    const pulled = await pullState(profileId);
+    const stateKey = 'lottamath_state_' + profileId;
+    let localState = null;
+    try {
+      const raw = localStorage.getItem(stateKey);
+      if (raw) localState = JSON.parse(raw);
+    } catch {
+      /* ignore */
+    }
+
+    if (pulled && pulled.state) {
+      const merged = mergeStates(localState, pulled.state);
+      localStorage.setItem(stateKey, JSON.stringify(merged));
+      await pushState(profileId, merged);
+      _setStatus('synced');
+      return { success: true, status: 'synced' };
+    } else if (localState) {
+      await pushState(profileId, localState);
+      _setStatus('synced');
+      return { success: true, status: 'synced' };
+    }
+
+    _setStatus('synced');
+    return { success: true, status: 'synced' };
+  } catch (err) {
+    console.warn('syncNow failed:', err);
+    _setStatus('error');
+    return { success: false, status: 'error', error: err.message };
+  }
+}
+
+/**
+ * Flushes any pending background sync when device wakes up or reconnects
+ */
+export async function flushPendingSync() {
+  if (_pendingPush && _pendingPush.profileId && _pendingPush.gameState) {
+    const { profileId, gameState } = _pendingPush;
+    await pushState(profileId, gameState);
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    flushPendingSync().catch(() => {});
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      flushPendingSync().catch(() => {});
+    }
+  });
+}
+
+/**
  * Links a profile from another device using a Sync-Code (sync_token).
  * @param {string} syncToken
- * @returns {Promise<{state: Object, state_version: number, profile: {profile_id: string, nickname: string, avatar: string}}|null>}
+ * @returns {Promise<{state: Object, state_version: number, profile: {profile_id: string, nickname: string, avatar: string, recovery_code?: string}}|null>}
  */
 export async function linkProfile(syncToken) {
   if (!syncToken) return null;
@@ -467,6 +649,9 @@ export async function linkProfile(syncToken) {
 
   const data = await response.json();
   if (data && data.success && data.profile) {
+    if (data.profile.recovery_code) {
+      setRecoveryCode(data.profile.profile_id, data.profile.recovery_code);
+    }
     return data;
   }
 
@@ -481,6 +666,7 @@ export async function linkProfile(syncToken) {
 export async function lookupByRecoveryCode(recoveryCode) {
   if (!recoveryCode) return null;
 
+  const cleanCode = recoveryCode.trim().toUpperCase();
   const response = await mockFetch(`${API_BASE}/sync.php`, {
     method: 'POST',
     headers: {
@@ -489,7 +675,7 @@ export async function lookupByRecoveryCode(recoveryCode) {
     },
     body: JSON.stringify({
       action: 'lookup',
-      recovery_code: recoveryCode.trim().toUpperCase(),
+      recovery_code: cleanCode,
     }),
   });
 
@@ -501,6 +687,11 @@ export async function lookupByRecoveryCode(recoveryCode) {
 
   const data = await response.json();
   if (data && data.success && data.profile) {
+    if (data.profile.recovery_code) {
+      setRecoveryCode(data.profile.profile_id, data.profile.recovery_code);
+    } else {
+      setRecoveryCode(data.profile.profile_id, cleanCode);
+    }
     return data;
   }
   return null;

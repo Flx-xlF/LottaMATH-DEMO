@@ -10,7 +10,13 @@ export function registerServiceWorker() {
   if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').then((registration) => {
-        
+        // If a worker is already waiting from previous session, record it immediately
+        if (registration.waiting) {
+          console.log('Update Manager: Existing waiting worker found.');
+          isUpdateAvailable = true;
+          waitingServiceWorker = registration.waiting;
+        }
+
         // Listen for new service worker installation
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
