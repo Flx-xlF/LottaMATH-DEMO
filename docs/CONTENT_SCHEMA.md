@@ -85,6 +85,11 @@ Every multiple-choice task provides 4 options where all 3 distractors map direct
 - **Engine-Level Dynamic Shuffling:** All interactive question types presenting choices or pool items (`multiple-choice`, `drag-group`, `drag-order`) must be dynamically shuffled via Fisher-Yates when session or exam questions are generated (`questionEngine.js`).
 - **UI-Level Collision Safeguard:** The quiz renderer (`quiz.js`) must defensively verify that the rendered item order does not coincidentally match the solved order 1:1. If a 1:1 alignment with group targets is detected, items must be swapped before rendering to prevent trivial drag-and-drop solutions.
 
+### 🥇 Rule 9: Swiss Orthography Standard (Strictly No "ß" / Always "ss" / "SS")
+LottaLEARN is designed exclusively for the Swiss school curriculum (Sekundarschule Baselland, Lehrplan 21). Swiss German orthography strictly applies across all questions, prompts, hints, explanations, and visual labels:
+- **Zero "ß" Tolerance:** The character `ß` (Eszett) is **strictly forbidden** everywhere in the app and its datasets.
+- **Mandatory Replacement:** Always write `ss` in lowercase words (e.g. *gross*, *schliessen*, *Strasse*, *heiss*, *Massstab*, *ausschliesslich*, *muss*, *weisser*, *Fläche*, *Fuss*) and `SS` in capitalized text (e.g. *GROSS*).
+
 ---
 
 ## 2b. The 8 Golden Rules of Science & Humanities Content Creation (NT & RZG Edition)
@@ -131,6 +136,11 @@ Questions must directly prepare students for canton-specific Sek P exams and off
 
 ### 🧬 Rule 8: Pre-Scrambled Data & Shuffled Delivery
 All draggable items and option lists must be stored pre-scrambled in data files and randomized at runtime via Fisher-Yates.
+
+### 🧬 Rule 9: Swiss Orthography Standard (Strictly No "ß" / Always "ss" / "SS")
+All biology, physics, chemistry, and history texts must strictly conform to Swiss German orthography:
+- **Zero "ß" Tolerance:** The character `ß` is strictly forbidden across all texts, prompts, hints, and explanations.
+- **Mandatory Replacement:** Always write `ss` in lowercase words (e.g. *Grosshirn*, *weisser*, *reissen*, *ausschliessen*, *Russ*, *süss*, *heiss*, *muss*, *Fluss*, *einflössen*) and `SS` in uppercase/capitalized text.
 
 ---
 

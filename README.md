@@ -1,155 +1,216 @@
-# 🐾 LottaLEARN (Demo)
+# LottaLEARN 🐾
 
-> Gamified, privacy-first multi-subject learning platform tailored for Swiss Secondary School (Sekundarstufe I, Niveau P) covering Mathematics, Natur & Technik (Science), and Geschichte (History/RZG). Built with interactive SVG visual models, live LaTeX rendering, custom touch keyboard, and local-first progress tracking.
+> **Gamified Multi-Subject Learning Platform for Secondary School & Swiss Gymnasium Preparation**  
+> *Built with Vanilla JavaScript, Vite, KaTeX, and a Local-First Sync Architecture.*  
+> 
+> Built with care (and a bit of madness) by [schema/f](https://github.com/Flx-xlF).  
+> Enjoy my work? [Tip me on Ko-fi](https://ko-fi.com/flxxlf)
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-F20587?style=flat-square&logo=github)](https://flx-xlf.github.io/LottaMATH-DEMO/)
-[![Bundle Size](https://img.shields.io/badge/Bundle-<250_kB_gzipped-black?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
-[![PWA](https://img.shields.io/badge/PWA-Installable-blue?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
-[![Curriculum](https://img.shields.io/badge/Lehrplan-21_Sekundarstufe_I-10b981?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](LICENSE)
+[![PWA Ready](https://img.shields.io/badge/PWA-Ready-7c4dff?style=flat-square&logo=pwa)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?style=flat-square&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![KaTeX](https://img.shields.io/badge/KaTeX-LaTeX_Math-00d1b2?style=flat-square)](https://katex.org/)
+[![PHP](https://img.shields.io/badge/Backend-PHP_8.x-777BB4?style=flat-square&logo=php)](https://www.php.net/)
+[![MariaDB](https://img.shields.io/badge/Database-MariaDB-003545?style=flat-square&logo=mariadb)](https://mariadb.org/)
+[![Curriculum](https://img.shields.io/badge/Curriculum-Lehrplan_21_%2F_Gymi-ff6b6b?style=flat-square)](https://v-ef.lehrplan.ch/)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Tip_Me-FF5E5B?style=flat-square&logo=kofi)](https://ko-fi.com/flxxlf)
+[![License](https://img.shields.io/badge/License-Proprietary-blue?style=flat-square)](#)
 
 ---
 
-## 🧭 Live Demo
+## 🎯 The Problem Solved
 
-Explore the fully interactive, client-side demo directly in your browser:  
-👉 **[https://flx-xlf.github.io/LottaMATH-DEMO/](https://flx-xlf.github.io/LottaMATH-DEMO/)**
+The transition from primary to secondary school (Sekundarstufe I / Untergymnasium) presents one of the steepest challenges in student confidence. Students abruptly shift from basic facts to abstract reasoning, rigorous scientific chains of causality, and algebraic terms.
 
-* **Pre-seeded Demo Profiles:**
-  * 🐱 **Lotta:** Level 4 (*Algebra-Talent*), 760 XP, 5-day streak, Mathematics & World 9 (Optik) progress, and 2 active items in the *Fehler-Schmiede*.
-  * 🦊 **Nico:** Level 2 (*Entdecker:in*), 220 XP, Natur & Technik (Optik & Nervensystem) focus.
-  * ➕ **Your Own Profile:** Create your own profile, toggle subjects seamlessly via the dashboard switcher, or reset progress anytime.
-* **100% Client-Side:** Runs completely in your browser with `localStorage` persistence. No server setup, no registration, and no tracking.
+Traditional educational software often exacerbates learning anxiety:
+1. **Punitiveness over Scaffolding:** Typical multiple-choice drills reward memorization and penalize mistakes with red crosses, discouraging experimentation.
+2. **Poor iPad & Classroom Usability:** Clunky desktop interfaces that fail on mobile touchscreens without proper mathematical and interactive input methods.
+3. **Data Privacy Barriers:** Requiring student emails, logins, or cloud accounts creates friction and violates strict Swiss school privacy regulations (DSGVO / cantonal school data protection laws).
 
----
-
-## 📐 Autonomous Chapter Generation: The "Golden Rule Set"
-
-A central architectural feature of **LottaLEARN** is its pedagogical compilation pipeline, governed by strict **"Golden Rule Sets"** for Mathematics and Natur & Technik.
-
-Instead of hand-coding every individual exercise, UI interaction, and diagram for a new syllabus topic, the pipeline accepts raw curriculum material and automatically synthesizes cohesive, classroom-ready learning chapters.
-
-```
-  ┌────────────────────────────────┐         ┌───────────────────────────────┐
-  │        Curriculum Input        │         │       LottaLEARN Engine       │
-  │ • Learning objectives (Ziele)  │ ──────> │      [ Golden Rule Set ]      │
-  │ • Theoretical explanations     │         │ • Pedagogical structure       │
-  │ • Example tasks & calculations │         │ • Cognitive load constraints  │
-  └────────────────────────────────┘         └───────────────┬───────────────┘
-                                                             │
-                                                             ▼
-  ┌──────────────────────────────────────────────────────────────────────────┐
-  │                         Generated Learning World                         │
-  │  • Real-world intro scenarios     • Vector SVG sketches & area models    │
-  │  • Multi-modal question types     • 3-tier hints & mistake explanations  │
-  │  • Calibrated mental math numbers • Formatted KaTeX mathematical terms   │
-  └──────────────────────────────────────────────────────────────────────────┘
-```
-
-### 📥 Inputs
-The pipeline works with standard curriculum resources:
-* **Learning Objectives (*Lernziele*):** Standard competencies (such as Swiss *Lehrplan 21*, Sekundarstufe I).
-* **Theory & Concepts:** Explanations, definitions, and formula derivations.
-* **Sample Calculations & Tasks:** Representative exercises, parameter sets, and step sequences.
-
-### ⚙️ What the System Generates
-Governed by the rule set, the pipeline translates the input into complete interactive chapters:
-
-* 📖 **Contextual Introductions:** Real-world scenarios grounded in everyday student experiences (e.g., game scoring, mobile subscriptions, discounts, room planning) that frame the concept before introducing formal notation.
-* 📐 **Visual Models & SVG Sketches:** Programmatically generated geometric sketches, area models (*Rechteckmodelle*), coordinate grids, and visual proofs—with consistent dimensions and anti-spoiler labeling.
-* 🧩 **Differentiated Question Sets:** A balanced mix of question formats (Multiple Choice, Touch Keypad Fill-in, Drag-to-Group categorization, Drag-to-Order step sequencing, and Multi-Step Builders) while preventing near-duplicate clones.
-* 🧠 **Calibrated Mental Math:** Values and intermediate steps are constrained to numbers that are straightforward to calculate mentally, keeping the student's working memory focused on algebraic and geometric structure.
-* 🪜 **Scaffolded 3-Tier Hints:** Progressive guidance (conceptual prompt $\rightarrow$ methodological clue $\rightarrow$ complete solution path), accompanied by explanations of common pitfalls (*Fehler-Fallen*).
-* 🛡️ **Anti-Spoiler Integrity:** Defensive pre-scrambling of choices, secured placeholders, and runtime shuffling to prevent answer guessing based on UI layout.
-* ✍️ **Standard KaTeX Typesetting:** Clean typography for all mathematical terms, fractions, exponents, and Swiss notation conventions.
-* 🎯 **Review Cards & Exam Pools:** High-yield summary cards and randomized, timed mock exam pools aligned with Swiss grading scales (1.0–6.0).
-
-> [!NOTE]
-> **Curriculum to Code:** The rule set standardizes quality across topics, translating raw teaching goals into consistent, interactive web exercises without manual per-question scripting.
+### 💡 The Solution: LottaLEARN
+**LottaLEARN** turns secondary-level learning across Mathematics, Science (*Natur & Technik*), and beyond into an encouraging, tactile adventure. Designed specifically for school iPads and desktop browsers, it introduces:
+- **Zero-Friction Privacy:** No emails, no phone numbers, no tracking cookies. Profiles live locally on the device with optional privacy-first cloud synchronization.
+- **Error-Friendly Pedagogy:** Mistakes are not penalties — they trigger immediate explanatory feedback, cognitive hints, and are collected in the **«Fehler-Schmiede» (Error-Forge)** for targeted spaced repetition.
+- **Suki the Cat:** A lively mascot giving contextual encouragement and celebration based on educational psychology principles (Self-Determination Theory).
 
 ---
 
 ## ✨ Key Features
 
-### 1. 📐 Aligned with Swiss Curriculum (Lehrplan 21 / Sekundarstufe I)
-* **Part 1 — Algebra & Terme:**
-  * **World 1:** Terme & Variablen verstehen *(Grundregeln, Zusammenfassen)*
-  * **World 2:** Klammern auflösen & Distributivgesetz *(Ausmultiplizieren, Minusklammern)*
-  * **World 3:** Binomische Formeln *(Binom 1, 2, 3 vorwärts & rückwärts)*
-  * **World 4:** Faktorisieren & Ausklammern *(Ausklammern, Binome erkennen)*
-* **Part 2 — Geometrie & Flächen (Thema 2):**
-  * **World 5:** Rechtecke & Quadrate *(Umfang, Fläche, Flächenzerlegung)*
-  * **World 6:** Parallelogramme & Rauten *(Grundlinie $\cdot$ Höhe)*
-  * **World 7:** Dreiecke & Trapeze *($\frac{g \cdot h}{2}$ & Mittelparallele)*
-  * **World 8:** Reale Sachaufgaben *(Verschnitt, Wandfarben, Rabatte, Materialkosten)*
-* **Part 3 — Natur & Technik (Biologie & Physik):**
-  * **World 9:** Sehsinn & Optik *(Lichtstrahl-Modell, Konvex-/Konkavlinsen, Akkommodation, Sehfehler & Brillen)*
-  * **World 10:** Gehörsinn & Nervensystem *(Schallwellen, Ohr-Anatomie, Hörschnecke, Reiz-Reaktions-Schema & Reflexe)*
-* **Part 4 — Geschichte & Gesellschaft (RZG):**
-  * **World 11:** Industrielle Revolution *(Zündfunken in England, James Watt & Dampfkraft, Fabrikalltag, Soziale Frage & 6 Akteure)*
+### 1. 🗺️ Six Curriculum Worlds (Swiss Lehrplan 21 & Gymi Prep)
+- **Welt 1: Ganze Zahlen & Vorzeichen** — Negative numbers, number line navigation, absolute values, rules of signs.
+- **Welt 2: Variablen & Terme** — Introducing variables, algebraic substitution, and collecting like terms ($3a + 2b - a$).
+- **Welt 3: Terme vereinfachen & Klammern** — Distributive laws, expanding brackets, minus-signs before brackets, factoring.
+- **Welt 4: Brüche & Bruchterme** — Fraction arithmetic, common denominators, algebraic fraction simplification.
+- **Welt 5: Lineare Gleichungen** — Balance-scale model, step-by-step equivalence transformations ($2x + 5 = 17$).
+- **Welt 6: Textaufgaben & Modellieren** — Translating word puzzles into formal equations, geometry and age problems.
 
-### 2. ⌨️ Touch-Optimized Math Keyboard & Live KaTeX
-* Tailored for school iPads and mobile touchscreens with $\ge 48\text{px}$ touch targets.
-* Mathematical symbols ($x, y, a, b, ^2, ^3, \cdot, /, -, +$) without triggering irritating system software keyboards.
-* Live typographic LaTeX rendering with KaTeX.
+### 2. 🧩 Five Diverse Interaction Formats
+Moving far beyond generic multiple choice, questions utilize tactile, pedagogically tailored mechanics:
+- **Multiple Choice with Misconception Distractors:** Answers reflect real student traps with explanatory breakdowns.
+- **Custom Math On-Screen Keyboard:** Full mathematical expression input ($x$, $y$, fractions, exponents, brackets) designed for iPad touchscreens.
+- **Drag-and-Drop Term Grouping:** Sort like terms into color-coded buckets with tactile snap animations.
+- **Drag-and-Drop Step Sequencing:** Arrange equation-solving steps into correct logical order.
+- **Interactive Step-Builder:** Scaffolded multi-step problems guiding the student through sub-calculations.
 
-### 3. 🧩 Interactive Question Types & Step Builders
-* **Multiple Choice:** Quick conceptual checks with randomized options.
-* **Math Keypad Input:** Exact algebraic term matching and smart simplification.
-* **Drag-to-Group & Drag-to-Order:** Interactive sorting of equivalent expressions and calculation steps.
-* **Step-by-Step Builders:** Guiding students methodically through complex multi-step problems.
+### 3. 🛡️ Error-Forge («Fehler-Schmiede») & Spaced Repetition
+- Any missed problem is automatically routed to the personal **Fehler-Schmiede**.
+- Students can replay their specific trouble spots in focused practice rounds until mastered.
+- A capped, high-signal cache (100 questions) guarantees fast query performance and positive reinforcement.
 
-### 4. 🐱 Suki Mascot & Gamification
-* Real-time mood reactions, confetti celebrations, and encouraging feedback in Swiss German/Standard German tone.
-* Level progression from *Anfänger:in* up to *Sek-P-Champion*, achievement trophies, and streaks.
+### 4. 🔄 Monotonic Cross-Device Cloud Sync
+- **Local-First:** Immediate, zero-latency interactions via browser `localStorage`.
+- **Background Sync:** Progress (XP, stars, streaks, completed levels) is debounced (2s) and pushed to the MariaDB backend.
+- **8-Character Recovery Code (`XXXX-XXXX`):** Link an iPad to a home Mac or restore progress after an iPad reset without an account or email.
+- **Monotonic Conflict Resolution:** If two devices sync differing states, algorithms merge highest XP, best scores, and superset achievements — progress is never lost.
 
-### 5. 🛠️ Fehler-Schmiede (Mistake Vault)
-* Questions answered incorrectly automatically land in the student's personal vault for targeted spaced repetition.
-* Solved questions are tombstoned and archived.
+### 5. 📱 Optimized iPad Safari PWA & Offline Support
+- Fully installable via Safari **«Zum Home-Bildschirm»** (standalone fullscreen mode).
+- Offline-ready Service Worker caching: all fonts, formulas, and assets are locally bundled, requiring zero external CDN runtime dependencies.
+- Automatic background updates without interrupting active quiz rounds.
 
-### 6. 📝 Exam Simulation (Prüfungsmodus)
-* Realistic 20-question randomized mock test across all worlds and subjects (including the new NT exam pool).
-* Swiss standard grading scale (Grade 1.0 to 6.0, rounded to quarters).
+### 6. 🏫 Classroom Mode & Monetization Readiness
+- **Classroom Password Gate:** Built-in SHA-256 Web Crypto password lock to prevent public access during classroom trials.
+- **Freemium Stripe Integration:** Ready for Stripe Checkout with native Swiss payment methods (TWINT & Credit Cards).
+- **Kill-Switch Architecture:** The `premium_enforced` switch allows toggling the entire app between 100% free mode and subscription gating instantly.
+- **Student Problem Reporter:** Integrated modal allowing students to report confusing formulations or typos directly to a private Discord channel.
 
 ---
 
-## 🛠️ Technology Stack
+## 📏 The Golden Rules of Content Creation
 
-| Component | Technology | Rationale |
+### 📐 Mathematics: The 9 Golden Rules
+Every mathematical problem, interaction, and visual sketch in LottaLEARN is strictly governed by the **9 Golden Rules of Math Content**, ensuring textbook quality (Swiss *Lehrplan 21* / Gymnasium standard), zero cognitive overload, and bulletproof UI compatibility:
+
+| # | Rule | Core Directive & Pedagogical Purpose |
 |---|---|---|
-| **Core Architecture** | Vanilla ES Modules (JS/HTML5) | Zero runtime overhead, fast boot time |
-| **Styling & Theme** | Modern Vanilla CSS | Smooth gradients, glassmorphism, responsive grid |
-| **Math Typesetting** | [KaTeX](https://katex.org/) | Blazing fast inline and display LaTeX rendering |
-| **Micro-Animations** | [Anime.js](https://animejs.com/) | Fluid feedback for mascot and XP counters |
-| **Drag & Drop** | [SortableJS](https://sortablejs.github.io/Sortable/) | Smooth touch-friendly drag-and-drop sorting |
-| **Bundler** | [Vite](https://vitejs.dev/) | Sub-second builds, efficient tree-shaking |
-| **Hosting** | [GitHub Pages](https://pages.github.com/) | 1-click CI/CD deployment via GitHub Actions |
+| **1** | **Question Uniqueness & Diversity** *(No Clones)* | Never create identical or cloned tasks (e.g. merely swapping $x$ for $y$ or $5$ for $6$). Every question targets a distinct algebraic pattern, order of operations, or geometric configuration across calibrated difficulty tiers (1–3). |
+| **2** | **Mental Math Standard** *(Kopfrechenbare Zahlen)* | Every step—including intermediate dividends and products—must be effortlessly solvable mentally by a 13-year-old student without a calculator or scratchpad. Requires clean integers/halves, even $(a+c)$ sums for trapezoid $\div 2$, and clean factors. |
+| **3** | **The 3-Tier Hint Ladder & Strict Boundaries** | Exactly 3 progressive hints with strict information boundaries: **Level 1 (`💡 Tipp`)** = conceptual orientation only; **Level 2 (`🔑 Hinweis`)** = methodological setup/first step (never reveals the final answer); **Level 3 (`✅ Lösung`)** = complete step-by-step resolution; plus a mandatory **`commonMistake`** trap breakdown. |
+| **4** | **Visual Scaffolding, SVG Fidelity & Zero Spoilers** | Mandatory visual models (`custom-svg`, `area-model`, `algebra-tiles`). Sketches must maintain proportional integrity and use Unicode (no raw LaTeX in SVG `<text>`). `promptLatex` and sketches must **never** spoil intermediate calculations, decomposed formulas, or variable letters in matching tasks. |
+| **5** | **Keyboard Reachability & Permutation Completeness** | `fill-in` and `step-builder` solutions must be 100% typable on the custom iPad math keyboard (only `0-9`, `x`, `y`, `a`, `b`, `²`, `³`, `+`, `-`, `·`, `/`, `,`, `(`, `)`). No other letters, units, or `=` signs. All commutative factor permutations in parentheses must be registered in `acceptedAnswers`. |
+| **6** | **Dummy Placeholder Integrity** *(Fill-in)* | The `interaction.placeholder` must never reveal `correctAnswer`, must never equal the `commonMistake` trap value (preventing cognitive anchoring), and must use distinct numbers from a different problem format example. |
+| **7** | **Diagnostic Distractor Design** *(Multiple Choice)* | Every multiple-choice task provides 4 options where all 3 distractors map directly to real, predictable student misconceptions (e.g. forgetting $\div 2$, minus-bracket sign flip, perimeter vs. area). All 4 options maintain length and stylistic parity to eliminate test-wiseness guessing. |
+| **8** | **Interaction Randomization & Order Integrity** | Options and draggable items must never be authored in solved order in data files. The engine applies dynamic Fisher-Yates shuffling and defensive UI collision detection to prevent trivial positional solutions. |
+| **9** | **Swiss Orthography Standard** *(Strictly No «ß»)* | Zero tolerance for the German Eszett («ß»). In Switzerland, standard orthography strictly replaces «ß» with «ss» (or «SS» in uppercase) across all UI elements, task prompts, answers, hints, and explanations. |
+
+### 🔬 Natur & Technik (Science) & RZG (Humanities): The 9 Golden Rules
+To maintain the same rigorous Swiss Sekundarschule Niveau P standard across science and humanities:
+
+| # | Rule | Core Directive & Pedagogical Purpose |
+|---|---|---|
+| **1** | **Complete Causal Chains** *(Ursache → Mechanismus → Auswirkung)* | Explanations must never stop at naming facts. E.g., for Myopia: not just "the eyeball is too long", but "because the eyeball is too long, the focal point forms *in front of* the retina, projecting a blurred circle onto it". |
+| **2** | **Taxonomy & Terminology Consistency** | Precise anatomical and scientific naming (e.g. *Ziliarmuskel / Ringmuskel*, *Konvex- / Sammellinse*, *Konkav- / Zerstreuungslinse*, *sensorisch / motorisch*). |
+| **3** | **Cognitive Traps & Plausible Distractors** | All 3 multiple-choice distractors embody real student misconceptions (e.g. confusing circular reasoning in AM 3.12b or reversing near/far muscle accommodation). |
+| **4** | **3-Tier Pedagogical Hint Ladder** | Tier 1 = Intuitive everyday hook; Tier 2 = Biological/Physical mechanism; Tier 3 = Full exam-grade answer; plus diagnostic `commonMistake`. |
+| **5** | **Touch-Optimized Interaction Types** | Strictly utilize `multiple-choice`, `drag-group` (classification), and `drag-order` (chronological stimulus-response or anatomy sequences). Zero typing traps or auto-correct penalties on iPad. |
+| **6** | **Anti-Spoiler Visual Schematics** | Anatomical and ray diagrams highlight the phenomenon without giving away the answer text. |
+| **7** | **Curriculum & Worksheet Alignment** | Direct mapping to Swiss Lehrplan 21 and Sek P worksheets (e.g. AM 3.12 & AM 3.13 for vision correction). |
+| **8** | **Authoring Scramble Integrity** | Question items and options are pre-scrambled in data and shuffled at runtime. |
+| **9** | **Swiss Orthography Standard** *(Strictly No «ß»)* | Zero tolerance for «ß». All German terms use «ss» (e.g. *gross*, *schliessen*, *heiss*, *weisse Substanz*, *Russ*, *süss*), adhering to Swiss school standards. |
+
+*(Detailed schemas, code specifications, and the pre-flight verification checklist are documented in [docs/CONTENT_SCHEMA.md](./docs/CONTENT_SCHEMA.md)).*
 
 ---
 
-## 🚀 Local Development
+## 🛠️ Architecture & Tech Stack
 
+```
+LottaLEARN/
+├── api/                    # Lightweight PHP 8 / MariaDB REST API
+│   ├── config.php          # Central configuration & fallback defaults
+│   ├── db.php              # Singleton PDO database connector
+│   ├── sync.php            # Cross-device profile & progress sync endpoint
+│   ├── report.php          # Discord Webhook issue reporting endpoint
+│   ├── checkout.php        # Stripe Checkout session creator (TWINT / Card)
+│   ├── portal.php          # Stripe Customer Portal session endpoint
+│   ├── verify.php          # License key validation & rate-limiting endpoint
+│   └── webhook.php         # Stripe event webhook listener
+├── src/                    # Frontend Application (Vanilla ES Modules)
+│   ├── components/         # UI Components (MathKeyboard, Suki, DragDrop, etc.)
+│   ├── data/               # World definitions & curated question pools (W1–W10, Mathe & NT)
+│   ├── engine/             # Core engines (GameState, QuestionEngine, SyncService)
+│   ├── screens/            # Application views (Dashboard, Quiz, Exam, etc.)
+│   ├── index.css           # Modern CSS design system with HSL tokens
+│   └── main.js             # App controller, hash router, and lifecycle
+├── public/                 # Static assets, icons, manifest, service worker
+└── vite.config.js          # Build configuration targeting Safari 15+
+```
+
+| Layer | Technology | Rationale |
+|---|---|---|
+| **Frontend Framework** | **Vanilla JS (ES6+)** | Zero framework overhead, ultra-fast load times on school tablets, zero bundle bloat. |
+| **Styling** | **Modern Vanilla CSS** | Custom CSS custom properties, HSL color system, glassmorphism, responsive grid. |
+| **Formula Engine** | **KaTeX (bundled)** | High-performance, accessible LaTeX math rendering that works 100% offline. |
+| **Animations** | **Anime.js** | Micro-interactions, celebratory star triggers, and tactile button feedback. |
+| **Touch Gestures** | **SortableJS** | Smooth HTML5 & touch drag-and-drop support on mobile Safari. |
+| **Bundler** | **Vite 6** | Instant HMR during development, optimized single-pass Safari 15 target bundle. |
+| **Backend API** | **PHP 8.x + PDO** | Stateless, fast, highly compatible with standard Swiss cPanel/cyon.ch hosting. |
+| **Database** | **MariaDB** | Normalized tables for licenses, synced profiles, and JSON state blobs (`utf8mb4`). |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js** 18+ and `npm`
+- *(Optional for Backend)* PHP 8.1+ & MySQL/MariaDB
+
+### Local Development
 ```bash
-# 1. Clone the repository
-git clone https://github.com/Flx-xlF/LottaMATH-DEMO.git
-cd LottaMATH-DEMO
+# 1. Clone repository
+git clone https://github.com/Flx-xlF/lottamath.git
+cd lottamath
 
 # 2. Install dependencies
 npm install
 
-# 3. Start development server
+# 3. Start local development server
 npm run dev
+```
+Open `http://localhost:3000` in your browser. (The server is also reachable on your local Wi-Fi IP for live iPad testing).
 
-# 4. Create production build
+### Production Build
+```bash
 npm run build
 ```
+Generates the fully optimized static bundle in `dist/`, automatically packaging the `api/` folder alongside web assets.
 
 ---
 
-## 📄 License & Attribution
+## 🚢 Deployment
 
-Distributed under the **MIT License**.
+The project is structured for 1-click SFTP/FTPS deployment onto standard web hosting environments like **cyon.ch**:
+
+1. Run `npm run build`.
+2. Upload the contents of `dist/` to your server's document root (e.g. `/public_html/lottamath.yourdomain.ch/`).
+3. In `api/`, create a `config.local.php` file with your MariaDB database credentials.
+4. Import `api/schema.sql` and `api/sync_schema.sql` via phpMyAdmin.
+
+*(Detailed step-by-step instructions available in [DEPLOY.md](./DEPLOY.md)).*
+
+---
+
+## 🔒 Privacy & Security
+
+- **Student Protection:** No analytics, tracking pixels, or third-party cookies.
+- **Hardened Server Config:** Root and API `.htaccess` files block direct access to `.env`, `composer.json`, and server secrets.
+- **Prepared Statements:** All database queries strictly utilize parameterized PDO prepared statements to eliminate SQL injection risks.
+- **IP Rate Limiting:** Built-in rate limiting on sync and license validation endpoints protects against brute-force attacks and abuse.
+
+---
+
+## 👨‍💻 Portfolio Highlights & Takeaways
+
+- **Pedagogical Engineering:** Designed from scratch to address psychological hurdles in secondary math education using positive reinforcement and error-tolerant interfaces.
+- **Mobile-First Touch Architecture:** Built custom UI components (such as an on-screen LaTeX keypad and touch sorting) to make complex mathematical notation intuitive on tablets.
+- **Local-First Data Resilience:** Engineered a monotonic state-merging synchronization model ensuring no lost student work even under unstable classroom Wi-Fi.
+
+---
 
 Built with care (and a bit of madness) by [schema/f](https://github.com/Flx-xlF).  
 Enjoy my work? [Tip me on Ko-fi](https://ko-fi.com/flxxlf).
+
+---
+
+*Created with ❤️ for Lotta and every student taking their first steps into the world of algebra.*

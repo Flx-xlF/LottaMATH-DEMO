@@ -496,7 +496,7 @@ export const WORLD11_QUESTIONS = [
     correctAnswer: 'Verschmutzte Flüsse, beissende Luftverschmutzung, Müllberge, wenig Trinkwasser und Seuchen.',
     acceptedAnswers: ['Verschmutzte Flüsse, beissende Luftverschmutzung, Müllberge, wenig Trinkwasser und Seuchen.'],
     hints: [
-      '💡 Tipp: Kohlenruß, fehlende Kanalisation und tausende Menschen auf engstem Raum ohne sauberes Wasser.',
+      '💡 Tipp: Kohlenruss, fehlende Kanalisation und tausende Menschen auf engstem Raum ohne sauberes Wasser.',
       '🔑 Hinweis: Die Städte wuchsen viel schneller als die Infrastruktur (Abwasser, Müllabfuhr, Trinkwasserleitungen).',
       '✅ Lösung: Flüsse verschmutzt, Luftverschmutzung, überfüllte Mietswohnungen, wenig Trinkwasser, Abfall, Lärm, Krankheiten.',
     ],

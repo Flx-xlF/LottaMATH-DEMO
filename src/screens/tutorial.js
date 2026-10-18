@@ -482,7 +482,7 @@ export function renderTutorial(container, levelId, callbacks = {}) {
 
       const valSpan = document.createElement('span');
       valSpan.className = 'tutorial-breakdown-val';
-      const isFormula = /[0-9xya-z²³⁴⁵+\-·*\/=()^]/.test(b.value) && (b.value.match(/[a-zA-ZäöüÄÖÜß]{3,}/g) || []).length === 0;
+      const isFormula = /[0-9xya-z²³⁴⁵+\-·*\/=()^]/.test(b.value) && (b.value.match(/[a-zA-ZäöüÄÖÜ]{3,}/g) || []).length === 0;
       renderMathInText(valSpan, b.value.includes('$') ? b.value : (isFormula ? `$${b.value}$` : b.value));
 
       itemEl.appendChild(labelSpan);

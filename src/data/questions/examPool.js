@@ -1501,7 +1501,7 @@ export const EXAM_QUESTIONS_NT = [
     correctAnswer: 'Weil die Zunge nur 5 Grundgeschmäcker erkennt und erst der Geruchssinn feine Aromen zur Gesamtwahrnehmung beisteuert',
     acceptedAnswers: ['Weil die Zunge nur 5 Grundgeschmäcker erkennt und erst der Geruchssinn feine Aromen zur Gesamtwahrnehmung beisteuert'],
     hints: [
-      '💡 Tipp: Geschmack (süß, sauer, salzig, bitter, umami) ist nur ein kleiner Teil des "Geschmackserlebnisses".',
+      '💡 Tipp: Geschmack (süss, sauer, salzig, bitter, umami) ist nur ein kleiner Teil des "Geschmackserlebnisses".',
       '🔑 Hinweis: Rund 80% des scheinbaren Geschmacks wird retronasal über die Riechschleimhaut wahrgenommen (multisensorische Verknüpfung).',
       '✅ Lösung: Zunge erkennt nur Grundgeschmäcker, Nase liefert die Aromen.',
     ],
@@ -1866,7 +1866,7 @@ export const EXAM_QUESTIONS_RZG = [
     hints: [
       '💡 Tipp: Keine Kanalisation, Schornsteine ohne Filter und Kloaken, die ins Trinkwasser sickerten.',
       '🔑 Hinweis: Flüsse verschmutzt, Luftverschmutzung, wenig Trinkwasser, Abfall, Lärm, Krankheiten.',
-      '✅ Lösung: Flüsse verschmutzt, Ruß, Trinkwassermangel, Abfall und Krankheiten.',
+      '✅ Lösung: Flüsse verschmutzt, Russ, Trinkwassermangel, Abfall und Krankheiten.',
     ],
     commonMistake: 'Die verheerenden Umweltfolgen der unkontrollierten Frühindustrialisierung unterschätzt.',
   },

@@ -43,7 +43,7 @@ export function renderMultipleChoice(container, options = {}) {
       renderMathInText(contentSpan, choiceText);
     } else {
       // Check if pure math-like string without multi-letter words
-      const words = choiceText.match(/[a-zA-ZäöüÄÖÜß]{3,}/g) || [];
+      const words = choiceText.match(/[a-zA-ZäöüÄÖÜ]{3,}/g) || [];
       const hasMathChars = /[0-9xya-z²³⁴⁵+\-·*\/=()^]/.test(choiceText);
       if (words.length === 0 && hasMathChars) {
         renderMathInText(contentSpan, `$${choiceText}$`);

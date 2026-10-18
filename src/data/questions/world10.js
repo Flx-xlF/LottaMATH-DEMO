@@ -602,7 +602,7 @@ export const WORLD10_QUESTIONS = [
     acceptedAnswers: ['Reflexe sichern das unmittelbare Überleben bei akuter Gefahr; bewusste Reaktionen ermöglichen flexibles, intelligentes und vorausschauendes Handeln.'],
     hints: [
       '💡 Tipp: Überlege: Was wäre, wenn wir nur Reflexe hätten? Und was wäre, wenn wir bei jeder heissen Herdplatte erst 2 Sekunden nachdenken müssten?',
-      '🔑 Hinweis: Die Kombination aus blitzschnellen Schutzschaltungen und komplexer Großhirn-Planung ist die perfekte Überlebensstrategie.',
+      '🔑 Hinweis: Die Kombination aus blitzschnellen Schutzschaltungen und komplexer Grosshirn-Planung ist die perfekte Überlebensstrategie.',
       '✅ Lösung: Die Zweiteilung verbindet blitzschnelle Schadensvermeidung (Reflex) mit intelligenter Anpassungsfähigkeit (Grosshirn).',
     ],
     commonMistake: 'Reflexe als veraltete oder überflüssige Mechanismen abgetan.',

@@ -45,7 +45,7 @@ export function renderDragGroup(container, options = {}) {
 
     const textSpan = document.createElement('span');
     textSpan.className = 'drag-item__text';
-    const words = itemText.match(/[a-zA-ZäöüÄÖÜß]{3,}/g) || [];
+    const words = itemText.match(/[a-zA-ZäöüÄÖÜ]{3,}/g) || [];
     const isPureMath = words.length === 0 && /[0-9xya-z²³⁴⁵+\-·*\/=()^]/.test(itemText) && !/[=<>]{2,}/.test(itemText);
     renderMathInText(textSpan, itemText.includes('$') ? itemText : (isPureMath ? `$${itemText}$` : itemText));
 
@@ -200,7 +200,7 @@ export function renderDragOrder(container, options = {}) {
 
     const textSpan = document.createElement('span');
     textSpan.className = 'drag-order__text';
-    const words = itemText.match(/[a-zA-ZäöüÄÖÜß]{3,}/g) || [];
+    const words = itemText.match(/[a-zA-ZäöüÄÖÜ]{3,}/g) || [];
     const isPureMath = words.length === 0 && /[0-9xya-z²³⁴⁵+\-·*\/=()^]/.test(itemText) && !/[=<>]{2,}/.test(itemText);
     renderMathInText(textSpan, itemText.includes('$') ? itemText : (isPureMath ? `$${itemText}$` : itemText));
 
