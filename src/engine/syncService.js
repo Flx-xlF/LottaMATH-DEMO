@@ -84,7 +84,12 @@ const PENDING_DELETES_KEY = 'lottamath_pending_deletes';
 
 // Sync status state
 let _syncStatus = 'idle'; // 'idle' | 'syncing' | 'synced' | 'offline' | 'error' | 'unregistered'
+let _lastSyncError = null;
 const _statusListeners = new Set();
+
+export function getLastSyncError() {
+  return _lastSyncError;
+}
 
 const _pushTimers = {};
 
@@ -185,22 +190,6 @@ export const RECOVERY_ALPHABET = 'ABCDEFGHJKMNPQRTUVWXYZ2346789';
  * Uses unambiguous uppercase letters and digits.
  * @returns {string}
  */
-
-/**
- * Normalizes user input for recovery codes:
- * Handles smart dashes, en-dashes, em-dashes, spaces, and formats 8 alphanumeric chars into XXXX-XXXX.
- * @param {string} code
- * @returns {string}
- */
-export function normalizeRecoveryCode(code) {
-  if (!code || typeof code !== "string") return "";
-  const cleaned = code.replace(/[\s\u2010-\u2015\u2212-]+/g, "").toUpperCase();
-  if (cleaned.length === 8) {
-    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 8)}`;
-  }
-  return code.trim().toUpperCase();
-}
-
 export function generateClientRecoveryCode() {
   const getRandomChar = () => {
     if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
@@ -216,6 +205,21 @@ export function generateClientRecoveryCode() {
   for (let i = 0; i < 4; i++) p1 += getRandomChar();
   for (let i = 0; i < 4; i++) p2 += getRandomChar();
   return `${p1}-${p2}`;
+}
+
+/**
+ * Normalizes user input for recovery codes:
+ * Handles smart dashes, en-dashes, em-dashes, spaces, and formats 8 alphanumeric chars into XXXX-XXXX.
+ * @param {string} code
+ * @returns {string}
+ */
+export function normalizeRecoveryCode(code) {
+  if (!code || typeof code !== 'string') return '';
+  const cleaned = code.replace(/[\s\u2010-\u2015\u2212-]+/g, '').toUpperCase();
+  if (cleaned.length === 8) {
+    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 8)}`;
+  }
+  return code.trim().toUpperCase();
 }
 
 /**
@@ -379,7 +383,9 @@ export async function registerProfile(profileId, nickname, avatar) {
       });
 
       if (!response.ok) {
-        console.warn('Sync registration returned non-ok status:', response.status);
+        const errBody = await response.json().catch(() => ({}));
+        _lastSyncError = errBody.error || `Serverfehler (${response.status})`;
+        console.warn('Sync registration returned non-ok status:', response.status, _lastSyncError);
         return null;
       }
 
@@ -449,13 +455,16 @@ export async function pushState(profileId, gameState, retryOn401 = true) {
         setSyncToken(profileId, null);
         return pushState(profileId, gameState, false);
       }
-      if (response.status === 401 || response.status === 400) {
+      const errBody = await response.json().catch(() => ({}));
+      const errMsg = errBody.error || `Serverfehler (${response.status})`;
+      _lastSyncError = errMsg;
+      if (response.status === 401 || response.status === 400 || response.status === 503) {
         _setStatus('error');
       } else {
         _pendingPush = { profileId, gameState };
         _setStatus('offline');
       }
-      return { success: false };
+      return { success: false, error: errMsg };
     }
 
     const data = await response.json();
@@ -521,6 +530,7 @@ export async function pullState(profileId, retryOn401 = true) {
       body: JSON.stringify({
         action: 'pull',
         sync_token: syncToken,
+        recovery_code: ensureLocalRecoveryCode(profileId),
       }),
     });
 
@@ -530,7 +540,10 @@ export async function pullState(profileId, retryOn401 = true) {
         setSyncToken(profileId, null);
         return pullState(profileId, false);
       }
-      if (response.status === 401) {
+      const errBody = await response.json().catch(() => ({}));
+      const errMsg = errBody.error || `Serverfehler (${response.status})`;
+      _lastSyncError = errMsg;
+      if (response.status === 401 || response.status === 503) {
         _setStatus('error');
       } else {
         _setStatus('offline');
@@ -580,7 +593,7 @@ export async function syncNow(profileId) {
       return {
         success: false,
         status: isOff ? 'offline' : 'unregistered',
-        error: isOff ? 'Keine Internetverbindung' : 'Server-Registrierung fehlgeschlagen',
+        error: isOff ? 'Keine Internetverbindung' : (_lastSyncError || 'Server-Registrierung fehlgeschlagen'),
       };
     }
 
@@ -597,17 +610,39 @@ export async function syncNow(profileId) {
     if (pulled && pulled.state) {
       const merged = mergeStates(localState, pulled.state);
       localStorage.setItem(stateKey, JSON.stringify(merged));
-      await pushState(profileId, merged);
-      _setStatus('synced');
-      return { success: true, status: 'synced' };
+      const pushRes = await pushState(profileId, merged);
+      if (pushRes && pushRes.success) {
+        _setStatus('synced');
+        return { success: true, status: 'synced' };
+      }
+      return {
+        success: false,
+        status: _syncStatus,
+        error: pushRes?.error || _lastSyncError || 'Sync-Push fehlgeschlagen',
+      };
     } else if (localState) {
-      await pushState(profileId, localState);
+      const pushRes = await pushState(profileId, localState);
+      if (pushRes && pushRes.success) {
+        _setStatus('synced');
+        return { success: true, status: 'synced' };
+      }
+      return {
+        success: false,
+        status: _syncStatus,
+        error: pushRes?.error || _lastSyncError || 'Sync-Push fehlgeschlagen',
+      };
+    }
+
+    if (pulled) {
       _setStatus('synced');
       return { success: true, status: 'synced' };
     }
 
-    _setStatus('synced');
-    return { success: true, status: 'synced' };
+    return {
+      success: false,
+      status: _syncStatus,
+      error: _lastSyncError || 'Server nicht erreichbar',
+    };
   } catch (err) {
     console.warn('syncNow failed:', err);
     _setStatus('error');
