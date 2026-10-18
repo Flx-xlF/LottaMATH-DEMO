@@ -121,7 +121,7 @@ export function checkAchievements(state) {
   const isWorld3Complete = state.levels && state.levels['3-5'] && state.levels['3-5'].completed;
   const isWorld4Complete = state.levels && state.levels['4-5'] && state.levels['4-5'].completed;
 
-  const allBossKeys = ['1-5', '2-5', '3-5', '4-5', '5-5', '6-5', '7-5', '8-5', '9-5', '10-5'];
+  const allBossKeys = ['1-5', '2-5', '3-5', '4-5', '5-5', '6-5', '7-5', '8-5', '9-5', '10-5', '11-5'];
   const anyBossComplete = allBossKeys.some((k) => state.levels && state.levels[k] && state.levels[k].completed);
   const termeBossCount = [isWorld1Complete, isWorld2Complete, isWorld3Complete, isWorld4Complete].filter(Boolean).length;
 

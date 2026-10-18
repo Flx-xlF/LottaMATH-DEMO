@@ -3,7 +3,7 @@
  * Cache-first offline support for iPad Safari.
  */
 
-const CACHE_NAME = 'lottalearn-v17';
+const CACHE_NAME = 'lottalearn-v18';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -436,14 +436,14 @@ class LottaMathApp {
         return;
       }
 
-      const subjectName = activeSubject === 'nt' ? 'Natur & Technik' : 'Mathematik';
+      const subjectName = activeSubject === 'nt' ? 'Natur & Technik' : (activeSubject === 'geschichte' ? 'Geschichte (RZG)' : 'Mathematik');
 
       this.currentScreen = renderQuiz(
         this.appContainer,
         {
           gameState: this.gameState,
           questions,
-          worldId: activeSubject === 'nt' ? 9 : 1,
+          worldId: activeSubject === 'nt' ? 9 : (activeSubject === 'geschichte' ? 11 : 1),
           levelId: 'vault',
           isBoss: false,
           timeLimit: 0,

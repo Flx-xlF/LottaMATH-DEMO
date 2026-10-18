@@ -24,7 +24,9 @@ export function renderExam(container, gameState, callbacks = {}) {
   screenEl.className = 'screen exam-screen flex-col flex-center';
   container.appendChild(screenEl);
 
-  let selectedTopic = (gameState && gameState.activeSubject === 'nt') ? 'sinne_optik' : 'all';
+  let selectedTopic = (gameState && gameState.activeSubject === 'nt')
+    ? 'sinne_optik'
+    : ((gameState && gameState.activeSubject === 'geschichte') ? 'revolution' : 'all');
 
   function showIntro() {
     screenEl.innerHTML = `
@@ -40,7 +42,8 @@ export function renderExam(container, gameState, callbacks = {}) {
           <select id="exam-topic-select" class="form-input" style="padding: 10px; border-radius: var(--radius-sm); font-size: 1rem; cursor: pointer;">
             <option value="flaechen" ${selectedTopic === 'flaechen' ? 'selected' : ''}>📐 Mathe: Flächeninhalt ebener Figuren</option>
             <option value="terme" ${selectedTopic === 'terme' ? 'selected' : ''}>🌊 Mathe: Terme & Termumformungen</option>
-            <option value="sinne_optik" ${selectedTopic === 'sinne_optik' ? 'selected' : ''}>👁️ NT: Reize, Sinne & Optik (Neu!)</option>
+            <option value="sinne_optik" ${selectedTopic === 'sinne_optik' ? 'selected' : ''}>👁️ NT: Reize, Sinne & Optik</option>
+            <option value="revolution" ${selectedTopic === 'revolution' ? 'selected' : ''}>🚂 Geschichte: Industrielle Revolution (Neu!)</option>
             <option value="all" ${selectedTopic === 'all' ? 'selected' : ''}>🌟 Mathe: Gesamter Stoff gemischt</option>
           </select>
         </div>

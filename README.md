@@ -1,6 +1,6 @@
 # 🐾 LottaLEARN (Demo)
 
-> Gamified, privacy-first multi-subject learning platform tailored for Swiss Secondary School (Sekundarstufe I, Niveau P) covering Mathematics and Natur & Technik (Science). Built with interactive SVG visual models, live LaTeX rendering, custom touch keyboard, and local-first progress tracking.
+> Gamified, privacy-first multi-subject learning platform tailored for Swiss Secondary School (Sekundarstufe I, Niveau P) covering Mathematics, Natur & Technik (Science), and Geschichte (History/RZG). Built with interactive SVG visual models, live LaTeX rendering, custom touch keyboard, and local-first progress tracking.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-F20587?style=flat-square&logo=github)](https://flx-xlf.github.io/LottaMATH-DEMO/)
 [![Bundle Size](https://img.shields.io/badge/Bundle-<250_kB_gzipped-black?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
@@ -86,6 +86,8 @@ Governed by the rule set, the pipeline translates the input into complete intera
 * **Part 3 — Natur & Technik (Biologie & Physik):**
   * **World 9:** Sehsinn & Optik *(Lichtstrahl-Modell, Konvex-/Konkavlinsen, Akkommodation, Sehfehler & Brillen)*
   * **World 10:** Gehörsinn & Nervensystem *(Schallwellen, Ohr-Anatomie, Hörschnecke, Reiz-Reaktions-Schema & Reflexe)*
+* **Part 4 — Geschichte & Gesellschaft (RZG):**
+  * **World 11:** Industrielle Revolution *(Zündfunken in England, James Watt & Dampfkraft, Fabrikalltag, Soziale Frage & 6 Akteure)*
 
 ### 2. ⌨️ Touch-Optimized Math Keyboard & Live KaTeX
 * Tailored for school iPads and mobile touchscreens with $\ge 48\text{px}$ touch targets.

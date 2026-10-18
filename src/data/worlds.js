@@ -1551,6 +1551,176 @@ export const WORLDS = [
       },
     ],
   },
+  {
+    id: 11,
+    topicId: 'revolution',
+    name: 'Industrielle Revolution',
+    emoji: '🚂',
+    colorPrimary: 'hsl(25, 90%, 48%)',
+    colorSecondary: 'hsl(15, 85%, 35%)',
+    description: 'Vom Zündfunken in England über James Watts Dampfmaschine bis zur Sozialen Frage.',
+    realWorldIntro: {
+      headline: 'Wie die Dampfmaschine unsere Welt veränderte',
+      examples: [
+        {
+          icon: '🧵',
+          title: 'Handarbeit vs. Fabrik (Produktionssprung)',
+          scenario: 'Vor 250 Jahren entstand jedes Kleidungsstück in wochenlanger Handarbeit zu Hause. Dampfgetriebene Webstühle stellten plötzlich in Stunden her, wofür Weber früher Monate brauchten.',
+          mathBreakdown: [
+            {
+              step: '1. Handwebstuhl',
+              detail: 'Ein geübter Handweber schaffte mühsam ca. 2 Meter Tuch pro Tag.',
+              math: '',
+            },
+            {
+              step: '2. Mechanischer Webstuhl',
+              detail: 'Eine dampfbetriebene Spinnmaschine produzierte über 50 Meter pro Tag – das 25-Fache!',
+              math: '',
+            },
+          ],
+          sukiComment: 'Kleidung wurde für Millionen bezahlbar – doch Handwerker verloren über Nacht ihre Existenz!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 135" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <!-- Left: Handarbeit -->
+              <rect x="20" y="25" width="135" height="85" rx="8" fill="rgba(255,255,255,0.05)" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="87" y="45" fill="#f59e0b" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Vor der Revolution</text>
+              <text x="87" y="68" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Mühsame Handarbeit</text>
+              <text x="87" y="85" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Heimarbeit &amp; Manufaktur</text>
+              <text x="87" y="102" fill="#94a3b8" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">2 Meter / Tag</text>
+
+              <!-- Arrow -->
+              <text x="170" y="72" fill="#10b981" font-size="22" font-weight="bold" text-anchor="middle">→</text>
+
+              <!-- Right: Fabrik -->
+              <rect x="185" y="25" width="135" height="85" rx="8" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="2"/>
+              <text x="252" y="45" fill="#10b981" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Industrielle Fabrik</text>
+              <text x="252" y="68" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Dampf &amp; Maschinen</text>
+              <text x="252" y="85" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Massenfertigung</text>
+              <text x="252" y="102" fill="#34d399" font-size="9" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">50+ Meter / Tag</text>
+            </svg>`,
+          },
+        },
+        {
+          icon: '⚙️',
+          title: 'James Watt & die Dampfkraft (21 Männer)',
+          scenario: 'Frühe Mühlen funktionierten nur an Flüssen und froren im Winter ein. James Watt erfand die ortsunabhängige Dauerenergie.',
+          mathBreakdown: [
+            {
+              step: '1. Gigantische Kraft',
+              detail: 'Eine einzige frühe Dampfmaschine ersetzte die Muskelkraft von 21 erwachsenen Männern.',
+              math: '',
+            },
+            {
+              step: '2. Mobilitätswunder',
+              detail: 'Dampflokomotiven und Dampfschiffe brachten Kohle, Eisen und Menschen in Rekordzeit ans Ziel.',
+              math: '',
+            },
+          ],
+          sukiComment: 'Die Dampfmaschine befreite die Fabriken von Flussufern und Wetter – und trieb den weltweiten Handel an!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 135" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <rect x="25" y="25" width="290" height="85" rx="8" fill="rgba(249, 115, 22, 0.1)" stroke="#f97316" stroke-width="1.5"/>
+              <text x="170" y="48" fill="#f97316" font-size="12" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Watts Dampfmaschine: Konstante Energie</text>
+              <circle cx="70" cy="78" r="18" fill="rgba(249, 115, 22, 0.2)" stroke="#f97316" stroke-width="2"/>
+              <text x="70" y="82" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">⚙️</text>
+              <text x="170" y="75" fill="#f8fafc" font-size="11" font-family="Outfit, sans-serif" text-anchor="middle">1 Maschine = Arbeitskraft von 21 Männern</text>
+              <text x="170" y="94" fill="#94a3b8" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Wetterunabhängig · Tag &amp; Nacht · Freie Standortwahl</text>
+            </svg>`,
+          },
+        },
+        {
+          icon: '⚖️',
+          title: 'Die Soziale Frage (Fortschritt vs. Not)',
+          scenario: 'Wieso drohte der arbeitenden Bevölkerung trotz dieses gewaltigen Reichtums Verelendung, Kinderarbeit und Hunger?',
+          mathBreakdown: [
+            {
+              step: '1. Widerspruch',
+              detail: 'Fabrikbesitzer wurden steinreich, Arbeiter hausten zu mehreren Familien in feuchten 1-Zimmer-Wohnungen.',
+              math: '',
+            },
+            {
+              step: '2. Die 6 Lösungsansätze',
+              detail: 'Arbeiter (Gewerkschaften), Parteien (SPD), Unternehmer, Kirchen, Staat (Gesetze) und Revolutionäre rangen um die Lösung.',
+              math: '',
+            },
+          ],
+          sukiComment: 'Ohne Gewerkschaften und staatliche Gesetze gäbe es heute kein Verbot von Kinderarbeit und keine Krankenversicherung!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 135" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="140" height="95" rx="8" fill="rgba(244, 63, 94, 0.12)" stroke="#f43f5e" stroke-width="1.5"/>
+              <text x="90" y="38" fill="#f43f5e" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Das Dilemma</text>
+              <text x="90" y="58" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">12h-Arbeitstag</text>
+              <text x="90" y="74" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Kinderarbeit</text>
+              <text x="90" y="90" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Wohnungsnot</text>
+              <text x="90" y="106" fill="#f8fafc" font-size="10" font-family="Outfit, sans-serif" text-anchor="middle">Null Absicherung</text>
+
+              <rect x="180" y="20" width="140" height="95" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="250" y="38" fill="#38bdf8" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Die 6 Antworten</text>
+              <text x="250" y="58" fill="#f8fafc" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">1. Arbeiter (Gewerkschaft)</text>
+              <text x="250" y="72" fill="#f8fafc" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">2. Unternehmer (Fürsorge)</text>
+              <text x="250" y="86" fill="#f8fafc" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">3. Parteien (SAP/SPD)</text>
+              <text x="250" y="100" fill="#f8fafc" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">4. Kirche · 5. Rev. · 6. Staat</text>
+            </svg>`,
+          },
+        },
+      ],
+    },
+    levels: [
+      {
+        id: '11-1',
+        name: 'Start & Zündfunken in England',
+        description: 'Voraussetzungen, Schweiz vs. England, Bevölkerungsexplosion und Zündfunken von unten.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 0,
+        unlockRequirement: 0,
+      },
+      {
+        id: '11-2',
+        name: 'Dampfmaschine & technischer Wandel',
+        description: 'James Watt, 21 Männer Arbeitskraft, konstante Energie, Eisenbahn und Dampfschiff.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '11-3',
+        name: 'Fabrikalltag & Schattenseiten',
+        description: 'Landflucht, Wohnungsnot, 12h-Arbeitstag, Fabrikrisiken, Kinderarbeit und Umweltprobleme.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '11-4',
+        name: 'Die Soziale Frage & 6 Akteure',
+        description: 'Widerspruch der Verelendung: Arbeiter, Unternehmer, Parteien, Kirchen, Revolutionäre und Staat.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '11-5',
+        name: 'Boss: Meister der Industrialisierung',
+        description: 'Meistere alle Prüfungsfragen und Kausalketten zur Industriellen Revolution!',
+        isBoss: true,
+        questionsPerSession: 8,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 240,
+        unlockRequirement: 1,
+      },
+    ],
+  },
 ];
 
 export function getWorld(worldId) {

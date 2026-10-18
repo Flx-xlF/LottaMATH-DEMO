@@ -16,6 +16,12 @@ export const SUBJECTS = [
     emoji: '🔬',
     paretoText: 'Mit nur <b>20% gezielten Kern-Mustern</b> (Ursache-Wirkungs-Ketten, Strahlengänge & Gegenspieler-Paare) sicherst du dir <b>80% aller Prüfungspunkte</b>! Achte immer auf die exakten Schlüsselbegriffe. 🐾',
   },
+  {
+    id: 'geschichte',
+    name: 'Geschichte (RZG)',
+    emoji: '📜',
+    paretoText: 'Mit nur <b>20% gezielten Kern-Mustern</b> (Kausalitätsketten: Ursache → Erfindung → gesellschaftliche Folge sowie die 6 Lösungsansätze der Sozialen Frage) sicherst du dir <b>80% aller Prüfungspunkte</b>! Achte auf die historischen Fachbegriffe. 🐾',
+  },
 ];
 
 export const TOPICS = [
@@ -74,6 +80,17 @@ export const TOPICS = [
     worldIds: [9, 10],
     unlocked: true,
   },
+  {
+    id: 'revolution',
+    subjectId: 'geschichte',
+    name: 'Industrielle Revolution',
+    emoji: '🚂',
+    colorPrimary: 'hsl(25, 90%, 48%)',
+    description: 'Vom Zündfunken in England über James Watts Dampfmaschine bis zur Sozialen Frage.',
+    chapter: 'RZG 2. Sek',
+    worldIds: [11],
+    unlocked: true,
+  },
 ];
 
 export function getSubjects() {
@@ -93,12 +110,13 @@ export function getTopicForWorld(worldId) {
 }
 
 /**
- * Determines the subject ('mathe' or 'nt') for a given question ID
+ * Determines the subject ('mathe', 'nt', or 'geschichte') for a given question ID
  * @param {string} questionId
- * @returns {'mathe'|'nt'}
+ * @returns {'mathe'|'nt'|'geschichte'}
  */
 export function getSubjectForQuestionId(questionId) {
   if (!questionId || typeof questionId !== 'string') return 'mathe';
+  if (questionId.startsWith('exam_rzg_') || questionId.startsWith('exam_gesch_')) return 'geschichte';
   if (questionId.startsWith('exam_nt_')) return 'nt';
   if (questionId.startsWith('exam_')) return 'mathe';
 
@@ -107,6 +125,7 @@ export function getSubjectForQuestionId(questionId) {
     const worldId = Number(match[1]);
     const topic = getTopicForWorld(worldId);
     if (topic && topic.subjectId) return topic.subjectId;
+    if (worldId === 11) return 'geschichte';
     if (worldId >= 9) return 'nt';
   }
   return 'mathe';

@@ -14,7 +14,8 @@ import { WORLD7_QUESTIONS } from '../data/questions/world7.js';
 import { WORLD8_QUESTIONS } from '../data/questions/world8.js';
 import { WORLD9_QUESTIONS } from '../data/questions/world9.js';
 import { WORLD10_QUESTIONS } from '../data/questions/world10.js';
-import { EXAM_QUESTIONS_FLAECHEN, EXAM_QUESTIONS_TERME, EXAM_QUESTIONS_NT } from '../data/questions/examPool.js';
+import { WORLD11_QUESTIONS } from '../data/questions/world11.js';
+import { EXAM_QUESTIONS_FLAECHEN, EXAM_QUESTIONS_TERME, EXAM_QUESTIONS_NT, EXAM_QUESTIONS_RZG } from '../data/questions/examPool.js';
 import { getLevel } from '../data/worlds.js';
 
 const ALL_QUESTIONS_MAP = {
@@ -28,6 +29,7 @@ const ALL_QUESTIONS_MAP = {
   8: WORLD8_QUESTIONS,
   9: WORLD9_QUESTIONS,
   10: WORLD10_QUESTIONS,
+  11: WORLD11_QUESTIONS,
 };
 
 /**
@@ -120,7 +122,9 @@ function prepareQuestionForDisplay(q) {
 export function getExamQuestions(count = 20, topicId = null) {
   let pool = [];
 
-  if (topicId === 'sinne_optik') {
+  if (topicId === 'revolution' || topicId === 'geschichte') {
+    pool = [...EXAM_QUESTIONS_RZG];
+  } else if (topicId === 'sinne_optik') {
     pool = [...EXAM_QUESTIONS_NT];
   } else if (topicId === 'terme') {
     pool = [...EXAM_QUESTIONS_TERME];
@@ -146,7 +150,7 @@ export function getExamQuestions(count = 20, topicId = null) {
  */
 export function getQuestionById(questionId) {
   if (questionId && questionId.startsWith('exam_')) {
-    const foundExam = [...EXAM_QUESTIONS_FLAECHEN, ...EXAM_QUESTIONS_TERME, ...EXAM_QUESTIONS_NT].find((q) => q.id === questionId);
+    const foundExam = [...EXAM_QUESTIONS_FLAECHEN, ...EXAM_QUESTIONS_TERME, ...EXAM_QUESTIONS_NT, ...EXAM_QUESTIONS_RZG].find((q) => q.id === questionId);
     if (foundExam) return foundExam;
   }
 
