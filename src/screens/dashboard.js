@@ -138,19 +138,39 @@ export function renderDashboard(container, gameState, callbacks = {}) {
   const subjects = SUBJECTS;
   let currentSubject = subjects.find((s) => s.id === activeSubjectId) || subjects[0];
 
+  const subjectNav = document.createElement('nav');
+  subjectNav.className = 'dashboard__subject-nav';
+  subjectNav.setAttribute('aria-label', 'Unterrichtsfächer');
+
+  const navScroll = document.createElement('div');
+  navScroll.className = 'dashboard__subject-nav-scroll';
+
   const subjectBar = document.createElement('div');
-  subjectBar.className = 'dashboard__subject-bar flex-row gap-xs';
-  subjectBar.style.cssText = 'background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border); border-radius: var(--radius-full, 999px); padding: 4px; align-self: flex-start; max-width: 100%;';
+  subjectBar.className = 'dashboard__subject-bar';
+  subjectBar.setAttribute('role', 'tablist');
 
   const subjectBtns = [];
+
+  function scrollActiveSubjectIntoView(btnEl, smooth = true) {
+    if (!btnEl || !navScroll) return;
+    const navRect = navScroll.getBoundingClientRect();
+    const btnRect = btnEl.getBoundingClientRect();
+    const offset = btnRect.left - navRect.left + navScroll.scrollLeft - (navRect.width / 2) + (btnRect.width / 2);
+    navScroll.scrollTo({
+      left: Math.max(0, offset),
+      behavior: smooth ? 'smooth' : 'auto',
+    });
+  }
 
   subjects.forEach((subj) => {
     const isAct = subj.id === activeSubjectId;
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = `btn ${isAct ? 'btn--primary' : 'btn--ghost'}`;
-    btn.style.cssText = `border-radius: var(--radius-full, 999px); padding: 8px 18px; font-size: 0.95rem; font-weight: 700; transition: all 0.2s ease; ${isAct ? '' : 'color: var(--color-text-muted);'}`;
-    btn.innerHTML = `<span>${subj.emoji}</span> <span>${subj.name}</span>`;
+    btn.className = `dashboard__subject-btn ${isAct ? 'dashboard__subject-btn--active' : ''}`;
+    btn.setAttribute('role', 'tab');
+    btn.setAttribute('aria-selected', isAct ? 'true' : 'false');
+    btn.setAttribute('id', `tab-subject-${subj.id}`);
+    btn.innerHTML = `<span>${subj.emoji}</span> <span>${escapeHtml(subj.name)}</span>`;
     btn.addEventListener('click', () => {
       if (activeSubjectId === subj.id) return;
       activeSubjectId = subj.id;
@@ -160,9 +180,11 @@ export function renderDashboard(container, gameState, callbacks = {}) {
 
       subjectBtns.forEach(({ b, id }) => {
         const selected = id === activeSubjectId;
-        b.className = `btn ${selected ? 'btn--primary' : 'btn--ghost'}`;
-        b.style.color = selected ? '' : 'var(--color-text-muted)';
+        b.className = `dashboard__subject-btn ${selected ? 'dashboard__subject-btn--active' : ''}`;
+        b.setAttribute('aria-selected', selected ? 'true' : 'false');
       });
+
+      scrollActiveSubjectIntoView(btn, true);
 
       if (paretoTextEl) {
         paretoTextEl.innerHTML = currentSubject.paretoText;
@@ -173,7 +195,18 @@ export function renderDashboard(container, gameState, callbacks = {}) {
     subjectBtns.push({ b: btn, id: subj.id });
     subjectBar.appendChild(btn);
   });
-  screenEl.appendChild(subjectBar);
+
+  navScroll.appendChild(subjectBar);
+  subjectNav.appendChild(navScroll);
+  screenEl.appendChild(subjectNav);
+
+  // Auto-center active subject on load if off-screen (e.g. mobile)
+  setTimeout(() => {
+    const activeItem = subjectBtns.find((item) => item.id === activeSubjectId);
+    if (activeItem) {
+      scrollActiveSubjectIntoView(activeItem.b, false);
+    }
+  }, 50);
 
   // 3.5. Pareto Strategy Card (80/20 Rule for Lotta)
   const paretoCard = document.createElement('div');

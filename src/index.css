@@ -297,10 +297,20 @@ button, .btn, .card, .key, .nav-item, .pill {
   flex-direction: column;
   width: 100%;
   max-width: 900px;
+  min-width: 0;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: env(safe-area-inset-top, var(--spacing-lg)) var(--spacing-xl) env(safe-area-inset-bottom, var(--spacing-lg));
   animation: fadeIn var(--transition-normal);
 }
+
+@media (max-width: 480px) {
+  .screen {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
 
 .screen--entering {
   animation: slideInRight var(--transition-normal);
@@ -2431,6 +2441,88 @@ h1, h2, h3, h4 {
 .dashboard__suki-slot {
   margin: var(--spacing-xs) 0;
 }
+
+/* 18.1 Subject Switcher Navigation (Mobile-Friendly Pill Bar) */
+.dashboard__subject-nav {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: var(--spacing-xs) 0;
+  position: relative;
+}
+
+.dashboard__subject-nav-scroll {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding: 4px 2px 6px 2px;
+  overscroll-behavior-x: contain;
+}
+
+.dashboard__subject-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.dashboard__subject-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full, 999px);
+  padding: 4px;
+  min-width: max-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard__subject-btn {
+  border-radius: var(--radius-full, 999px);
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: var(--font-family);
+  white-space: nowrap;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  min-height: 42px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dashboard__subject-btn:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dashboard__subject-btn--active {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px var(--color-primary-glow);
+}
+
+@media (max-width: 480px) {
+  .dashboard__subject-btn {
+    padding: 7px 14px;
+    font-size: 0.9rem;
+    gap: 6px;
+  }
+}
+
 
 .dashboard__topics-section {
   width: 100%;
