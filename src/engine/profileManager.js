@@ -46,10 +46,11 @@ export function seedDemoData() {
   ];
   localStorage.setItem(PROFILES_KEY, JSON.stringify(demoProfiles));
 
-  // Seed Lotta: Level 4, 680 XP, 5-day streak, Worlds 1-2 done, 2 mistakes in vault
+  // Seed Lotta: Level 4, 760 XP, 5-day streak, Worlds 1-2 + World 9 started, 2 mistakes in vault
   const lottaState = {
     generation: 1,
-    totalXP: 680,
+    totalXP: 760,
+    activeSubject: "mathe",
     levels: {
       "1-1": { stars: 3, bestScore: 100, attempts: 2, completed: true },
       "1-2": { stars: 3, bestScore: 100, attempts: 1, completed: true },
@@ -63,6 +64,8 @@ export function seedDemoData() {
       "2-5": { stars: 3, bestScore: 90, attempts: 2, completed: true },
       "3-1": { stars: 2, bestScore: 70, attempts: 1, completed: true },
       "3-2": { stars: 0, bestScore: 0, attempts: 0, completed: false },
+      "9-1": { stars: 3, bestScore: 100, attempts: 1, completed: true },
+      "9-2": { stars: 2, bestScore: 80, attempts: 1, completed: true },
     },
     streak: { current: 5, best: 5, lastActiveDate: today },
     achievements: ["first_star", "first_boss", "streak_3", "streak_7", "math_speedster"],
@@ -75,7 +78,7 @@ export function seedDemoData() {
         duration: 820,
       }
     ],
-    seenIntros: ["1", "2", "3"],
+    seenIntros: ["1", "2", "3", "9"],
     mistakeVault: ["w1_fi_102", "w2_mc_101"],
     resolvedMistakes: ["w1_mc_101"],
     mistakeTimestamps: {
@@ -85,20 +88,22 @@ export function seedDemoData() {
   };
   localStorage.setItem("lottamath_profile_demo-lotta_state", JSON.stringify(lottaState));
 
-  // Seed Nico: Level 2, 140 XP
+  // Seed Nico: Level 2, 220 XP, NT focus
   const nicoState = {
     generation: 1,
-    totalXP: 140,
+    totalXP: 220,
+    activeSubject: "nt",
     levels: {
       "1-1": { stars: 3, bestScore: 100, attempts: 1, completed: true },
       "1-2": { stars: 2, bestScore: 80, attempts: 2, completed: true },
-      "1-3": { stars: 1, bestScore: 60, attempts: 1, completed: true },
+      "9-1": { stars: 3, bestScore: 100, attempts: 1, completed: true },
+      "10-1": { stars: 2, bestScore: 80, attempts: 1, completed: true },
     },
     streak: { current: 2, best: 2, lastActiveDate: today },
     achievements: ["first_star"],
     theme: "dark",
     examHistory: [],
-    seenIntros: ["1"],
+    seenIntros: ["1", "9", "10"],
     mistakeVault: ["w1_fi_101"],
     resolvedMistakes: [],
     mistakeTimestamps: {

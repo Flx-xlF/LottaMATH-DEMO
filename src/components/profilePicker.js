@@ -79,7 +79,7 @@ export function renderProfilePicker(container, options = {}) {
 
     card.innerHTML = `
       <div class="profile-picker__icon">🎮</div>
-      <h1 class="text-gradient" style="font-size: 2.2rem; margin-bottom: 0.3rem;">LottaMATH</h1>
+      <h1 class="text-gradient" style="font-size: 2.2rem; margin-bottom: 0.3rem;">LottaLEARN</h1>
       <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 1rem;">
         ${profiles.length > 0 ? 'Wer übt heute?' : 'Erstelle dein Profil, um loszulegen!'}
       </p>
@@ -484,7 +484,7 @@ export function renderProfilePicker(container, options = {}) {
         <div style="font-size: 2.2rem;">✏️</div>
         <h3 class="text-gradient" style="font-size: 1.3rem;">Name bearbeiten</h3>
         <p class="text-muted" style="font-size: 0.85rem;">
-          Wie möchtest du in LottaMATH genannt werden?
+          Wie möchtest du in LottaLEARN genannt werden?
         </p>
         <input
           type="text"
@@ -633,7 +633,7 @@ export function renderProfilePicker(container, options = {}) {
 
         <div class="text-muted" style="font-size: 0.8rem; line-height: 1.5; text-align: left;">
           <strong>So geht's:</strong><br>
-          1. Öffne LottaMATH auf dem neuen Gerät.<br>
+          1. Öffne LottaLEARN auf dem neuen Gerät.<br>
           2. Tippe auf «Profil wiederherstellen».<br>
           3. Gib diesen Code ein.
         </div>

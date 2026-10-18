@@ -24,10 +24,10 @@ function getStorageKey() {
 export const XP_LEVELS = [
   { level: 1, minXP: 0, title: 'Anfänger:in' },
   { level: 2, minXP: 100, title: 'Entdecker:in' },
-  { level: 3, minXP: 250, title: 'Terme-Kenner:in' },
-  { level: 4, minXP: 500, title: 'Algebra-Talent' },
-  { level: 5, minXP: 1000, title: 'Rechen-Meister:in' },
-  { level: 6, minXP: 2000, title: 'Mathe-König:in' },
+  { level: 3, minXP: 250, title: 'Wissens-Kenner:in' },
+  { level: 4, minXP: 500, title: 'Logik-Talent' },
+  { level: 5, minXP: 1000, title: 'Lern-Meister:in' },
+  { level: 6, minXP: 2000, title: 'Sek-P-Champion' },
 ];
 
 /**
@@ -37,6 +37,7 @@ export function getDefaultState() {
   return {
     generation: 1,
     totalXP: 0,
+    activeSubject: 'mathe',
     levels: {
       '1-1': { stars: 0, bestScore: 0, attempts: 0, completed: false },
     },

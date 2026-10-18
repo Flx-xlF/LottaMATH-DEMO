@@ -1,0 +1,610 @@
+/**
+ * Question Bank: World 10 (Gehörsinn & Nervensystem)
+ * Subject: Natur & Technik (Biologie & Physik, Sekundarstufe I Niveau P)
+ * Curriculum alignment: Prisma / NaTech AM 3.12, AM 3.13, Lehrplan 21
+ */
+
+export const WORLD10_QUESTIONS = [
+  // =========================================================================
+  // Level 10-1: Aufbau & Funktion des Ohrs
+  // =========================================================================
+  {
+    id: 'w10_mc_101',
+    levelId: '10-1',
+    type: 'multiple-choice',
+    difficulty: 1,
+    prompt: 'Was ist Schall aus physikalischer Sicht und wie breitet er sich in der Luft aus?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Schall besteht aus mechanischen Druckwellen (Dichteschwankungen), die sich geradlinig in alle Richtungen ausbreiten.',
+        'Schall ist eine sichtbare elektromagnetische Strahlung wie Licht.',
+        'Schall bewegt sich ausschliesslich durch feste Gegenstände und prallt an Luft ab.',
+        'Schall breitet sich im Vakuum des Weltalls am schnellsten aus.',
+      ],
+    },
+    correctAnswer: 'Schall besteht aus mechanischen Druckwellen (Dichteschwankungen), die sich geradlinig in alle Richtungen ausbreiten.',
+    acceptedAnswers: ['Schall besteht aus mechanischen Druckwellen (Dichteschwankungen), die sich geradlinig in alle Richtungen ausbreiten.'],
+    hints: [
+      '💡 Tipp: Wenn eine Box laute Musik spielt, kannst du die Bass-Vibrationen in der Luft und am Gehäuse spüren.',
+      '🔑 Hinweis: Schall benötigt immer ein Trägermedium (Luft, Wasser, Festkörper), dessen Teilchen aneinanderstossen.',
+      '✅ Lösung: Schall sind mechanische Schwingungen und Druckwellen, die sich über Teilchenstösse in Medien ausbreiten.',
+    ],
+    commonMistake: 'Schall mit elektromagnetischen Wellen (Licht, Funk) verwechselt oder geglaubt, im Weltall könne man Töne hören.',
+  },
+  {
+    id: 'w10_do_102',
+    levelId: '10-1',
+    type: 'drag-order',
+    difficulty: 2,
+    prompt: 'Bringe den Weg des Schalls durch das menschliche Ohr in die anatomisch richtige Reihenfolge:',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      items: [
+        'Gehörgang leitet Schallwellen nach innen',
+        'Trommelfell gerät in Schwingung',
+        'Gehörknöchelchen (Hammer, Amboss, Steigbügel) verstärken die Hebelkraft',
+        'Ohrmuschel fängt Schallwellen aus der Umgebung auf',
+        'Hörschnecke wandelt Flüssigkeitswellen durch Haarsinneszellen in Nervenimpulse um',
+        'Hörnerv leitet elektrische Signale an das Hörzentrum im Gehirn weiter',
+      ],
+      correctOrder: [
+        'Ohrmuschel fängt Schallwellen aus der Umgebung auf',
+        'Gehörgang leitet Schallwellen nach innen',
+        'Trommelfell gerät in Schwingung',
+        'Gehörknöchelchen (Hammer, Amboss, Steigbügel) verstärken die Hebelkraft',
+        'Hörschnecke wandelt Flüssigkeitswellen durch Haarsinneszellen in Nervenimpulse um',
+        'Hörnerv leitet elektrische Signale an das Hörzentrum im Gehirn weiter',
+      ],
+    },
+    correctAnswer: [
+      'Ohrmuschel fängt Schallwellen aus der Umgebung auf',
+      'Gehörgang leitet Schallwellen nach innen',
+      'Trommelfell gerät in Schwingung',
+      'Gehörknöchelchen (Hammer, Amboss, Steigbügel) verstärken die Hebelkraft',
+      'Hörschnecke wandelt Flüssigkeitswellen durch Haarsinneszellen in Nervenimpulse um',
+      'Hörnerv leitet elektrische Signale an das Hörzentrum im Gehirn weiter',
+    ],
+    acceptedAnswers: [],
+    hints: [
+      '💡 Tipp: Beginne ganz aussen bei der sichtbaren Ohrmuschel und wandere nach innen.',
+      '🔑 Hinweis: Aussenohr (Muschel, Gang) → Mittelohr (Trommelfell, 3 Knöchelchen) → Innenohr (Schnecke, Hörnerv).',
+      '✅ Lösung: Ohrmuschel → Gehörgang → Trommelfell → Gehörknöchelchen → Hörschnecke → Hörnerv/Gehirn.',
+    ],
+    commonMistake: 'Hörschnecke vor die Gehörknöchelchen gesetzt.',
+  },
+  {
+    id: 'w10_dg_103',
+    levelId: '10-1',
+    type: 'drag-group',
+    difficulty: 1,
+    prompt: 'Ordne die Ohrbestandteile den drei Hauptabschnitten des Ohrs zu:',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      items: [
+        'Ohrmuschel & äusserer Gehörgang',
+        'Trommelfell',
+        'Hammer, Amboss & Steigbügel',
+        'Hörschnecke (Cochlea)',
+        'Bogengänge (Gleichgewichtsorgan)',
+      ],
+      groups: [
+        { id: 'aussen', label: 'Aussenohr', color: 'hsl(195, 85%, 48%)' },
+        { id: 'mittel', label: 'Mittelohr', color: 'hsl(35, 95%, 55%)' },
+        { id: 'innen', label: 'Innenohr', color: 'hsl(280, 75%, 58%)' },
+      ],
+    },
+    correctAnswer: {
+      aussen: ['Ohrmuschel & äusserer Gehörgang'],
+      mittel: ['Trommelfell', 'Hammer, Amboss & Steigbügel'],
+      innen: ['Hörschnecke (Cochlea)', 'Bogengänge (Gleichgewichtsorgan)'],
+    },
+    acceptedAnswers: [],
+    hints: [
+      '💡 Tipp: Das Mittelohr ist eine lufthaltige Höhle hinter dem Trommelfell mit den kleinsten Knochen des Menschen.',
+      '🔑 Hinweis: Das Innenohr liegt tief im Felsenbein und ist mit Flüssigkeit gefüllt (Hörschnecke und Gleichgewicht).',
+      '✅ Lösung: Aussenohr: Muschel/Gang. Mittelohr: Trommelfell & Knöchelchen. Innenohr: Schnecke & Bogengänge.',
+    ],
+    commonMistake: 'Trommelfell fälschlicherweise zum Innenohr gerechnet.',
+  },
+  {
+    id: 'w10_mc_104',
+    levelId: '10-1',
+    type: 'multiple-choice',
+    difficulty: 2,
+    prompt: 'Welche zentrale mechanische Aufgabe erfüllen die drei Gehörknöchelchen (Hammer, Amboss, Steigbügel)?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Sie übertragen die Schwingungen des Trommelfells mit einer Hebelverstärkung von etwa 20:1 auf das ovale Fenster der flüssigkeitsgefüllten Hörschnecke.',
+        'Sie filtern schrille Töne heraus und dämpfen jede Lautstärke auf Zimmerlautstärke.',
+        'Sie wandeln mechanische Schallwellen direkt in elektrische Gehirnströme um.',
+        'Sie kühlen das Innenohr durch rhythmische Schwingbewegungen.',
+      ],
+    },
+    correctAnswer: 'Sie übertragen die Schwingungen des Trommelfells mit einer Hebelverstärkung von etwa 20:1 auf das ovale Fenster der flüssigkeitsgefüllten Hörschnecke.',
+    acceptedAnswers: ['Sie übertragen die Schwingungen des Trommelfells mit einer Hebelverstärkung von etwa 20:1 auf das ovale Fenster der flüssigkeitsgefüllten Hörschnecke.'],
+    hints: [
+      '💡 Tipp: Eine Flüssigkeit in der Schnecke in Schwingung zu versetzen verlangt viel mehr Kraft als Luft.',
+      '🔑 Hinweis: Die Hebelwirkung der Knöchelchen und der Grössenunterschied von Trommelfell zu ovalem Fenster verstärken den Druck massiv.',
+      '✅ Lösung: Die Gehörknöchelchen verstärken den Schalldruck, damit die Schwingung vom leichten Luftmedium auf die zähere Innenohr-Flüssigkeit übertragen wird.',
+    ],
+    commonMistake: 'Den Gehörknöchelchen die Umwandlung in Nervenimpulse zugeschrieben (das erledigen die Haarzellen in der Schnecke!).',
+  },
+  {
+    id: 'w10_mc_105',
+    levelId: '10-1',
+    type: 'multiple-choice',
+    difficulty: 3,
+    prompt: 'In welcher Struktur des Ohrs findet die eigentliche Umwandlung von mechanischer Bewegung in elektrische Nervenimpulse statt?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'In den Haarsinneszellen auf der Basilarmembran innerhalb der Hörschnecke.',
+        'Auf der hauchdünnen Membran des Trommelfells.',
+        'In den Hohlräumen der Ohrtrompete (Eustachische Röhre).',
+        'Am Übergang vom Amboss zum Steigbügel.',
+      ],
+    },
+    correctAnswer: 'In den Haarsinneszellen auf der Basilarmembran innerhalb der Hörschnecke.',
+    acceptedAnswers: ['In den Haarsinneszellen auf der Basilarmembran innerhalb der Hörschnecke.'],
+    hints: [
+      '💡 Suki sagt: Denk an mikroskopisch kleine Härchen, die in einer Flüssigkeit mitschwingen wie Schilf im Wasser!',
+      '🔑 Hinweis: Die Haarsinneszellen sind die eigentlichen Rezeptoren des Gehörs (im Corti-Organ in der Schnecke).',
+      '✅ Lösung: In der Hörschnecke biegen Flüssigkeitswellen die feinen Haarsinneszellen, was elektrische Nervensignale feuert.',
+    ],
+    commonMistake: 'Das Trommelfell als Sinnesorgan für die Signalumwandlung genannt.',
+  },
+
+  // =========================================================================
+  // Level 10-2: Räumliches Hören & Gehörschäden
+  // =========================================================================
+  {
+    id: 'w10_mc_201',
+    levelId: '10-2',
+    type: 'multiple-choice',
+    difficulty: 1,
+    prompt: 'Wie gelingt es dem menschlichen Gehirn, eine Schallquelle im Raum (z. B. ein herannahendes Auto) präzise zu orten?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Durch den winzigen Zeitunterschied (Laufzeit) und Lautstärkeunterschied, mit dem der Schall die beiden Ohren erreicht.',
+        'Durch den Geruchssinn, der den Abgasen der Schallquelle folgt.',
+        'Indem das Ohr die Schallwellen mit Infrarot-Sensoren abtastet.',
+        'Weil das linke Ohr nur tiefe Töne und das rechte Ohr nur hohe Töne wahrnimmt.',
+      ],
+    },
+    correctAnswer: 'Durch den winzigen Zeitunterschied (Laufzeit) und Lautstärkeunterschied, mit dem der Schall die beiden Ohren erreicht.',
+    acceptedAnswers: ['Durch den winzigen Zeitunterschied (Laufzeit) und Lautstärkeunterschied, mit dem der Schall die beiden Ohren erreicht.'],
+    hints: [
+      '💡 Suki sagt: Warum haben fast alle Tiere ZWEI Ohren an den gegenüberliegenden Seiten des Kopfes?',
+      '🔑 Hinweis: Kommt ein Ton von links, erreicht er das linke Ohr einen Sekundenbruchteil früher und ist dort minimal lauter.',
+      '✅ Lösung: Das Gehirn vergleicht Laufzeitdifferenzen (im Mikrosekundenbereich) und Pegelunterschiede beider Ohren.',
+    ],
+    commonMistake: 'Geglaubt, ein einzelnes Ohr könne die genaue Richtung eines Schalls im Raum allein bestimmen.',
+  },
+  {
+    id: 'w10_mc_202',
+    levelId: '10-2',
+    type: 'multiple-choice',
+    difficulty: 2,
+    prompt: 'Welche mechanische und funktionelle Konsequenz hat ein Riss im Trommelfell (z. B. durch einen lauten Knall oder Fremdkörper)?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Die Schallwellen können das Trommelfell nicht mehr sauber in Schwingung versetzen; die Weiterleitung auf die Gehörknöchelchen fällt weitgehend aus.',
+        'Das Auge auf derselben Kopfseite verliert sofort die Sehschärfe.',
+        'Die Haarsinneszellen in der Hörschnecke lösen sich vollständig auf.',
+        'Der Hörnerv schmilzt durch die plötzliche Druckentlastung.',
+      ],
+    },
+    correctAnswer: 'Die Schallwellen können das Trommelfell nicht mehr sauber in Schwingung versetzen; die Weiterleitung auf die Gehörknöchelchen fällt weitgehend aus.',
+    acceptedAnswers: ['Die Schallwellen können das Trommelfell nicht mehr sauber in Schwingung versetzen; die Weiterleitung auf die Gehörknöchelchen fällt weitgehend aus.'],
+    hints: [
+      '💡 Tipp: Ein zerrissenes Schlagzeugfell kann nicht mehr schwingen und keinen Ton erzeugen.',
+      '🔑 Hinweis: Ohne intakte Membran kann der Luftschall nicht in die mechanische Knochenbewegung des Mittelohrs übersetzt werden (Schallleitungsschwerhörigkeit).',
+      '✅ Lösung: Die mechanische Schallübertragung vom Gehörgang auf Hammer, Amboss und Steigbügel ist unterbrochen.',
+    ],
+    commonMistake: 'Gedacht, ein Trommelfellriss zerstöre direkt das Gehirn oder den Sehsinn.',
+  },
+  {
+    id: 'w10_mc_203',
+    levelId: '10-2',
+    type: 'multiple-choice',
+    difficulty: 2,
+    prompt: 'Warum ist Lärmschwerhörigkeit (z. B. durch laute Konzerte oder Kopfhörer) irreversibel (nicht heilbar)?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Weil einmal abgeknickte oder zerstörte Haarsinneszellen in der menschlichen Hörschnecke nicht mehr nachwachsen können.',
+        'Weil das Trommelfell bei Lärm für immer versteinert.',
+        'Weil die Gehörknöchelchen bei Lautstärken über 85 Dezibel zersplittern.',
+        'Weil das Hörzentrum im Gehirn dauerhaft abschaltet.',
+      ],
+    },
+    correctAnswer: 'Weil einmal abgeknickte oder zerstörte Haarsinneszellen in der menschlichen Hörschnecke nicht mehr nachwachsen können.',
+    acceptedAnswers: ['Weil einmal abgeknickte oder zerstörte Haarsinneszellen in der menschlichen Hörschnecke nicht mehr nachwachsen können.'],
+    hints: [
+      '💡 Suki sagt: Behandle deine Ohren wie einen Schatz! Haarzellen wachsen im Gegensatz zu Fingernägeln niemals nach!',
+      '🔑 Hinweis: Extrem hoher Schalldruck schlägt die feinen Sinneshärchen im Innenohr wie Getreide im Hagelsturm um. Sie sterben ab.',
+      '✅ Lösung: Zerstörte Haarsinneszellen regenerieren sich beim Menschen nicht. Der Hörverlust bleibt dauerhaft bestehen.',
+    ],
+    commonMistake: 'Geglaubt, das Ohr heile sich wie eine Hautwunde nach ein paar Wochen von selbst vollständig.',
+  },
+  {
+    id: 'w10_dg_204',
+    levelId: '10-2',
+    type: 'drag-group',
+    difficulty: 2,
+    prompt: 'Ordne die Symptome und Ursachen den beiden Gehörschäden zu:',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      items: [
+        'Dauerhafter Pfeifton oder Rauschen im Ohr ohne äussere Schallquelle',
+        'Zerstörung von Haarsinneszellen durch chronischen Lärm über 85 dB',
+        'Stumpfes Hören nach Druckwelle (z. B. Knalltrauma oder Tauchunfall)',
+        'Riss in der dünnen Trennmembran zwischen Aussen- und Mittelohr',
+      ],
+      groups: [
+        { id: 'tinnitus', label: 'Tinnitus & Lärmschwerhörigkeit', color: 'hsl(280, 75%, 58%)' },
+        { id: 'trommelfell', label: 'Trommelfellverletzung', color: 'hsl(35, 95%, 55%)' },
+      ],
+    },
+    correctAnswer: {
+      tinnitus: [
+        'Dauerhafter Pfeifton oder Rauschen im Ohr ohne äussere Schallquelle',
+        'Zerstörung von Haarsinneszellen durch chronischen Lärm über 85 dB',
+      ],
+      trommelfell: [
+        'Stumpfes Hören nach Druckwelle (z. B. Knalltrauma oder Tauchunfall)',
+        'Riss in der dünnen Trennmembran zwischen Aussen- und Mittelohr',
+      ],
+    },
+    acceptedAnswers: [],
+    hints: [
+      '💡 Tipp: Tinnitus entsteht im Innenohr und Gehirn (Phantomgeräusch). Ein Trommelfellriss betrifft die mechanische Membran.',
+      '🔑 Hinweis: Pfeifen/Rauschen = Tinnitus. Riss/Druckschaden = Trommelfellverletzung.',
+      '✅ Lösung: Pfeifton & Haarzellenschaden gehören zu Tinnitus/Lärmschaden; Riss in Membran & Druckschaden zur Trommelfellverletzung.',
+    ],
+    commonMistake: 'Tinnitus für ein Problem des Aussenohrs gehalten.',
+  },
+  {
+    id: 'w10_mc_205',
+    levelId: '10-2',
+    type: 'multiple-choice',
+    difficulty: 3,
+    prompt: 'Welche physikalische Schallfrequenz (Tonhöhe) wird bei beginnender Lärmschwerhörigkeit typischerweise als ALLERERSTES zerstört?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Hohe Frequenzen (rund um 4000 Hz / Hochtöne), da die entsprechenden Haarzellen direkt am Eingang der Hörschnecke liegen.',
+        'Tiefe Frequenzen (Bass), da sie die meiste Energie besitzen.',
+        'Menschliche Stimmen im Bereich von 500 Hz.',
+        'Alle Tonhöhen werden immer absolut gleichmässig geschädigt.',
+      ],
+    },
+    correctAnswer: 'Hohe Frequenzen (rund um 4000 Hz / Hochtöne), da die entsprechenden Haarzellen direkt am Eingang der Hörschnecke liegen.',
+    acceptedAnswers: ['Hohe Frequenzen (rund um 4000 Hz / Hochtöne), da die entsprechenden Haarzellen direkt am Eingang der Hörschnecke liegen.'],
+    hints: [
+      '💡 Tipp: Betroffene können oft tiefe Männerstimmen noch gut verstehen, während Vogelzwitschern oder Konsonanten wie «s» und «f» verschwinden.',
+      '🔑 Hinweis: Am Schneckeneingang (hohe Töne) trifft der Schalldruck mit voller Wucht auf. Erst in der Schneckenspitze sitzen die tiefen Töne.',
+      '✅ Lösung: Hohe Frequenzen leiden zuerst, da die Haarzellen für hohe Töne am Beginn der Schnecke der höchsten Belastung ausgesetzt sind.',
+    ],
+    commonMistake: 'Geglaubt, der Bass (tiefe Töne) gehe zuerst verloren.',
+  },
+
+  // =========================================================================
+  // Level 10-3: Wahrnehmung & Reizleitung
+  // =========================================================================
+  {
+    id: 'w10_mc_301',
+    levelId: '10-3',
+    type: 'multiple-choice',
+    difficulty: 1,
+    prompt: 'Was beweist das klassische Schulexperiment, bei dem eine Testperson mit verbundener Nase einen Apfel- und einen Kartoffelschnitz probiert?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Dass ein Sinn allein oft nicht ausreicht und Geschmack zu einem grossen Teil durch den Geruchssinn bestimmt wird.',
+        'Dass der Geschmackssinn bei verbundenen Augen vollständig abgeschaltet wird.',
+        'Dass Kartoffeln chemisch identisch mit Äpfeln aufgebaut sind.',
+        'Dass die Zunge nur heisse und kalte Speisen unterscheiden kann.',
+      ],
+    },
+    correctAnswer: 'Dass ein Sinn allein oft nicht ausreicht und Geschmack zu einem grossen Teil durch den Geruchssinn bestimmt wird.',
+    acceptedAnswers: ['Dass ein Sinn allein oft nicht ausreicht und Geschmack zu einem grossen Teil durch den Geruchssinn bestimmt wird.'],
+    hints: [
+      '💡 Suki sagt: Halt dir mal beim Essen fest die Nase zu – alles schmeckt plötzlich fade!',
+      '🔑 Hinweis: Die Zunge schmeckt nur süss, salzig, sauer, bitter und umami. Das feine Aroma entsteht erst durch das Zusammenspiel mit der Nase.',
+      '✅ Lösung: Das Experiment zeigt: «Ein Sinn allein reicht nicht aus». Wahrnehmung ist eine multimodale Teamleistung unseres Nervensystems.',
+    ],
+    commonMistake: 'Gedacht, die Zunge allein kenne tausende verschiedene Geschmäcker.',
+  },
+  {
+    id: 'w10_do_302',
+    levelId: '10-3',
+    type: 'drag-order',
+    difficulty: 2,
+    prompt: 'Bringe das allgemeine Reiz-Reaktions-Schema in die richtige Reihenfolge von der Umwelt zur Muskelbewegung:',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      items: [
+        'Reizaufnahme: Sinneszelle nimmt Reiz (z. B. optisch/akustisch) auf',
+        'Sensibler Nerv: Leitet elektrische Impulse zum Zentralnervensystem (Gehirn/Rückenmark)',
+        'Verarbeitung & Entscheidung im Steuerzentrum',
+        'Äusserer Reiz trifft auf den Körper',
+        'Motorischer Nerv: Leitet den Befehl zur Muskulatur',
+        'Reaktion: Muskel führt die Handlung aus',
+      ],
+      correctOrder: [
+        'Äusserer Reiz trifft auf den Körper',
+        'Reizaufnahme: Sinneszelle nimmt Reiz (z. B. optisch/akustisch) auf',
+        'Sensibler Nerv: Leitet elektrische Impulse zum Zentralnervensystem (Gehirn/Rückenmark)',
+        'Verarbeitung & Entscheidung im Steuerzentrum',
+        'Motorischer Nerv: Leitet den Befehl zur Muskulatur',
+        'Reaktion: Muskel führt die Handlung aus',
+      ],
+    },
+    correctAnswer: [
+      'Äusserer Reiz trifft auf den Körper',
+      'Reizaufnahme: Sinneszelle nimmt Reiz (z. B. optisch/akustisch) auf',
+      'Sensibler Nerv: Leitet elektrische Impulse zum Zentralnervensystem (Gehirn/Rückenmark)',
+      'Verarbeitung & Entscheidung im Steuerzentrum',
+      'Motorischer Nerv: Leitet den Befehl zur Muskulatur',
+      'Reaktion: Muskel führt die Handlung aus',
+    ],
+    acceptedAnswers: [],
+    hints: [
+      '💡 Tipp: Start beim Reiz von aussen → Rezeptor → sensibler Nerv → Zentrum → motorischer Nerv → Reaktion.',
+      '🔑 Hinweis: Sensibel führt HIN zum Gehirn, motorisch führt WEG zum Muskel.',
+      '✅ Lösung: Reiz → Sinneszelle → Sensibler Nerv → Zentrum → Motorischer Nerv → Muskelreaktion.',
+    ],
+    commonMistake: 'Sensiblen und motorischen Nerv vertauscht.',
+  },
+  {
+    id: 'w10_dg_303',
+    levelId: '10-3',
+    type: 'drag-group',
+    difficulty: 2,
+    prompt: 'Unterscheide die Aufgaben von sensiblen und motorischen Nervenfasern:',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      items: [
+        'Leitet Sinnesmeldungen vom Ohr zum Gehirn',
+        'Überträgt Schmerzsignale von der Haut zum Rückenmark',
+        'Sendet Bewegungsimpulse vom Gehirn an die Beinmuskeln',
+        'Befiehlt der Hand, den Stift fester zu greifen',
+      ],
+      groups: [
+        { id: 'sensibel', label: 'Sensible Nerven (hinführend)', color: 'hsl(195, 85%, 48%)' },
+        { id: 'motorisch', label: 'Motorische Nerven (ausführend)', color: 'hsl(35, 95%, 55%)' },
+      ],
+    },
+    correctAnswer: {
+      sensibel: [
+        'Leitet Sinnesmeldungen vom Ohr zum Gehirn',
+        'Überträgt Schmerzsignale von der Haut zum Rückenmark',
+      ],
+      motorisch: [
+        'Sendet Bewegungsimpulse vom Gehirn an die Beinmuskeln',
+        'Befiehlt der Hand, den Stift fester zu greifen',
+      ],
+    },
+    acceptedAnswers: [],
+    hints: [
+      '💡 Suki sagt: «Sensibel» spürt (Sinnesorgane), «Motorisch» bewegt (wie ein Motor)!',
+      '🔑 Hinweis: Wenn der Befehl ZUM Muskel geht, ist es motorisch. Wenn Information VOM Sinnesorgan kommt, ist es sensibel.',
+      '✅ Lösung: Sensibel: Ohr/Haut → Gehirn. Motorisch: Gehirn → Muskeln.',
+    ],
+    commonMistake: 'Motorische Signale mit Sinneseindrücken verwechselt.',
+  },
+  {
+    id: 'w10_mc_304',
+    levelId: '10-3',
+    type: 'multiple-choice',
+    difficulty: 3,
+    prompt: 'In welcher Form werden Informationen entlang von Nervenbahnen im menschlichen Körper transportiert?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Als schnelle elektrische Nervenimpulse (Aktionspotenziale).',
+        'Als kleine Flüssigkeitstropfen, die durch hohle Nervenröhren fliessen.',
+        'Als Ultraschallwellen im Bindegewebe.',
+        'Als Magnetfelder, die von Knochen erzeugt werden.',
+      ],
+    },
+    correctAnswer: 'Als schnelle elektrische Nervenimpulse (Aktionspotenziale).',
+    acceptedAnswers: ['Als schnelle elektrische Nervenimpulse (Aktionspotenziale).'],
+    hints: [
+      '💡 Tipp: Nerven funktionieren ähnlich wie Stromkabel in einem Computer.',
+      '🔑 Hinweis: Sinneszellen wandeln Reize in winzige elektrische Spannungsimpulse um.',
+      '✅ Lösung: Nerven übertragen Informationen über elektrische Impulse (Aktionspotenziale), die an Synapsen chemisch weitergeleitet werden.',
+    ],
+    commonMistake: 'Nerven als hohle Schläuche für Flüssigkeiten missverstanden.',
+  },
+  {
+    id: 'w10_mc_305',
+    levelId: '10-3',
+    type: 'multiple-choice',
+    difficulty: 2,
+    prompt: 'Was geschieht an einer Synapse (der Kontaktstelle zwischen zwei Nervenzellen), wenn ein elektrischer Impuls dort ankommt?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Der elektrische Impuls löst die Ausschüttung chemischer Botenstoffe (Neurotransmitter) in den synaptischen Spalt aus.',
+        'Der Strom springt als Funke wie bei einer Zündkerze direkt zur nächsten Zelle über.',
+        'Die beiden Nervenzellen verschmelzen dauerhaft zu einer einzigen Riesenzelle.',
+        'Das Signal wird an der Kontaktstelle blockiert und für immer gelöscht.',
+      ],
+    },
+    correctAnswer: 'Der elektrische Impuls löst die Ausschüttung chemischer Botenstoffe (Neurotransmitter) in den synaptischen Spalt aus.',
+    acceptedAnswers: ['Der elektrische Impuls löst die Ausschüttung chemischer Botenstoffe (Neurotransmitter) in den synaptischen Spalt aus.'],
+    hints: [
+      '💡 Suki sagt: An der Synapse berühren sich die Nervenzellen nicht direkt – es gibt einen winzigen Spalt!',
+      '🔑 Hinweis: Die Übertragung über diesen synaptischen Spalt erfolgt auf chemischem Weg durch Botenstoffe.',
+      '✅ Lösung: An der Synapse wird das elektrische Signal in ein chemisches Signal (Botenstoffe) umgewandelt und an der nächsten Zelle wieder als elektrischer Impuls fortgesetzt.',
+    ],
+    commonMistake: 'Gedacht, der Strom springe als sichtbarer Funke über den Spalt.',
+  },
+
+  // =========================================================================
+  // Level 10-4: Bewusste Reaktion vs. Reflex
+  // =========================================================================
+  {
+    id: 'w10_dg_401',
+    levelId: '10-4',
+    type: 'drag-group',
+    difficulty: 2,
+    prompt: 'Ordne die Merkmale und Beispiele den beiden Reaktionsarten zu:',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      items: [
+        'Umschaltung erfolgt blitzschnell direkt im Rückenmark (unter 50 ms)',
+        'Angeboren, starr und unwillkürlich (nicht bewusst steuerbar)',
+        'Hand von heisser Herdplatte wegziehen / Kniesehnenreflex',
+        'Verarbeitung läuft über das Grosshirn (Reaktionszeit > 150 ms)',
+        'Erfordert bewusste Entscheidung, Wahrnehmung und Übung',
+        'Torwart hechtet gezielt in die linke Torecke nach dem Elfmeter',
+      ],
+      groups: [
+        { id: 'reflex', label: 'Unbewusster Reflex', color: 'hsl(244, 63%, 64%)' },
+        { id: 'bewusst', label: 'Bewusste Reaktion', color: 'hsl(160, 75%, 42%)' },
+      ],
+    },
+    correctAnswer: {
+      reflex: [
+        'Umschaltung erfolgt blitzschnell direkt im Rückenmark (unter 50 ms)',
+        'Angeboren, starr und unwillkürlich (nicht bewusst steuerbar)',
+        'Hand von heisser Herdplatte wegziehen / Kniesehnenreflex',
+      ],
+      bewusst: [
+        'Verarbeitung läuft über das Grosshirn (Reaktionszeit > 150 ms)',
+        'Erfordert bewusste Entscheidung, Wahrnehmung und Übung',
+        'Torwart hechtet gezielt in die linke Torecke nach dem Elfmeter',
+      ],
+    },
+    acceptedAnswers: [],
+    hints: [
+      '💡 Suki sagt: Bei einem Reflex denkst du nicht nach – dein Körper handelt, bevor du überhaupt weisst, was passiert ist!',
+      '🔑 Hinweis: Reflex = Rückenmark, ohne Grosshirn, Schutzfunktion. Bewusst = Grosshirn, mit Entscheidung.',
+      '✅ Lösung: Reflex: Rückenmark, unwillkürlich, Herdplatte. Bewusst: Grosshirn, Entscheidung, Torwart.',
+    ],
+    commonMistake: 'Sportliche Reaktionen (wie Torwart-Parade) für angeborene Reflexe gehalten (das sind trainierte bewusste Reaktionen!).',
+  },
+  {
+    id: 'w10_mc_402',
+    levelId: '10-4',
+    type: 'multiple-choice',
+    difficulty: 2,
+    prompt: 'Warum ist der Lidschlussreflex (Schliessen des Auges bei herannahendem Gegenstand oder Luftstoss) als Reflex organisiert und nicht als bewusste Handlung?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Weil der Weg über das Grosshirn viel zu lange dauern würde und das empfindliche Auge sonst verletzt würde.',
+        'Weil das Grosshirn für Augenbewegungen anatomisch gar nicht zuständig ist.',
+        'Weil der Lidschlussreflex keine Muskeln benötigt.',
+        'Weil man das Schliessen der Augen durch Willenskraft unbegrenzt verhindern kann.',
+      ],
+    },
+    correctAnswer: 'Weil der Weg über das Grosshirn viel zu lange dauern würde und das empfindliche Auge sonst verletzt würde.',
+    acceptedAnswers: ['Weil der Weg über das Grosshirn viel zu lange dauern würde und das empfindliche Auge sonst verletzt würde.'],
+    hints: [
+      '💡 Suki sagt: Bis das Gehirn nachgedacht hat («Oh, da fliegt ein Insekt auf mein Auge zu, soll ich blinzeln?»), ist es schon zu spät!',
+      '🔑 Hinweis: Reflexe dienen primär dem Schutz des Körpers vor unmittelbaren Verletzungen durch extrem kurze Reaktionszeiten.',
+      '✅ Lösung: Reflexe schalten auf kürzestem Weg ohne Zeitverlust um, um vitale Organe wie das Auge vor Schäden zu schützen.',
+    ],
+    commonMistake: 'Geglaubt, der Körper könne bewusste Entscheidungen genauso schnell treffen wie Reflexe.',
+  },
+  {
+    id: 'w10_mc_403',
+    levelId: '10-4',
+    type: 'multiple-choice',
+    difficulty: 2,
+    prompt: 'Was passiert beim bekannten Patellarsehnenreflex (Kniesehnenreflex beim Arzt) anatomisch?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Der Schlag dehnt den Oberschenkelmuskel; der Dehnungsreiz wird im Rückenmark sofort auf den motorischen Nerv umgeschaltet, sodass der Muskel zuckt.',
+        'Der Schlag sendet ein Schmerzsignal an das Grosshirn, das dem Bein bewusst befiehlt, nach vorne zu kicken.',
+        'Der Schlag setzt das Kniegelenk mechanisch wie eine Feder unter Spannung.',
+        'Der Reflex prüft, ob die Knochen im Unterschenkel gebrochen sind.',
+      ],
+    },
+    correctAnswer: 'Der Schlag dehnt den Oberschenkelmuskel; der Dehnungsreiz wird im Rückenmark sofort auf den motorischen Nerv umgeschaltet, sodass der Muskel zuckt.',
+    acceptedAnswers: ['Der Schlag dehnt den Oberschenkelmuskel; der Dehnungsreiz wird im Rückenmark sofort auf den motorischen Nerv umgeschaltet, sodass der Muskel zuckt.'],
+    hints: [
+      '💡 Tipp: Es ist ein sogenannter Eigenreflex: Der gedehnte Muskel reagiert selbst durch Zusammenziehen.',
+      '🔑 Hinweis: Es ist eine Umschaltung über eine einzige Synapse im Rückenmark – das Gehirn wird erst informiert, wenn das Bein schon gezuckt hat.',
+      '✅ Lösung: Muskelspindeln registrieren Dehnung → Signal an Rückenmark → sofortige Kontraktion des Streckmuskels.',
+    ],
+    commonMistake: 'Gedacht, der Arzt wolle die Knochenstärke testen.',
+  },
+  {
+    id: 'w10_mc_404',
+    levelId: '10-4',
+    type: 'multiple-choice',
+    difficulty: 3,
+    prompt: 'Kann ein echter angeborener Schutzreflex (wie der Pupillenreflex bei grellem Licht) durch reines Wollen dauerhaft willentlich unterdrückt werden?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Nein, angeborene vegetative Schutzreflexe laufen unwillkürlich ab und entziehen sich der bewussten Willenskontrolle.',
+        'Ja, mit ausreichend Konzentration kann jeder Mensch seine Pupillengrösse willkürlich steuern.',
+        'Ja, indem man den Atem für 10 Sekunden anhält.',
+        'Nur, wenn man gleichzeitig die Augenmuskeln anspannt.',
+      ],
+    },
+    correctAnswer: 'Nein, angeborene vegetative Schutzreflexe laufen unwillkürlich ab und entziehen sich der bewussten Willenskontrolle.',
+    acceptedAnswers: ['Nein, angeborene vegetative Schutzreflexe laufen unwillkürlich ab und entziehen sich der bewussten Willenskontrolle.'],
+    hints: [
+      '💡 Suki sagt: Leuchte mal mit einer Taschenlampe ins Auge: Kannst du deiner Pupille befehlen, weit geöffnet zu bleiben?',
+      '🔑 Hinweis: Vegetative Reflexe schützen Organe automatisch vor Schäden – der Wille kann sie nicht ausschalten.',
+      '✅ Lösung: Nein, Schutzreflexe wie der Pupillenreflex sind fest verdrahtet und laufen vollkommen unwillkürlich ab.',
+    ],
+    commonMistake: 'Geglaubt, der menschliche Wille könne jeden physiologischen Reflex beliebig steuern.',
+  },
+  {
+    id: 'w10_mc_405',
+    levelId: '10-4',
+    type: 'multiple-choice',
+    difficulty: 3,
+    prompt: 'Was ist der biologische Evolutionsvorteil, dass der Mensch sowohl schnelle Reflexe als auch bewusste Reaktionen besitzt?',
+    promptLatex: '',
+    visual: null,
+    interaction: {
+      options: [
+        'Reflexe sichern das unmittelbare Überleben bei akuter Gefahr; bewusste Reaktionen ermöglichen flexibles, intelligentes und vorausschauendes Handeln.',
+        'Reflexe sparen Kalorien, während bewusste Handlungen ausschliesslich der Entspannung dienen.',
+        'Reflexe funktionieren nur nachts, bewusste Handlungen nur am Tag.',
+        'Ohne Reflexe könnte der Mensch keine Fremdsprachen erlernen.',
+      ],
+    },
+    correctAnswer: 'Reflexe sichern das unmittelbare Überleben bei akuter Gefahr; bewusste Reaktionen ermöglichen flexibles, intelligentes und vorausschauendes Handeln.',
+    acceptedAnswers: ['Reflexe sichern das unmittelbare Überleben bei akuter Gefahr; bewusste Reaktionen ermöglichen flexibles, intelligentes und vorausschauendes Handeln.'],
+    hints: [
+      '💡 Tipp: Überlege: Was wäre, wenn wir nur Reflexe hätten? Und was wäre, wenn wir bei jeder heissen Herdplatte erst 2 Sekunden nachdenken müssten?',
+      '🔑 Hinweis: Die Kombination aus blitzschnellen Schutzschaltungen und komplexer Großhirn-Planung ist die perfekte Überlebensstrategie.',
+      '✅ Lösung: Die Zweiteilung verbindet blitzschnelle Schadensvermeidung (Reflex) mit intelligenter Anpassungsfähigkeit (Grosshirn).',
+    ],
+    commonMistake: 'Reflexe als veraltete oder überflüssige Mechanismen abgetan.',
+  },
+];

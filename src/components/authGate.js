@@ -56,9 +56,9 @@ export function renderAuthGate(container, options = {}) {
   gateEl.innerHTML = `
     <div class="auth-gate__card glass-card text-center">
       <div class="auth-gate__icon">🔐</div>
-      <h1 class="text-gradient" style="font-size: 2.2rem; margin-bottom: 0.4rem;">LottaMATH</h1>
+      <h1 class="text-gradient" style="font-size: 2.2rem; margin-bottom: 0.4rem;">LottaLEARN</h1>
       <p class="text-muted" style="margin-bottom: 1.6rem; font-size: 0.95rem;">
-        Willkommen! Gib das Klassen-Passwort ein, um die Mathe-Welt zu betreten:
+        Willkommen! Gib das Klassen-Passwort ein, um zu starten:
       </p>
 
       <form id="auth-gate-form" class="flex-col gap-md">

@@ -177,7 +177,7 @@ export function renderDragOrder(container, options = {}) {
 
   wrapper.innerHTML = `
     <div class="drag-order__instructions text-muted text-center" style="margin-bottom: 1rem;">
-      👆 Bringe die Rechenschritte durch Ziehen in die richtige Reihenfolge:
+      👆 Bringe die Schritte durch Ziehen in die richtige Reihenfolge:
     </div>
     <div class="drag-order__list" id="drag-order-list"></div>
     <div class="drag-order__submit-row" style="margin-top: 1.5rem;">

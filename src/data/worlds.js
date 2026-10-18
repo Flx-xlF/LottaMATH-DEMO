@@ -437,7 +437,7 @@ export const WORLDS = [
         description: '(a + b)(c + d): Jeden Term der 1. Klammer mit jedem der 2. multiplizieren.',
         isBoss: false,
         questionsPerSession: 7,
-        allowedTypes: ['step-builder', 'fill-in'],
+        allowedTypes: ['multiple-choice', 'step-builder', 'fill-in'],
         timeLimit: 0,
         unlockRequirement: 1,
       },
@@ -778,7 +778,7 @@ export const WORLDS = [
         description: 'Vom Dreiglied zurück zum Quadrat (Faktorisieren mit Binomen).',
         isBoss: false,
         questionsPerSession: 7,
-        allowedTypes: ['fill-in', 'drag-group'],
+        allowedTypes: ['multiple-choice', 'fill-in', 'drag-group'],
         timeLimit: 0,
         unlockRequirement: 1,
       },
@@ -867,7 +867,7 @@ export const WORLDS = [
         description: 'A = g · h: Warum jede Scherung die gleiche Fläche behält.',
         isBoss: false,
         questionsPerSession: 6,
-        allowedTypes: ['multiple-choice', 'fill-in'],
+        allowedTypes: ['multiple-choice', 'fill-in', 'drag-order'],
         timeLimit: 0,
         unlockRequirement: 0,
       },
@@ -907,7 +907,7 @@ export const WORLDS = [
         description: 'Beweise dein Können bei allen 5 ebenen Grundfiguren!',
         isBoss: true,
         questionsPerSession: 8,
-        allowedTypes: ['multiple-choice', 'fill-in', 'drag-group'],
+        allowedTypes: ['multiple-choice', 'fill-in', 'drag-group', 'drag-order'],
         timeLimit: 300,
         unlockRequirement: 1,
       },
@@ -1240,7 +1240,7 @@ export const WORLDS = [
         description: 'Flächen und Pflastersteinkosten für Trapeze berechnen.',
         isBoss: false,
         questionsPerSession: 6,
-        allowedTypes: ['multiple-choice', 'fill-in'],
+        allowedTypes: ['multiple-choice', 'fill-in', 'step-builder'],
         timeLimit: 0,
         unlockRequirement: 1,
       },
@@ -1250,7 +1250,7 @@ export const WORLDS = [
         description: 'Walm- und Satteldächer berechnen mit 20% Ziegelzuschlag.',
         isBoss: false,
         questionsPerSession: 6,
-        allowedTypes: ['multiple-choice', 'fill-in'],
+        allowedTypes: ['multiple-choice', 'fill-in', 'step-builder'],
         timeLimit: 0,
         unlockRequirement: 1,
       },
@@ -1260,7 +1260,7 @@ export const WORLDS = [
         description: 'Fassadendämmung mit Fensterabzug, Farbverbrauch und Korkpackungen.',
         isBoss: false,
         questionsPerSession: 6,
-        allowedTypes: ['multiple-choice', 'fill-in'],
+        allowedTypes: ['multiple-choice', 'fill-in', 'step-builder'],
         timeLimit: 0,
         unlockRequirement: 1,
       },
@@ -1272,6 +1272,281 @@ export const WORLDS = [
         questionsPerSession: 8,
         allowedTypes: ['multiple-choice', 'fill-in', 'step-builder'],
         timeLimit: 360,
+        unlockRequirement: 1,
+      },
+    ],
+  },
+  {
+    id: 9,
+    topicId: 'sinne_optik',
+    name: 'Sehsinn & Optik',
+    emoji: '👁️',
+    colorPrimary: 'hsl(195, 85%, 48%)',
+    colorSecondary: 'hsl(205, 80%, 38%)',
+    description: 'Licht & Linsen, Bildentstehung im Auge, Akkommodation und Korrektur von Sehfehlern.',
+    realWorldIntro: {
+      headline: 'Wie das Auge die Welt einfängt',
+      examples: [
+        {
+          icon: '📷',
+          title: 'Auge und Kamera',
+          scenario: 'Genau wie eine Kamera bündelt das menschliche Auge Lichtstrahlen auf eine lichtempfindliche Schicht (Netzhaut).',
+          mathBreakdown: [
+            {
+              step: '1. Lichtbrechung',
+              detail: 'Hornhaut und Augenlinse brechen das einfallende Licht.',
+              math: '',
+            },
+            {
+              step: '2. Bild auf Netzhaut',
+              detail: 'Auf der Netzhaut entsteht ein umgekehrtes, verkleinertes Bild.',
+              math: '',
+            },
+            {
+              step: '3. Gehirn',
+              detail: 'Das Gehirn verarbeitet die elektrischen Impulse und dreht das Bild aufrecht.',
+              math: '',
+            },
+          ],
+          sukiComment: 'Die Hornhaut übernimmt sogar den grössten Teil der Brechung – die Augenlinse stellt nur noch fein scharf!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 145" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="240" cy="72" r="55" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="2.5"/>
+              <path d="M 285 35 A 55 55 0 0 1 285 109" fill="none" stroke="#f59e0b" stroke-width="3.5"/>
+              <text x="295" y="28" fill="#f59e0b" font-size="11" font-weight="bold" font-family="Outfit, sans-serif">Netzhaut</text>
+              <ellipse cx="195" cy="72" rx="7" ry="32" fill="rgba(56, 189, 248, 0.35)" stroke="#38bdf8" stroke-width="2"/>
+              <text x="195" y="30" fill="#38bdf8" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Linse</text>
+              <line x1="20" y1="52" x2="195" y2="52" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="92" x2="195" y2="92" stroke="#10b981" stroke-width="2"/>
+              <line x1="195" y1="52" x2="295" y2="72" stroke="#10b981" stroke-width="2"/>
+              <line x1="195" y1="92" x2="295" y2="72" stroke="#10b981" stroke-width="2"/>
+              <circle cx="295" cy="72" r="4" fill="#f43f5e"/>
+              <text x="240" y="140" fill="var(--color-text-muted, #94a3b8)" font-size="11" font-family="Outfit, sans-serif" text-anchor="middle">Licht bündelt sich exakt auf der Netzhaut</text>
+            </svg>`,
+          },
+        },
+        {
+          icon: '👓',
+          title: 'Warum Brillen scharfstellen',
+          scenario: 'Wenn der Augapfel nicht die ideale Form hat, landet der Brennpunkt nicht auf der Netzhaut – die Sicht wird unscharf.',
+          mathBreakdown: [
+            {
+              step: 'Kurzsichtig',
+              detail: 'Augapfel zu lang → Brennpunkt VOR der Netzhaut → Konkavlinse (Zerstreuungslinse) schiebt ihn nach hinten.',
+              math: '',
+            },
+            {
+              step: 'Weitsichtig',
+              detail: 'Augapfel zu kurz → Brennpunkt HINTER der Netzhaut → Konvexlinse (Sammellinse) bündelt vorab.',
+              math: '',
+            },
+          ],
+          sukiComment: 'Mit der passenden Brille landet der Brennpunkt wieder haargenau auf der Netzhaut!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 140" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="250" cy="70" rx="65" ry="45" fill="rgba(244, 63, 94, 0.1)" stroke="#f43f5e" stroke-width="2"/>
+              <circle cx="270" cy="70" r="3.5" fill="#f43f5e"/>
+              <text x="270" y="55" fill="#f43f5e" font-size="10" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">vor Netzhaut</text>
+              <path d="M 36 40 Q 44 70 36 100 L 58 100 Q 50 70 58 40 Z" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8" stroke-width="2"/>
+              <text x="47" y="125" fill="#38bdf8" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Konkavlinse</text>
+              <text x="180" y="132" fill="var(--color-text, #f8fafc)" font-size="11" font-family="Outfit, sans-serif" text-anchor="middle">Korrektur bei Kurzsichtigkeit</text>
+            </svg>`,
+          },
+        },
+      ],
+    },
+    levels: [
+      {
+        id: '9-1',
+        name: 'Licht & Linsenarten',
+        description: 'Geradliniges Licht, Konvexlinse (Sammellinse) vs. Konkavlinse (Zerstreuungslinse).',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 0,
+        unlockRequirement: 0,
+      },
+      {
+        id: '9-2',
+        name: 'Aufbau & Bildentstehung',
+        description: 'Der Sehvorgang: Hornhaut, Pupille, Linse, Netzhaut und Bildeigenschaften.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '9-3',
+        name: 'Akkommodation (Nah & Fern)',
+        description: 'Scharfeinstellung: Ringmuskel, Linsenwölbung und Brechkraft bei Nah- und Fernsicht.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '9-4',
+        name: 'Sehfehler & Brillenkorrektur',
+        description: 'Kurzsichtigkeit, Weitsichtigkeit & Hornhautverkrümmung: Ursachen, Brennpunkt und Linsen.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '9-5',
+        name: 'Boss: Optik-Meisterprüfung',
+        description: 'Beweise dein Können über das gesamte Sehsinn- und Optik-Thema!',
+        isBoss: true,
+        questionsPerSession: 8,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 240,
+        unlockRequirement: 1,
+      },
+    ],
+  },
+  {
+    id: 10,
+    topicId: 'sinne_optik',
+    name: 'Gehörsinn & Nervensystem',
+    emoji: '🎧',
+    colorPrimary: 'hsl(280, 75%, 58%)',
+    colorSecondary: 'hsl(290, 70%, 48%)',
+    description: 'Schallausbreitung, Aufbau des Ohrs, räumliches Hören, Gehörschäden und Reiz-Reaktions-Schema.',
+    realWorldIntro: {
+      headline: 'Wie wir hören und blitzschnell reagieren',
+      examples: [
+        {
+          icon: '🚲',
+          title: 'Richtungshören im Verkehr',
+          scenario: 'Ein Fahrrad klingelt hinter dir – sofort weisst du, aus welcher Richtung es kommt.',
+          mathBreakdown: [
+            {
+              step: '1. Zeitunterschied',
+              detail: 'Der Schall erreicht das nähere Ohr wenige Bruchteile einer Sekunde früher.',
+              math: '',
+            },
+            {
+              step: '2. Lautstärke',
+              detail: 'Der Kopf dämpft den Schall zum abgewandten Ohr leicht ab.',
+              math: '',
+            },
+            {
+              step: '3. Gehirn',
+              detail: 'Aus Zeit- und Lautstärkeunterschied berechnet das Gehirn die exakte Richtung.',
+              math: '',
+            },
+          ],
+          sukiComment: 'Darum brauchen wir zwei funktionierende Ohren, um Schall im Raum orten zu können!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 140" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="170" cy="70" r="35" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="2"/>
+              <ellipse cx="132" cy="70" rx="6" ry="12" fill="#a855f7"/>
+              <ellipse cx="208" cy="70" rx="6" ry="12" fill="#a855f7"/>
+              <circle cx="60" cy="40" r="10" fill="#f59e0b"/>
+              <text x="60" y="44" fill="#000" font-size="11" font-weight="bold" text-anchor="middle">🔔</text>
+              <path d="M 80 45 Q 110 55 130 65" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+              <text x="170" y="128" fill="var(--color-text-muted, #94a3b8)" font-size="11" font-family="Outfit, sans-serif" text-anchor="middle">Schall erreicht linkes Ohr zuerst</text>
+            </svg>`,
+          },
+        },
+        {
+          icon: '⚡',
+          title: 'Schutzreflex an der Herdplatte',
+          scenario: 'Warum ziehst du die Hand von einer heissen Herdplatte zurück, noch BEVOR du den Schmerz spürst?',
+          mathBreakdown: [
+            {
+              step: '1. Reflexbogen',
+              detail: 'Das Alarmsignal wird direkt im Rückenmark auf den Muskel umgeschaltet (unter 50 Millisekunden).',
+              math: '',
+            },
+            {
+              step: '2. Schmerz',
+              detail: 'Die Nachricht erreicht das Grosshirn erst kurz danach – der Schutzreflex hat bereits gewirkt.',
+              math: '',
+            },
+          ],
+          sukiComment: 'Ein Reflex schützt vor Verbrennungen, weil das Nachdenken im Gehirn zu lange dauern würde!',
+          visual: {
+            type: 'custom-svg',
+            svg: `<svg viewBox="0 0 340 135" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrow-amber" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M 0 0 L 6 3 L 0 6 Z" fill="#f59e0b"/>
+                </marker>
+                <marker id="arrow-green" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M 0 0 L 6 3 L 0 6 Z" fill="#10b981"/>
+                </marker>
+              </defs>
+              <rect x="30" y="45" width="90" height="40" rx="8" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" stroke-width="2"/>
+              <text x="75" y="69" fill="#f43f5e" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Haut / Muskel</text>
+              <rect x="220" y="45" width="90" height="40" rx="8" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
+              <text x="265" y="69" fill="#10b981" font-size="11" font-weight="bold" font-family="Outfit, sans-serif" text-anchor="middle">Rückenmark</text>
+              <path d="M 120 55 L 212 55" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+              <text x="166" y="50" fill="#f59e0b" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">sensibel</text>
+              <path d="M 220 75 L 128 75" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green)"/>
+              <text x="166" y="88" fill="#10b981" font-size="9" font-family="Outfit, sans-serif" text-anchor="middle">motorisch</text>
+              <text x="170" y="118" fill="var(--color-text, #f8fafc)" font-size="11" font-family="Outfit, sans-serif" text-anchor="middle">Kurzer Reflexbogen ohne Gehirn-Umweg</text>
+            </svg>`,
+          },
+        },
+      ],
+    },
+    levels: [
+      {
+        id: '10-1',
+        name: 'Aufbau & Funktion des Ohrs',
+        description: 'Schallausbreitung, Trommelfell, Gehörknöchelchen und Hörschnecke.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 0,
+        unlockRequirement: 0,
+      },
+      {
+        id: '10-2',
+        name: 'Räumliches Hören & Schäden',
+        description: 'Hören mit zwei Ohren, Trommelfellriss, Lärmschwerhörigkeit und Tinnitus.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '10-3',
+        name: 'Wahrnehmung & Reizleitung',
+        description: 'Ein Sinn allein reicht nicht aus: Reizaufnahme, Weiterleitung und Verarbeitung.',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-order', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '10-4',
+        name: 'Bewusste Reaktion vs. Reflex',
+        description: 'Unterscheidung zwischen bewussten Handlungen (Gehirn) und Schutzreflexen (Rückenmark).',
+        isBoss: false,
+        questionsPerSession: 5,
+        allowedTypes: ['multiple-choice', 'drag-group'],
+        timeLimit: 0,
+        unlockRequirement: 1,
+      },
+      {
+        id: '10-5',
+        name: 'Boss: Sinne & Nerven Finale',
+        description: 'Meistere alle Prüfungsfragen zu Gehör, Wahrnehmung und Reflexen!',
+        isBoss: true,
+        questionsPerSession: 8,
+        allowedTypes: ['multiple-choice', 'drag-group', 'drag-order'],
+        timeLimit: 240,
         unlockRequirement: 1,
       },
     ],

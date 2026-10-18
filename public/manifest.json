@@ -1,7 +1,7 @@
 {
-  "name": "LottaMATH (Demo) — Dein Mathe-Trainer",
-  "short_name": "LottaMATH",
-  "description": "Interaktive Demo von LottaMATH — Gamified Math Trainer für Sekundarstufe Niveau P (Terme & Flächen)",
+  "name": "LottaLEARN",
+  "short_name": "LottaLEARN",
+  "description": "LottaLEARN",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

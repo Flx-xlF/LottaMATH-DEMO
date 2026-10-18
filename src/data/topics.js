@@ -1,11 +1,27 @@
 /**
- * Topic Definitions for LottaMATH
+ * Topic & Subject Definitions for LottaLEARN
  * High-level subject areas (Sekundarschule Niveau P, Baselland) grouping multiple worlds.
  */
+
+export const SUBJECTS = [
+  {
+    id: 'mathe',
+    name: 'Mathematik',
+    emoji: '📐',
+    paretoText: 'Mit nur <b>20% gezielten Kern-Mustern</b> (Flächenmodelle, Minusklammern & Binome) löst du <b>80% aller Prüfungsaufgaben</b>! Lerne clever & mit Durchblick statt mit Frust. 🐾',
+  },
+  {
+    id: 'nt',
+    name: 'Natur & Technik',
+    emoji: '🔬',
+    paretoText: 'Mit nur <b>20% gezielten Kern-Mustern</b> (Ursache-Wirkungs-Ketten, Strahlengänge & Gegenspieler-Paare) sicherst du dir <b>80% aller Prüfungspunkte</b>! Achte immer auf die exakten Schlüsselbegriffe. 🐾',
+  },
+];
 
 export const TOPICS = [
   {
     id: 'terme',
+    subjectId: 'mathe',
     name: 'Terme & Termumformungen',
     emoji: '📐',
     colorPrimary: 'hsl(265, 80%, 55%)',
@@ -16,6 +32,7 @@ export const TOPICS = [
   },
   {
     id: 'flaechen',
+    subjectId: 'mathe',
     name: 'Flächeninhalt ebener Figuren',
     emoji: '📐',
     colorPrimary: 'hsl(160, 75%, 42%)',
@@ -26,6 +43,7 @@ export const TOPICS = [
   },
   {
     id: 'gleichungen',
+    subjectId: 'mathe',
     name: 'Gleichungen & Ungleichungen',
     emoji: '⚖️',
     colorPrimary: 'hsl(200, 75%, 50%)',
@@ -36,6 +54,7 @@ export const TOPICS = [
   },
   {
     id: 'prozent',
+    subjectId: 'mathe',
     name: 'Prozent- & Zinsrechnen',
     emoji: '📊',
     colorPrimary: 'hsl(35, 85%, 55%)',
@@ -44,7 +63,26 @@ export const TOPICS = [
     worldIds: [],
     unlocked: false,
   },
+  {
+    id: 'sinne_optik',
+    subjectId: 'nt',
+    name: 'Reize, Sinne & Optik',
+    emoji: '👁️',
+    colorPrimary: 'hsl(195, 85%, 48%)',
+    description: 'Licht & Linsen, Bildentstehung im Auge, Akkommodation, Sehfehler, Gehörsinn und Nervensystem.',
+    chapter: 'AM 3.12 / 3.13',
+    worldIds: [9, 10],
+    unlocked: true,
+  },
 ];
+
+export function getSubjects() {
+  return SUBJECTS;
+}
+
+export function getTopicsForSubject(subjectId = 'mathe') {
+  return TOPICS.filter((t) => (t.subjectId || 'mathe') === subjectId);
+}
 
 export function getTopic(topicId) {
   return TOPICS.find((t) => t.id === topicId) || null;

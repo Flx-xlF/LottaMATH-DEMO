@@ -24,7 +24,7 @@ export function renderExam(container, gameState, callbacks = {}) {
   screenEl.className = 'screen exam-screen flex-col flex-center';
   container.appendChild(screenEl);
 
-  let selectedTopic = 'all';
+  let selectedTopic = (gameState && gameState.activeSubject === 'nt') ? 'sinne_optik' : 'all';
 
   function showIntro() {
     screenEl.innerHTML = `
@@ -38,9 +38,10 @@ export function renderExam(container, gameState, callbacks = {}) {
         <div class="flex-col gap-xs text-left" style="margin: 0.5rem 0;">
           <label style="font-size: 0.9rem; font-weight: 700; color: var(--color-text);">Themenbereich wählen:</label>
           <select id="exam-topic-select" class="form-input" style="padding: 10px; border-radius: var(--radius-sm); font-size: 1rem; cursor: pointer;">
-            <option value="flaechen" ${selectedTopic === 'flaechen' ? 'selected' : ''}>📐 Flächeninhalt ebener Figuren (Neu!)</option>
-            <option value="terme" ${selectedTopic === 'terme' ? 'selected' : ''}>🌊 Terme & Termumformungen</option>
-            <option value="all" ${selectedTopic === 'all' ? 'selected' : ''}>🌟 Gesamter Stoff (Alle Themen gemischt)</option>
+            <option value="flaechen" ${selectedTopic === 'flaechen' ? 'selected' : ''}>📐 Mathe: Flächeninhalt ebener Figuren</option>
+            <option value="terme" ${selectedTopic === 'terme' ? 'selected' : ''}>🌊 Mathe: Terme & Termumformungen</option>
+            <option value="sinne_optik" ${selectedTopic === 'sinne_optik' ? 'selected' : ''}>👁️ NT: Reize, Sinne & Optik (Neu!)</option>
+            <option value="all" ${selectedTopic === 'all' ? 'selected' : ''}>🌟 Mathe: Gesamter Stoff gemischt</option>
           </select>
         </div>
 
@@ -193,6 +194,28 @@ export function renderExam(container, gameState, callbacks = {}) {
       </div>
     `;
 
+    function formatAnswerForDisplay(val) {
+      if (val === null || val === undefined || val === '') return '(Keine Eingabe)';
+      let parsed = val;
+      if (typeof val === 'string' && (val.startsWith('[') || val.startsWith('{'))) {
+        try {
+          parsed = JSON.parse(val);
+        } catch (_) {
+          parsed = val;
+        }
+      }
+      if (Array.isArray(parsed)) {
+        return parsed.join(' → ');
+      }
+      if (typeof parsed === 'object' && parsed !== null) {
+        return Object.entries(parsed)
+          .filter(([_, items]) => (Array.isArray(items) ? items.length > 0 : Boolean(items)))
+          .map(([grp, items]) => `${grp}: ${Array.isArray(items) ? items.join(', ') : items}`)
+          .join(' | ');
+      }
+      return String(parsed);
+    }
+
     // Render mistake cards with math rendering
     if (wrongAnswers.length > 0) {
       const mistakesContainer = screenEl.querySelector('#exam-mistakes-container');
@@ -214,13 +237,13 @@ export function renderExam(container, gameState, callbacks = {}) {
         userCol.style.color = 'var(--color-error)';
         userCol.innerHTML = 'Deine Eingabe: <strong></strong>';
         const userStrong = userCol.querySelector('strong');
-        renderMathInText(userStrong, item.userAnswer);
+        renderMathInText(userStrong, formatAnswerForDisplay(item.userAnswer));
 
         const correctCol = document.createElement('span');
         correctCol.style.color = 'var(--color-success)';
         correctCol.innerHTML = 'Richtig: <strong></strong>';
         const correctStrong = correctCol.querySelector('strong');
-        renderMathInText(correctStrong, item.correctAnswer);
+        renderMathInText(correctStrong, formatAnswerForDisplay(item.correctAnswer));
 
         answersRow.appendChild(userCol);
         answersRow.appendChild(correctCol);

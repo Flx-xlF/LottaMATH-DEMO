@@ -110,9 +110,14 @@ export function renderResults(container, sessionResult = {}, levelInfo = {}, cal
         <button type="button" class="btn btn--secondary" id="results-retry-btn">
           🔄 Nochmal
         </button>
+        ${
+          sessionResult.starsEarned > 0
+            ? `
         <button type="button" class="btn btn--primary" id="results-next-btn">
           Weiter ➡️
-        </button>
+        </button>`
+            : ''
+        }
         <button type="button" class="btn btn--ghost" id="results-home-btn">
           🏠 Übersicht
         </button>
@@ -135,13 +140,13 @@ export function renderResults(container, sessionResult = {}, levelInfo = {}, cal
   const homeBtn = screenEl.querySelector('#results-home-btn');
 
   retryBtn.addEventListener('click', onRetry);
-  nextBtn.addEventListener('click', onNext);
+  if (nextBtn) nextBtn.addEventListener('click', onNext);
   homeBtn.addEventListener('click', onHome);
 
   return {
     destroy: () => {
       retryBtn.removeEventListener('click', onRetry);
-      nextBtn.removeEventListener('click', onNext);
+      if (nextBtn) nextBtn.removeEventListener('click', onNext);
       homeBtn.removeEventListener('click', onHome);
       if (sukiWidget && sukiWidget.destroy) sukiWidget.destroy();
       screenEl.remove();

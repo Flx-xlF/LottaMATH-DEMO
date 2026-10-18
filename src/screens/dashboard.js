@@ -3,10 +3,10 @@
  * Main hub: Suki greeting, Topic accordions, World progression cards, Exam mode hero, and Achievement shelf.
  */
 
-import { TOPICS } from '../data/topics.js';
+import { TOPICS, SUBJECTS, getTopicsForSubject } from '../data/topics.js';
 import { getWorldsForTopic } from '../data/worlds.js';
 import { ACHIEVEMENTS } from '../data/achievements.js';
-import { isWorldUnlocked, getMistakeCount } from '../engine/gameState.js';
+import { isWorldUnlocked, getMistakeCount, saveGameState } from '../engine/gameState.js';
 import { renderXPCounter } from '../components/xpCounter.js';
 import { renderStreakBadge } from '../components/streakBadge.js';
 import { renderProgressRing } from '../components/progressBar.js';
@@ -57,10 +57,9 @@ export function renderDashboard(container, gameState, callbacks = {}) {
       <span class="dashboard__logo-icon">🌊</span>
       <div class="dashboard__titles">
         <div class="flex-row gap-xs" style="align-items: center;">
-          <h1 class="dashboard__title text-gradient">LottaMATH</h1>
+          <h1 class="dashboard__title text-gradient">LottaLEARN</h1>
           ${isSubscribed ? '<span class="premium-badge">⭐ Premium</span>' : ''}
         </div>
-        <div class="dashboard__subtitle text-muted">Sekundarschule Niveau P (Baselland)</div>
       </div>
     </div>
     <div class="dashboard__actions flex-row gap-sm" style="align-items: center; position: relative;">
@@ -127,6 +126,47 @@ export function renderDashboard(container, gameState, callbacks = {}) {
     position: 'inline',
   });
 
+  // 3.2. Subject Switcher Bar
+  let activeSubjectId = (gameState && gameState.activeSubject) || 'mathe';
+  const subjects = SUBJECTS;
+  let currentSubject = subjects.find((s) => s.id === activeSubjectId) || subjects[0];
+
+  const subjectBar = document.createElement('div');
+  subjectBar.className = 'dashboard__subject-bar flex-row gap-xs';
+  subjectBar.style.cssText = 'background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border); border-radius: var(--radius-full, 999px); padding: 4px; align-self: flex-start; max-width: 100%;';
+
+  const subjectBtns = [];
+
+  subjects.forEach((subj) => {
+    const isAct = subj.id === activeSubjectId;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `btn ${isAct ? 'btn--primary' : 'btn--ghost'}`;
+    btn.style.cssText = `border-radius: var(--radius-full, 999px); padding: 8px 18px; font-size: 0.95rem; font-weight: 700; transition: all 0.2s ease; ${isAct ? '' : 'color: var(--color-text-muted);'}`;
+    btn.innerHTML = `<span>${subj.emoji}</span> <span>${subj.name}</span>`;
+    btn.addEventListener('click', () => {
+      if (activeSubjectId === subj.id) return;
+      activeSubjectId = subj.id;
+      gameState.activeSubject = subj.id;
+      saveGameState(gameState);
+      currentSubject = subj;
+
+      subjectBtns.forEach(({ b, id }) => {
+        const selected = id === activeSubjectId;
+        b.className = `btn ${selected ? 'btn--primary' : 'btn--ghost'}`;
+        b.style.color = selected ? '' : 'var(--color-text-muted)';
+      });
+
+      if (paretoTextEl) {
+        paretoTextEl.innerHTML = currentSubject.paretoText;
+      }
+      renderTopicCards();
+    });
+    subjectBtns.push({ b: btn, id: subj.id });
+    subjectBar.appendChild(btn);
+  });
+  screenEl.appendChild(subjectBar);
+
   // 3.5. Pareto Strategy Card (80/20 Rule for Lotta)
   const paretoCard = document.createElement('div');
   paretoCard.className = 'dashboard__pareto-card glass-card flex-row gap-md';
@@ -140,12 +180,13 @@ export function renderDashboard(container, gameState, callbacks = {}) {
       <div style="font-weight: 700; font-size: 0.95rem; color: var(--color-text);">
         Sukis 80/20-Erfolgsregel (Das Pareto-Prinzip)
       </div>
-      <div class="text-muted" style="font-size: 0.85rem; line-height: 1.45;">
-        Mit nur <b>20% gezielten Kern-Mustern</b> (Flächenmodelle, Minusklammern & Binome) löst du <b>80% aller Prüfungsaufgaben</b>! Lerne clever & mit Durchblick statt mit Frust. 🐾
+      <div class="text-muted" id="dashboard-pareto-text" style="font-size: 0.85rem; line-height: 1.45;">
+        ${currentSubject.paretoText}
       </div>
     </div>
   `;
   screenEl.appendChild(paretoCard);
+  const paretoTextEl = paretoCard.querySelector('#dashboard-pareto-text');
 
   // 3.6. Fehler-Schmiede Card (Lottas Mistake Vault)
   const mistakeCount = getMistakeCount(gameState);
@@ -207,157 +248,158 @@ export function renderDashboard(container, gameState, callbacks = {}) {
     });
   }
 
-  // 4. Topic Accordion Section
+  // 4. Topic Accordion Section (Dynamic by Active Subject)
   const topicsSection = document.createElement('div');
   topicsSection.className = 'dashboard__topics-section flex-col gap-md';
-  topicsSection.innerHTML = `<h2 class="dashboard__section-title">Themenbereiche</h2>`;
+  screenEl.appendChild(topicsSection);
 
-  TOPICS.forEach((topic, topicIdx) => {
-    const topicWorlds = getWorldsForTopic(topic.id);
-    const isUnlocked = topic.unlocked;
+  function renderTopicCards() {
+    topicsSection.innerHTML = `<h2 class="dashboard__section-title">Themenbereiche (${currentSubject.name})</h2>`;
+    const filteredTopics = getTopicsForSubject(activeSubjectId);
 
-    // Calculate total levels and completed levels for this topic
-    let totalLevels = 0;
-    let completedLevels = 0;
-    let totalStars = 0;
+    filteredTopics.forEach((topic, topicIdx) => {
+      const topicWorlds = getWorldsForTopic(topic.id);
+      const isUnlocked = topic.unlocked;
 
-    topicWorlds.forEach((w) => {
-      totalLevels += w.levels.length;
-      w.levels.forEach((l) => {
-        const prog = gameState.levels && gameState.levels[l.id];
-        if (prog) {
-          totalStars += prog.stars || 0;
-          if (prog.completed) completedLevels += 1;
-        }
-      });
-    });
-
-    const completionPercent = totalLevels > 0 ? Math.round((completedLevels / totalLevels) * 100) : 0;
-    const isExpanded = topicIdx === 0 && isUnlocked; // First topic expanded by default
-
-    const topicCard = document.createElement('div');
-    topicCard.className = `topic-card glass-card ${isUnlocked ? '' : 'topic-card--locked'} ${
-      isExpanded ? 'topic-card--expanded' : ''
-    }`;
-    topicCard.style.setProperty('--topic-color', topic.colorPrimary);
-
-    // Topic Header
-    const topicHeader = document.createElement('div');
-    topicHeader.className = 'topic-card__header flex-between';
-    topicHeader.innerHTML = `
-      <div class="topic-card__header-left flex-row gap-md">
-        <span class="topic-card__emoji">${topic.emoji}</span>
-        <div class="topic-card__info flex-col">
-          <div class="flex-row gap-sm" style="align-items: center;">
-            <h3 class="topic-card__title">${topic.name}</h3>
-            <span class="topic-card__chapter">${topic.chapter}</span>
-          </div>
-          ${
-            isUnlocked
-              ? `<p class="topic-card__desc text-muted">${topic.description}</p>`
-              : `<p class="topic-card__teaser">${topic.description}</p>`
-          }
-        </div>
-      </div>
-      <div class="topic-card__header-right flex-row gap-md" style="align-items: center;">
-        ${
-          isUnlocked
-            ? `
-            <span class="topic-card__progress" style="color: ${topic.colorPrimary};">${completionPercent}%</span>
-            <span class="topic-card__chevron">▼</span>
-          `
-            : `
-            <span class="topic-card__lock-badge text-muted">🔒 Demnächst</span>
-          `
-        }
-      </div>
-    `;
-
-    topicCard.appendChild(topicHeader);
-
-    // Topic Body (Collapsible World Grid)
-    if (isUnlocked && topicWorlds.length > 0) {
-      const topicBody = document.createElement('div');
-      topicBody.className = 'topic-card__body';
-
-      const worldsGrid = document.createElement('div');
-      worldsGrid.className = 'dashboard__worlds-grid';
+      // Calculate total levels and completed levels for this topic
+      let totalLevels = 0;
+      let completedLevels = 0;
 
       topicWorlds.forEach((w) => {
-        const worldUnlocked = isWorldUnlocked(gameState, w.id);
-
-        let wStars = 0;
-        let wCompleted = 0;
+        totalLevels += w.levels.length;
         w.levels.forEach((l) => {
           const prog = gameState.levels && gameState.levels[l.id];
-          if (prog) {
-            wStars += prog.stars || 0;
-            if (prog.completed) wCompleted += 1;
-          }
+          if (prog && prog.completed) completedLevels += 1;
         });
+      });
 
-        const maxStars = w.levels.length * 3;
-        const progressRatio = w.levels.length > 0 ? wCompleted / w.levels.length : 0;
+      const completionPercent = totalLevels > 0 ? Math.round((completedLevels / totalLevels) * 100) : 0;
+      const isExpanded = topicIdx === 0 && isUnlocked; // First topic expanded by default
 
-        const wCard = document.createElement('div');
-        wCard.className = `world-card glass-card ${worldUnlocked ? 'glass-card--interactive' : 'world-card--locked'}`;
-        wCard.style.setProperty('--world-theme', w.colorPrimary);
+      const topicCard = document.createElement('div');
+      topicCard.className = `topic-card glass-card ${isUnlocked ? '' : 'topic-card--locked'} ${
+        isExpanded ? 'topic-card--expanded' : ''
+      }`;
+      topicCard.style.setProperty('--topic-color', topic.colorPrimary);
 
-        wCard.innerHTML = `
-          <div class="world-card__header flex-between">
-            <span class="world-card__emoji">${w.emoji}</span>
-            <div class="world-card__ring-mount" id="world-ring-${w.id}"></div>
-          </div>
-          <div class="world-card__body">
-            <h4 class="world-card__title" style="font-size: 1.15rem;">${w.name}</h4>
-            <p class="world-card__desc text-muted">${w.description}</p>
-          </div>
-          <div class="world-card__footer flex-between">
-            <span class="world-card__stars">⭐ ${wStars} / ${maxStars}</span>
+      // Topic Header
+      const topicHeader = document.createElement('div');
+      topicHeader.className = 'topic-card__header flex-between';
+      topicHeader.innerHTML = `
+        <div class="topic-card__header-left flex-row gap-md">
+          <span class="topic-card__emoji">${topic.emoji}</span>
+          <div class="topic-card__info flex-col">
+            <div class="flex-row gap-sm" style="align-items: center;">
+              <h3 class="topic-card__title">${topic.name}</h3>
+              <span class="topic-card__chapter">${topic.chapter}</span>
+            </div>
             ${
-              worldUnlocked
-                ? `<span class="world-card__status" style="color: ${w.colorPrimary}; font-weight: 600;">Öffnen →</span>`
-                : `<span class="world-card__lock">🔒 Gesperrt</span>`
+              isUnlocked
+                ? `<p class="topic-card__desc text-muted">${topic.description}</p>`
+                : `<p class="topic-card__teaser">${topic.description}</p>`
             }
           </div>
-        `;
+        </div>
+        <div class="topic-card__header-right flex-row gap-md" style="align-items: center;">
+          ${
+            isUnlocked
+              ? `
+              <span class="topic-card__progress" style="color: ${topic.colorPrimary};">${completionPercent}%</span>
+              <span class="topic-card__chevron">▼</span>
+            `
+              : `
+              <span class="topic-card__lock-badge text-muted">🔒 Demnächst</span>
+            `
+          }
+        </div>
+      `;
 
-        if (worldUnlocked) {
-          wCard.addEventListener('click', (e) => {
-            e.stopPropagation();
-            onWorldSelect(w.id);
+      topicCard.appendChild(topicHeader);
+
+      // Topic Body (Collapsible World Grid)
+      if (isUnlocked && topicWorlds.length > 0) {
+        const topicBody = document.createElement('div');
+        topicBody.className = 'topic-card__body';
+
+        const worldsGrid = document.createElement('div');
+        worldsGrid.className = 'dashboard__worlds-grid';
+
+        topicWorlds.forEach((w) => {
+          const worldUnlocked = isWorldUnlocked(gameState, w.id);
+
+          let wStars = 0;
+          let wCompleted = 0;
+          w.levels.forEach((l) => {
+            const prog = gameState.levels && gameState.levels[l.id];
+            if (prog) {
+              wStars += prog.stars || 0;
+              if (prog.completed) wCompleted += 1;
+            }
           });
-        }
 
-        worldsGrid.appendChild(wCard);
+          const maxStars = w.levels.length * 3;
+          const progressRatio = w.levels.length > 0 ? wCompleted / w.levels.length : 0;
 
-        setTimeout(() => {
-          const ringMount = wCard.querySelector(`#world-ring-${w.id}`);
-          if (ringMount) {
-            renderProgressRing(ringMount, {
-              value: progressRatio,
-              size: 44,
-              strokeWidth: 5,
-              color: w.colorPrimary,
-              label: `${wCompleted}/${w.levels.length}`,
+          const wCard = document.createElement('div');
+          wCard.className = `world-card glass-card ${worldUnlocked ? 'glass-card--interactive' : 'world-card--locked'}`;
+          wCard.style.setProperty('--world-theme', w.colorPrimary);
+
+          wCard.innerHTML = `
+            <div class="world-card__header flex-between">
+              <span class="world-card__emoji">${w.emoji}</span>
+              <div class="world-card__ring-mount" id="world-ring-${w.id}"></div>
+            </div>
+            <div class="world-card__body">
+              <h4 class="world-card__title" style="font-size: 1.15rem;">${w.name}</h4>
+              <p class="world-card__desc text-muted">${w.description}</p>
+            </div>
+            <div class="world-card__footer flex-between">
+              <span class="world-card__stars">⭐ ${wStars} / ${maxStars}</span>
+              ${
+                worldUnlocked
+                  ? `<span class="world-card__status" style="color: ${w.colorPrimary}; font-weight: 600;">Öffnen →</span>`
+                  : `<span class="world-card__lock">🔒 Gesperrt</span>`
+              }
+            </div>
+          `;
+
+          if (worldUnlocked) {
+            wCard.addEventListener('click', (e) => {
+              e.stopPropagation();
+              onWorldSelect(w.id);
             });
           }
-        }, 0);
-      });
 
-      topicBody.appendChild(worldsGrid);
-      topicCard.appendChild(topicBody);
+          worldsGrid.appendChild(wCard);
 
-      // Header click toggles expand/collapse
-      topicHeader.addEventListener('click', () => {
-        topicCard.classList.toggle('topic-card--expanded');
-      });
-    }
+          setTimeout(() => {
+            const ringMount = wCard.querySelector(`#world-ring-${w.id}`);
+            if (ringMount) {
+              renderProgressRing(ringMount, {
+                value: progressRatio,
+                size: 44,
+                strokeWidth: 5,
+                color: w.colorPrimary,
+                label: `${wCompleted}/${w.levels.length}`,
+              });
+            }
+          }, 0);
+        });
 
-    topicsSection.appendChild(topicCard);
-  });
+        topicBody.appendChild(worldsGrid);
+        topicCard.appendChild(topicBody);
 
-  screenEl.appendChild(topicsSection);
+        // Header click toggles expand/collapse
+        topicHeader.addEventListener('click', () => {
+          topicCard.classList.toggle('topic-card--expanded');
+        });
+      }
+
+      topicsSection.appendChild(topicCard);
+    });
+  }
+
+  renderTopicCards();
 
   // 5. Exam Mode Hero Card
   const examSection = document.createElement('div');

@@ -1,6 +1,6 @@
-# 🐾 LottaMATH (Demo)
+# 🐾 LottaLEARN (Demo)
 
-> Gamified, privacy-first math learning platform tailored for Swiss Secondary School (Sekundarstufe I, Niveau P). Built with interactive SVG visual models, live LaTeX rendering, custom touch keyboard, and local-first progress tracking.
+> Gamified, privacy-first multi-subject learning platform tailored for Swiss Secondary School (Sekundarstufe I, Niveau P) covering Mathematics and Natur & Technik (Science). Built with interactive SVG visual models, live LaTeX rendering, custom touch keyboard, and local-first progress tracking.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-F20587?style=flat-square&logo=github)](https://flx-xlf.github.io/LottaMATH-DEMO/)
 [![Bundle Size](https://img.shields.io/badge/Bundle-<250_kB_gzipped-black?style=flat-square)](https://flx-xlf.github.io/LottaMATH-DEMO/)
@@ -17,22 +17,22 @@ Explore the fully interactive, client-side demo directly in your browser:
 👉 **[https://flx-xlf.github.io/LottaMATH-DEMO/](https://flx-xlf.github.io/LottaMATH-DEMO/)**
 
 * **Pre-seeded Demo Profiles:**
-  * 🐱 **Lotta:** Level 4 (*Algebra-Talent*), 680 XP, 5-day streak, Worlds 1–3 completed with 3 stars, and 2 active items in the *Fehler-Schmiede*.
-  * 🦊 **Nico:** Level 2 (*Entdecker:in*), 140 XP, World 1 completed.
-  * ➕ **Your Own Profile:** Create your own profile or reset progress anytime.
+  * 🐱 **Lotta:** Level 4 (*Algebra-Talent*), 760 XP, 5-day streak, Mathematics & World 9 (Optik) progress, and 2 active items in the *Fehler-Schmiede*.
+  * 🦊 **Nico:** Level 2 (*Entdecker:in*), 220 XP, Natur & Technik (Optik & Nervensystem) focus.
+  * ➕ **Your Own Profile:** Create your own profile, toggle subjects seamlessly via the dashboard switcher, or reset progress anytime.
 * **100% Client-Side:** Runs completely in your browser with `localStorage` persistence. No server setup, no registration, and no tracking.
 
 ---
 
 ## 📐 Autonomous Chapter Generation: The "Golden Rule Set"
 
-A central architectural feature of **LottaMATH** is its pedagogical compilation pipeline, governed by a strict **"Golden Rule Set"**.
+A central architectural feature of **LottaLEARN** is its pedagogical compilation pipeline, governed by strict **"Golden Rule Sets"** for Mathematics and Natur & Technik.
 
 Instead of hand-coding every individual exercise, UI interaction, and diagram for a new syllabus topic, the pipeline accepts raw curriculum material and automatically synthesizes cohesive, classroom-ready learning chapters.
 
 ```
   ┌────────────────────────────────┐         ┌───────────────────────────────┐
-  │        Curriculum Input        │         │        LottaMATH Engine       │
+  │        Curriculum Input        │         │       LottaLEARN Engine       │
   │ • Learning objectives (Ziele)  │ ──────> │      [ Golden Rule Set ]      │
   │ • Theoretical explanations     │         │ • Pedagogical structure       │
   │ • Example tasks & calculations │         │ • Cognitive load constraints  │
@@ -83,6 +83,9 @@ Governed by the rule set, the pipeline translates the input into complete intera
   * **World 6:** Parallelogramme & Rauten *(Grundlinie $\cdot$ Höhe)*
   * **World 7:** Dreiecke & Trapeze *($\frac{g \cdot h}{2}$ & Mittelparallele)*
   * **World 8:** Reale Sachaufgaben *(Verschnitt, Wandfarben, Rabatte, Materialkosten)*
+* **Part 3 — Natur & Technik (Biologie & Physik):**
+  * **World 9:** Sehsinn & Optik *(Lichtstrahl-Modell, Konvex-/Konkavlinsen, Akkommodation, Sehfehler & Brillen)*
+  * **World 10:** Gehörsinn & Nervensystem *(Schallwellen, Ohr-Anatomie, Hörschnecke, Reiz-Reaktions-Schema & Reflexe)*
 
 ### 2. ⌨️ Touch-Optimized Math Keyboard & Live KaTeX
 * Tailored for school iPads and mobile touchscreens with $\ge 48\text{px}$ touch targets.
@@ -97,14 +100,14 @@ Governed by the rule set, the pipeline translates the input into complete intera
 
 ### 4. 🐱 Suki Mascot & Gamification
 * Real-time mood reactions, confetti celebrations, and encouraging feedback in Swiss German/Standard German tone.
-* Level progression from *Anfänger:in* up to *Mathe-König:in*, achievement trophies, and streaks.
+* Level progression from *Anfänger:in* up to *Sek-P-Champion*, achievement trophies, and streaks.
 
 ### 5. 🛠️ Fehler-Schmiede (Mistake Vault)
 * Questions answered incorrectly automatically land in the student's personal vault for targeted spaced repetition.
 * Solved questions are tombstoned and archived.
 
 ### 6. 📝 Exam Simulation (Prüfungsmodus)
-* Realistic 20-question randomized mock test across all worlds.
+* Realistic 20-question randomized mock test across all worlds and subjects (including the new NT exam pool).
 * Swiss standard grading scale (Grade 1.0 to 6.0, rounded to quarters).
 
 ---

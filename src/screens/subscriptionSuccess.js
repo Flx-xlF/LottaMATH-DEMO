@@ -22,7 +22,7 @@ export function renderSubscriptionSuccess(container, callbacks = {}) {
         Willkommen im Premium!
       </h1>
       <p class="text-muted" style="font-size: 1.05rem; line-height: 1.6;">
-        Deine Zahlung war erfolgreich. Alle Mathe-Welten, der Prüfungsmodus und die Fehler-Schmiede sind jetzt freigeschaltet!
+        Deine Zahlung war erfolgreich. Alle Lern-Welten, der Prüfungsmodus und die Fehler-Schmiede sind jetzt freigeschaltet!
       </p>
 
       <div style="margin: 1.5rem 0 0.5rem; width: 100%;">

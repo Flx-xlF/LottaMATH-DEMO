@@ -71,7 +71,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 window.addEventListener('appinstalled', () => {
   window.deferredPrompt = null;
-  console.log('LottaMATH PWA was successfully installed');
+  console.log('LottaLEARN PWA was successfully installed');
 });
 
 // PWA Installation Reminder cooldown (3 days in milliseconds)
@@ -617,7 +617,13 @@ class LottaMathApp {
               const nextLevelNum = this.lastLevelInfo.levelNum + 1;
               if (nextLevelNum <= 5) {
                 const nextLevelId = `${this.lastLevelInfo.worldId}-${nextLevelNum}`;
-                this.navigate(`#/quiz/${this.lastLevelInfo.worldId}/${nextLevelId}`);
+                const nextLevelDef = getLevel(this.lastLevelInfo.worldId, nextLevelNum);
+                const attempts = (this.gameState.levels && this.gameState.levels[nextLevelId] && this.gameState.levels[nextLevelId].attempts) || 0;
+                if (attempts === 0 && nextLevelDef && !nextLevelDef.isBoss) {
+                  this.navigate(`#/tutorial/${this.lastLevelInfo.worldId}/${nextLevelId}`);
+                } else {
+                  this.navigate(`#/quiz/${this.lastLevelInfo.worldId}/${nextLevelId}`);
+                }
                 return;
               }
             }

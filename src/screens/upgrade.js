@@ -25,11 +25,8 @@ export function renderUpgrade(container, callbacks = {}) {
 
     <div class="upgrade-screen__hero text-center" style="max-width: 600px;">
       <div style="font-size: 3rem; margin-bottom: 0.5rem;">⭐</div>
-      <div style="display: inline-block; margin-bottom: 0.8rem; padding: 6px 16px; border-radius: 9999px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-weight: 600; font-size: 0.9rem;">
-        ✨ Demo-Modus: Alle Welten 1–8 sind bereits für dich freigeschaltet!
-      </div>
       <h1 class="text-gradient" style="font-size: 2.2rem; margin-bottom: 0.5rem;">
-        LottaMATH Premium (Vorschau)
+        LottaLEARN Premium
       </h1>
       <p class="text-muted" style="font-size: 1.05rem; line-height: 1.5;">
         Schalte alle Welten, den Prüfungsmodus und die Fehler-Schmiede unbegrenzt frei!
@@ -53,14 +50,14 @@ export function renderUpgrade(container, callbacks = {}) {
         </div>
 
         <ul class="pricing-features flex-col gap-xs text-left" style="list-style: none; padding: 0; margin: 1rem 0; font-size: 0.95rem;">
-          <li>✨ Alle Mathe-Welten (1–5)</li>
+          <li>✨ Alle Lern-Welten & Fächer</li>
           <li>🎯 Prüfungsmodus & Noten-Check</li>
           <li>🛠️ Fehler-Schmiede & Archiv</li>
           <li>📱 Bis zu 8 Profile pro Gerät</li>
         </ul>
 
         <button type="button" class="btn btn--secondary btn--full" id="plan-monthly-btn" style="min-height: 48px; font-weight: 600;">
-          Demo: Simulation starten
+          Monatlich starten
         </button>
       </div>
 
@@ -82,7 +79,7 @@ export function renderUpgrade(container, callbacks = {}) {
         </div>
 
         <ul class="pricing-features flex-col gap-xs text-left" style="list-style: none; padding: 0; margin: 1rem 0; font-size: 0.95rem;">
-          <li>✨ Alle Mathe-Welten (1–5)</li>
+          <li>✨ Alle Lern-Welten & Fächer</li>
           <li>🎯 Prüfungsmodus & Noten-Check</li>
           <li>🛠️ Fehler-Schmiede & Archiv</li>
           <li>📱 Bis zu 8 Profile pro Gerät</li>

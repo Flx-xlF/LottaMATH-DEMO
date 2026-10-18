@@ -808,9 +808,13 @@ export function mergeStates(localState, serverState) {
   // 8. Theme: Local preference wins
   const theme = localState.theme || serverState.theme || 'dark';
 
+  // 9. Active Subject: Local preference wins
+  const activeSubject = localState.activeSubject || serverState.activeSubject || 'mathe';
+
   return {
     generation,
     totalXP,
+    activeSubject,
     levels: mergedLevels,
     streak: mergedStreak,
     achievements: mergedAchievements,

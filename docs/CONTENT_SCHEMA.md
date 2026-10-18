@@ -1,27 +1,27 @@
-# LottaMATH Content Schema & Developer Guide
+# LottaLEARN Content Schema & Developer Guide
 
-This document defines the strict architecture, data schemas, and pedagogical principles required when adding or maintaining topics, worlds, levels, questions, and tutorials in **LottaMATH**.
+This document defines the strict architecture, data schemas, and pedagogical principles required when adding or maintaining topics, worlds, levels, questions, and tutorials in **LottaLEARN**.
 
 ---
 
 # PART I: CONTENT STRATEGY & PEDAGOGY
 
 ## 0. The User Persona: Lotta (13, 2. Sekundarstufe, Niveau P)
-*Every single design decision, question, text, and SVG in LottaMATH is built specifically for Lotta.*
+*Every single design decision, question, text, and SVG in LottaLEARN is built specifically for Lotta.*
 
 - **Age & Academic Context:** 13 years old, 2. Sekundarstufe, Niveau P (Basel-Landschaft / Swiss Lehrplan 21). High academic performance expectations, preparing for Gymnasium/FMS.
-- **The Core Frustration (Effort vs. Return Mismatch):** Lotta invests heavy effort and long study hours into math, yet test grades fall short of her expectations. This mismatch triggers math anxiety, self-doubt, and fear of failure.
-- **Learning Style (Visual & Spatial First):** Lotta is an intensely visual learner. Dense symbolic algebra (e.g. $(a+b)^2 = a^2 + 2ab + b^2$) looks arbitrary to her until she sees it physically as a split rectangle or animated folding model. Animations and geometric sketches turn abstract rules into tangible intuition.
-- **The "Why do I care?" Need (Real-World Relevance):** Lotta disengages if math feels detached from reality. Every mathematical concept must immediately answer *"Where does this matter in my life?"* through real-world hooks (gaming XP, phone plans, shopping sales, architecture, fair sharing).
-- **Cognitive Load & Mental Math:** Multi-digit arithmetic and tedious manual calculation exhaust her working memory and lead to careless slips. LottaMATH strictly guarantees friendly numbers so 100% of her cognitive focus is reserved for conceptual mastery and structure recognition.
+- **The Core Frustration (Effort vs. Return Mismatch):** Lotta invests heavy effort and long study hours into math and sciences, yet test grades fall short of her expectations. This mismatch triggers anxiety, self-doubt, and fear of failure.
+- **Learning Style (Visual & Spatial First):** Lotta is an intensely visual learner. Dense symbolic algebra and abstract scientific terms look arbitrary to her until she sees them physically as diagrams, ray models, or interactive schematics. Animations and geometric sketches turn abstract rules into tangible intuition.
+- **The "Why do I care?" Need (Real-World Relevance):** Lotta disengages if material feels detached from reality. Every concept must immediately answer *"Where does this matter in my life?"* through real-world hooks (optics in cameras/glasses, acoustic hearing damage, gaming XP, shopping sales).
+- **Cognitive Load & Mental Math:** Multi-digit arithmetic and tedious manual calculation exhaust her working memory and lead to careless slips. LottaLEARN strictly guarantees friendly numbers so 100% of her cognitive focus is reserved for conceptual mastery and structure recognition.
 
 ---
 
 ## 1. Core Pedagogical Principles & Vocabulary
-*These principles form the foundation of LottaMATH's learning experience.*
+*These principles form the foundation of LottaLEARN's learning experience.*
 
-1. **Visual Learning First:** Emphasize intuitive mental models (**Rechteckmodell / Area Models**, **Kachelmodell / Algebra Tiles**) before abstract algebraic notation.
-2. **The 80/20 Pareto Principle:** Focus on the **20% core patterns** (e.g., area expansion, minus brackets, middle term $2ab$ in binomials) that yield **80% of exam points**, reducing cognitive overwhelm and test anxiety for Lotta.
+1. **Visual Learning First:** Emphasize intuitive mental models (**Rechteckmodell / Area Models**, **Kachelmodell / Algebra Tiles**, anatomical & optical ray sketches) before abstract notation.
+2. **The 80/20 Pareto Principle:** Focus on the **20% core patterns** (e.g., area expansion, minus brackets, middle term $2ab$ in binomials, focal point positioning in eye defects) that yield **80% of exam points**, reducing cognitive overwhelm and test anxiety for Lotta.
 3. **Empathetic Mascot (Suki):** Suki the cat provides emotional safety, normalizes learning from mistakes, and provides relatable real-world context. Suki's messages support **`{name}` interpolation** to directly address the active student profile (e.g., `"Toll gemacht, {name}!"`).
 4. **Fehler-Schmiede (Mistake Vault):** A remediation system where incorrectly answered questions are stored for later practice. Mastery awards +15 XP.
 5. **Math Vocabulary Standards (Baselland Niveau P):**
@@ -39,9 +39,9 @@ This document defines the strict architecture, data schemas, and pedagogical pri
 
 ---
 
-## 2. The 6 Golden Rules of Question Creation
+## 2. The 8 Golden Rules of Question Creation (Math Edition)
 > [!IMPORTANT]
-> **To ensure 100% quality and consistency, every single question added to LottaMATH MUST adhere to these 6 Golden Rules.**
+> **To ensure 100% quality and consistency, every single math question added to LottaLEARN MUST adhere to these 8 Golden Rules.**
 
 ### 🥇 Rule 1: Question Uniqueness & Diversity (No Clones)
 Never create identical or near-identical questions in the same world (e.g., merely changing variable $x$ to $y$ or $5$ to $6$). Every question must target a distinct algebraic pattern, operation order, or geometric configuration.
@@ -71,13 +71,66 @@ Every question must have exactly 3 progressive hints. There are no penalties for
 - **Variable Visibility & Anti-Spoiler (Calculation Tasks):** For calculation problems, every known variable from the formula ($g$, $h$, $a$) and the unknown target ($?$) must have visible dimension indicators (lines, arrows, high-contrast labels) in the sketch. NEVER print the calculated solution into the sketch or the prompt text. If asking for a specific variable (e.g., Grundseite $g$), label it as $g = ?$ in the sketch. Use `Fläche = ?` or dimension labels.
 - **Formula Identification Anti-Spoiler (Matching / Classification Tasks):** In questions where students must identify, match, or assign formulas to geometric shapes (e.g., `drag-group` or `multiple-choice` matching formulas to shapes), sketches **MUST NOT** include the formula's variable letter annotations ($a, c, h, e, f, g$). Showing $a, c, h$ on a trapezoid or $e, f$ on a kite reduces the problem to mindless letter matching rather than conceptual geometry. In such tasks, display only clean geometric shapes with structural lines (e.g., dashed heights or diagonals) and figure names.
 
-### 🥇 Rule 5: Dummy Text Integrity (Fill-in)
-For `fill-in` questions, the `interaction.placeholder` must **NEVER** reveal the question's solution and must **NEVER** be identical to `correctAnswer`! Always provide a generic, structurally similar example from a different problem (e.g., `z.B. 3x`, `z.B. 4(x + 1)`, `z.B. 25`).
+### 🥇 Rule 5: Keyboard Reachability & Permutation Completeness
+`fill-in` and `step-builder` solutions must be 100% typable on the custom iPad math keyboard (only `0-9`, `x`, `y`, `a`, `b`, `²`, `³`, `+`, `-`, `·`, `/`, `,`, `(`, `)`). No other letters, units, or `=` signs. All commutative factor permutations in parentheses (e.g. `(x + 7)(x - 7)` and `(x - 7)(x + 7)`) must be registered in `acceptedAnswers`.
 
-### 🥇 Rule 6: Interaction Randomization & Anti-Spoiler Order Integrity
+### 🥇 Rule 6: Dummy Placeholder Integrity (Fill-in)
+The `interaction.placeholder` must never reveal `correctAnswer`, must never equal the `commonMistake` trap value (preventing cognitive anchoring), and must use distinct numbers from a different problem format example (e.g., `z.B. 3x`, `z.B. 4(x + 1)`, `z.B. 25`).
+
+### 🥇 Rule 7: Diagnostic Distractor Design (Multiple Choice)
+Every multiple-choice task provides 4 options where all 3 distractors map directly to real, predictable student misconceptions (e.g. forgetting $\div 2$, minus-bracket sign flip, perimeter vs. area). All 4 options maintain length and stylistic parity to eliminate test-wiseness guessing.
+
+### 🥇 Rule 8: Interaction Randomization & Anti-Spoiler Order Integrity
 - **Mandatory Pre-Scrambling in Data:** In question data files (`world*.js`, `examPool.js`), `interaction.items` and `options` must **NEVER** be authored in the order of their correct solution or in 1:1 alignment with target categories/groups (`groups`).
 - **Engine-Level Dynamic Shuffling:** All interactive question types presenting choices or pool items (`multiple-choice`, `drag-group`, `drag-order`) must be dynamically shuffled via Fisher-Yates when session or exam questions are generated (`questionEngine.js`).
 - **UI-Level Collision Safeguard:** The quiz renderer (`quiz.js`) must defensively verify that the rendered item order does not coincidentally match the solved order 1:1. If a 1:1 alignment with group targets is detected, items must be swapped before rendering to prevent trivial drag-and-drop solutions.
+
+---
+
+## 2b. The 8 Golden Rules of Science & Humanities Content Creation (NT & RZG Edition)
+> [!IMPORTANT]
+> **When expanding LottaLEARN into Natur & Technik (Biology, Physics, Chemistry) and RZG (History, Geography), questions MUST adhere to these 8 foundational rules:**
+
+### 🧬 Rule 1: Complete Causal Chains (Ursache → Mechanismus → Auswirkung)
+In science at Sekundarschule Niveau P, explanations must never stop at naming a superficial fact or symptom. Every explanation and correct answer must provide the complete scientific chain:
+- **Ursache:** Anatomical/physical condition (e.g., *Augapfel ist zu lang*).
+- **Physikalischer/Biologischer Mechanismus:** Optical ray deflection or neural transmission (e.g., *Lichtstrahlen brechen zu stark und schneiden sich VOR der Netzhaut*).
+- **Auswirkung:** Observable phenomenon (e.g., *unscharfer Zerstreuungskreis auf der Netzhaut, ferne Gegenstände erscheinen unscharf*).
+Answers that omit the intermediate mechanism (such as Worksheet AM 3.12b's classic trap: "Das Auge ist länglich") are treated as incomplete circular reasoning.
+
+### 🧬 Rule 2: Strict Sek P Terminology & Taxonomy
+Always use the standardized curriculum terminology:
+- **Eye & Vision:** *Hornhaut (Cornea)*, *Augenlinse*, *Ringmuskel / Ziliarmuskel*, *Zonulafasern*, *Netzhaut (Retina)*, *Gelber Fleck*, *Blinder Fleck*, *Sehnerv*, *Akkommodation*, *Konvexlinse (Sammellinse)*, *Konkavlinse (Zerstreuungslinse)*, *Kurzsichtigkeit (Myopie)*, *Weitsichtigkeit (Hyperopie)*, *Hornhautverkrümmung (Astigmatismus)*.
+- **Ear & Hearing:** *Ohrmuschel*, *Gehörgang*, *Trommelfell*, *Gehörknöchelchen (Hammer, Amboss, Steigbügel)*, *ovales Fenster*, *Hörschnecke (Cochlea)*, *Haarsinneszellen*, *Hörnerv*, *Eustachische Röhre (Ohrtrompete)*, *Dezibel (dB)*, *Schallleitungsschwerhörigkeit*, *Schallempfindungsschwerhörigkeit*, *Tinnitus*.
+- **Nervous System:** *Reiz*, *Rezeptor / Sinneszelle*, *sensorischer (afferenter) Nerv*, *Zentralnervensystem (Gehirn & Rückenmark)*, *motorischer (efferenter) Nerv*, *Effektor (Muskel/Drüse)*, *Reaktion*, *Reflexbogen*, *Kniesehnenreflex*.
+
+### 🧬 Rule 3: Diagnostic 3-Trap Distractors
+Every multiple choice question must provide 4 options where each of the 3 distractors corresponds to a documented Sek P cognitive trap:
+- **Trap A (Opposite Mechanism):** Inverting cause and effect (e.g. claiming a concave lens is needed for farsightedness, or that the ciliary muscle contracts for distance vision).
+- **Trap B (Superficial/Circular Description):** Stating the condition without the mechanism (e.g. AM 3.12b: "Sieht unscharf, weil die Augenlinse kaputt ist").
+- **Trap C (Category Confusion / Anachronism):** Mixing sound waves with light waves (e.g. claiming sound can propagate through vacuum) or mixing sensory and motor pathways.
+
+### 🧬 Rule 4: 3-Tier Pedagogical Hint Ladder & CommonMistake Remediation
+Every question must contain:
+- **Level 1 (`💡 Tipp`):** Intuitive everyday observation or orienting question.
+- **Level 2 (`🔑 Hinweis`):** The underlying biological or physical principle.
+- **Level 3 (`✅ Lösung`):** Complete exam-grade formulation.
+- **`commonMistake`:** Explicit explanation of why students frequently fall into the primary trap.
+
+### 🧬 Rule 5: Touch-Optimized Interaction Types (Zero Keyboard Traps)
+For Science and Humanities, avoid `fill-in` text inputs on mobile iPad to prevent keyboard mismatches (since `mathKeyboard.js` is optimized for numeric/algebraic entry) and German spelling penalties. Use:
+- `multiple-choice` for conceptual reasoning and causal analysis.
+- `drag-group` for classifying anatomy, lens types, or reaction types.
+- `drag-order` for chronological sequences (e.g., ray path from light source to brain, acoustic transmission through the ear ossicles, stimulus-reaction arc).
+
+### 🧬 Rule 6: Anti-Spoiler Visual Scaffolding
+Visual schematics (`custom-svg`) must illustrate anatomical organs, ray paths, and acoustic waves with high aesthetic fidelity, but must NEVER label the solution answer or state the diagnosis directly in the graphic.
+
+### 🧬 Rule 7: Direct Curriculum & Worksheet AM 3.12 / 3.13 Alignment
+Questions must directly prepare students for canton-specific Sek P exams and official school worksheets (e.g., distinguishing eyeball length from lens flexibility, correcting with diverging vs. converging lenses).
+
+### 🧬 Rule 8: Pre-Scrambled Data & Shuffled Delivery
+All draggable items and option lists must be stored pre-scrambled in data files and randomized at runtime via Fisher-Yates.
 
 ---
 

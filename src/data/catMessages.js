@@ -9,7 +9,7 @@ export const CAT_MESSAGES = {
   greeting: [
     'Miau! Schön, dass du da bist, {name}! 🐾',
     'Schnurr… lass uns heute ein paar Terme zähmen!',
-    '*streckt sich* Bereit für dein nächstes Mathe-Abenteuer?',
+    '*streckt sich* Bereit für dein nächstes Lern-Abenteuer?',
     'Miau! Zusammen knacken wir jede Aufgabe! ✨',
     'Hey {name}! Ich hab meine Pfoten schon aufgewärmt. 🐱',
     'Schnurr… mit jedem Schritt wirst du sicherer!',
@@ -58,7 +58,7 @@ export const CAT_MESSAGES = {
     'Gute Frage! Lass mich dir zeigen, wozu man das braucht… 🐱',
     'Hmm, wofür braucht man das im echten Leben? Schau mal! 🐾',
     'Miau! Das ist viel praktischer als du denkst! ✨',
-    '*legt den Kopf schief* Mathe steckt überall im Alltag!',
+    '*legt den Kopf schief* Spannendes Wissen steckt überall im Alltag!',
     'Wusstest du schon? Das begegnet dir überall! 💡',
     '💡 80/20-Fokus: Konzentriere dich auf die 3 Kern-Muster, der Rest ergibt sich von alleine! 🐱',
   ],

@@ -24,7 +24,7 @@ export const ACHIEVEMENTS = [
   {
     id: 'streak_7',
     name: 'Wochenkriegerin',
-    description: 'Eine ganze Woche jeden Tag Mathe geübt!',
+    description: 'Eine ganze Woche jeden Tag fleissig geübt!',
     icon: '⚡',
   },
   {
@@ -96,7 +96,7 @@ export const ACHIEVEMENTS = [
   {
     id: 'xp_2000',
     name: '2000 XP',
-    description: 'Sammle 2000 Erfahrungspunkte — Mathe-Star!',
+    description: 'Sammle 2000 Erfahrungspunkte — Lern-Star!',
     icon: '💫',
   },
 ];
@@ -121,7 +121,9 @@ export function checkAchievements(state) {
   const isWorld3Complete = state.levels && state.levels['3-5'] && state.levels['3-5'].completed;
   const isWorld4Complete = state.levels && state.levels['4-5'] && state.levels['4-5'].completed;
 
-  const bossCount = [isWorld1Complete, isWorld2Complete, isWorld3Complete, isWorld4Complete].filter(Boolean).length;
+  const allBossKeys = ['1-5', '2-5', '3-5', '4-5', '5-5', '6-5', '7-5', '8-5', '9-5', '10-5'];
+  const anyBossComplete = allBossKeys.some((k) => state.levels && state.levels[k] && state.levels[k].completed);
+  const termeBossCount = [isWorld1Complete, isWorld2Complete, isWorld3Complete, isWorld4Complete].filter(Boolean).length;
 
   const examHistory = state.examHistory || [];
   const hasCompletedExam = examHistory.length > 0;
@@ -137,8 +139,8 @@ export function checkAchievements(state) {
     world2_done: isWorld2Complete,
     world3_done: isWorld3Complete,
     world4_done: isWorld4Complete,
-    boss_slayer: bossCount >= 1,
-    all_bosses: bossCount >= 4,
+    boss_slayer: anyBossComplete,
+    all_bosses: termeBossCount >= 4,
     exam_ready: hasCompletedExam,
     exam_45: bestGrade >= 4.5,
     exam_5: bestGrade >= 5.0,

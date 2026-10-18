@@ -12,7 +12,9 @@ import { WORLD5_QUESTIONS } from '../data/questions/world5.js';
 import { WORLD6_QUESTIONS } from '../data/questions/world6.js';
 import { WORLD7_QUESTIONS } from '../data/questions/world7.js';
 import { WORLD8_QUESTIONS } from '../data/questions/world8.js';
-import { EXAM_QUESTIONS_FLAECHEN, EXAM_QUESTIONS_TERME } from '../data/questions/examPool.js';
+import { WORLD9_QUESTIONS } from '../data/questions/world9.js';
+import { WORLD10_QUESTIONS } from '../data/questions/world10.js';
+import { EXAM_QUESTIONS_FLAECHEN, EXAM_QUESTIONS_TERME, EXAM_QUESTIONS_NT } from '../data/questions/examPool.js';
 import { getLevel } from '../data/worlds.js';
 
 const ALL_QUESTIONS_MAP = {
@@ -24,6 +26,8 @@ const ALL_QUESTIONS_MAP = {
   6: WORLD6_QUESTIONS,
   7: WORLD7_QUESTIONS,
   8: WORLD8_QUESTIONS,
+  9: WORLD9_QUESTIONS,
+  10: WORLD10_QUESTIONS,
 };
 
 /**
@@ -73,29 +77,38 @@ export function getQuestionsForLevel(worldId, levelNum, requestedCount) {
   const shuffledPool = shuffle(pool);
   const selected = shuffledPool.slice(0, Math.min(count, shuffledPool.length));
 
-  // For multiple-choice questions, shuffle options while preserving the correct one
-  // For drag-group questions, shuffle items so they are not rendered in pre-sorted order
-  return selected.map((q) => {
-    if (q.type === 'multiple-choice' && q.interaction && Array.isArray(q.interaction.options)) {
-      return {
-        ...q,
-        interaction: {
-          ...q.interaction,
-          options: shuffle(q.interaction.options),
-        },
-      };
-    }
-    if (q.type === 'drag-group' && q.interaction && Array.isArray(q.interaction.items)) {
-      return {
-        ...q,
-        interaction: {
-          ...q.interaction,
-          items: shuffle(q.interaction.items),
-        },
-      };
-    }
-    return q;
-  });
+  return selected.map(prepareQuestionForDisplay);
+}
+
+/**
+ * Prepares a question for display by shuffling interactive elements (MC options, drag items)
+ * @param {Object} q
+ * @returns {Object}
+ */
+function prepareQuestionForDisplay(q) {
+  if (!q || !q.interaction) return q;
+
+  if (q.type === 'multiple-choice' && Array.isArray(q.interaction.options)) {
+    return {
+      ...q,
+      interaction: {
+        ...q.interaction,
+        options: shuffle(q.interaction.options),
+      },
+    };
+  }
+
+  if ((q.type === 'drag-group' || q.type === 'drag-order') && Array.isArray(q.interaction.items)) {
+    return {
+      ...q,
+      interaction: {
+        ...q.interaction,
+        items: shuffle(q.interaction.items),
+      },
+    };
+  }
+
+  return q;
 }
 
 /**
@@ -107,7 +120,9 @@ export function getQuestionsForLevel(worldId, levelNum, requestedCount) {
 export function getExamQuestions(count = 20, topicId = null) {
   let pool = [];
 
-  if (topicId === 'terme') {
+  if (topicId === 'sinne_optik') {
+    pool = [...EXAM_QUESTIONS_NT];
+  } else if (topicId === 'terme') {
     pool = [...EXAM_QUESTIONS_TERME];
   } else if (topicId === 'flaechen') {
     pool = [...EXAM_QUESTIONS_FLAECHEN];
@@ -121,27 +136,7 @@ export function getExamQuestions(count = 20, topicId = null) {
 
   const selected = shuffle(pool).slice(0, count);
 
-  return selected.map((q) => {
-    if (q.type === 'multiple-choice' && q.interaction && Array.isArray(q.interaction.options)) {
-      return {
-        ...q,
-        interaction: {
-          ...q.interaction,
-          options: shuffle(q.interaction.options),
-        },
-      };
-    }
-    if (q.type === 'drag-group' && q.interaction && Array.isArray(q.interaction.items)) {
-      return {
-        ...q,
-        interaction: {
-          ...q.interaction,
-          items: shuffle(q.interaction.items),
-        },
-      };
-    }
-    return q;
-  });
+  return selected.map(prepareQuestionForDisplay);
 }
 
 /**
@@ -151,7 +146,7 @@ export function getExamQuestions(count = 20, topicId = null) {
  */
 export function getQuestionById(questionId) {
   if (questionId && questionId.startsWith('exam_')) {
-    const foundExam = [...EXAM_QUESTIONS_FLAECHEN, ...EXAM_QUESTIONS_TERME].find((q) => q.id === questionId);
+    const foundExam = [...EXAM_QUESTIONS_FLAECHEN, ...EXAM_QUESTIONS_TERME, ...EXAM_QUESTIONS_NT].find((q) => q.id === questionId);
     if (foundExam) return foundExam;
   }
 
@@ -172,17 +167,7 @@ export function getQuestionsByIds(ids = []) {
   ids.forEach((id) => {
     const q = getQuestionById(id);
     if (q) {
-      if (q.type === 'multiple-choice' && q.interaction && Array.isArray(q.interaction.options)) {
-        list.push({
-          ...q,
-          interaction: {
-            ...q.interaction,
-            options: shuffle(q.interaction.options),
-          },
-        });
-      } else {
-        list.push(q);
-      }
+      list.push(prepareQuestionForDisplay(q));
     }
   });
   return list;

@@ -291,6 +291,107 @@ const TUTORIAL_CONTENT = {
     ],
     rule: '💡 80/20-Prüfungsfokus: Ein Verschnitt von $+20\\%$ bedeutet Multiplikation mit $1{,}20$ – Runde das Endergebnis bei Stückzahlen immer auf ganze Ziegel auf!',
   },
+
+  // =========================================================================
+  // Welt 9: Sehsinn & Optik (NT)
+  // =========================================================================
+  '9-1': {
+    title: 'Lichtstrahlen & Linsenarten',
+    emoji: '🔍',
+    body: 'Licht breitet sich von Lichtquellen **geradlinig** aus. Trifft es auf eine Linse, wird es abgelenkt (**Lichtbrechung**).',
+    latexExample: '',
+    breakdown: [
+      { label: 'Konvexlinse (Sammellinse)', value: 'In der Mitte dicker', desc: 'Bündelt einfallende Lichtstrahlen im Brennpunkt (Lupe, Mikroskop)' },
+      { label: 'Konkavlinse (Zerstreuungslinse)', value: 'In der Mitte dünner', desc: 'Zerstreut einfallende Lichtstrahlen nach aussen (bestimmte Brillen)' },
+    ],
+    rule: '💡 80/20-Prüfungstipp: Konvex = bauchig nach aussen (Sammellinse); Konkav = eingewölbt nach innen (wie eine Höhle/Cave, Zerstreuungslinse)!',
+  },
+  '9-2': {
+    title: 'Wie entsteht ein Bild im Auge?',
+    emoji: '👁️',
+    body: 'Der Sehvorgang folgt einer festen Kette: Licht wird reflektiert, an Hornhaut und Augenlinse gebrochen und auf der Netzhaut gebündelt.',
+    latexExample: '',
+    breakdown: [
+      { label: '1. Hornhaut & Linse', value: 'Zweifache Brechung', desc: 'Bündelt die Lichtstrahlen (Hornhaut bricht am stärksten)' },
+      { label: '2. Netzhaut', value: 'Umgekehrt & verkleinert', desc: 'Sinneszellen wandeln Licht in elektrische Nervenimpulse um' },
+      { label: '3. Sehnerv & Gehirn', value: 'Aufrecht drehen', desc: 'Das Gehirn verarbeitet die Impulse zur bewussten Wahrnehmung' },
+    ],
+    rule: '💡 80/20-Prüfungsfokus: Auf der Netzhaut steht das Bild IMMER auf dem Kopf (umgekehrt) und ist verkleinert – erst das Gehirn dreht es aufrecht!',
+  },
+  '9-3': {
+    title: 'Akkommodation: Scharfeinstellung',
+    emoji: '🎯',
+    body: 'Die dynamische Anpassung der Linsenbrechkraft an nahe oder weit entfernte Gegenstände heisst **Akkommodation**.',
+    latexExample: '',
+    breakdown: [
+      { label: 'Blick in die Ferne', value: 'Ringmuskel entspannt', desc: 'Augenlinse flach gezogen → Licht muss nur schwach gebrochen werden' },
+      { label: 'Blick in die Nähe', value: 'Ringmuskel angespannt', desc: 'Augenlinse stark gewölbt (kugelig) → Licht muss stark gebrochen werden' },
+    ],
+    rule: '⚠️ Häufigste Prüfungsfalle: Beim Fernsehen ist der Ringmuskel ENTSPANNT (Linse flach). Beim Nahsehen muss er sich ANSPANNEN (Linse dick)!',
+  },
+  '9-4': {
+    title: 'Sehfehler & Brillen (AM 3.12 / 3.13)',
+    emoji: '👓',
+    body: 'Wenn der Augapfel nicht die ideale Form hat, treffen sich die gebrochenen Lichtstrahlen nicht exakt auf der Netzhaut.',
+    latexExample: '',
+    breakdown: [
+      { label: 'Kurzsichtigkeit', value: 'Augapfel zu lang', desc: 'Brennpunkt VOR Netzhaut → Korrektur: Konkavlinse (Zerstreuungslinse)' },
+      { label: 'Weitsichtigkeit', value: 'Augapfel zu kurz', desc: 'Brennpunkt HINTER Netzhaut → Korrektur: Konvexlinse (Sammellinse)' },
+      { label: 'Hornhautverkrümmung', value: 'Hornhaut unregelmässig', desc: 'Verzerrte Sicht in Nah- und Fernbereich' },
+    ],
+    rule: '💡 AM-3.12-Prüfungsregel: In der Prüfung niemals nur schreiben "das Auge ist oval"! Immer die Kette nennen: Augapfel zu lang → Brennpunkt VOR Netzhaut!',
+  },
+
+  // =========================================================================
+  // Welt 10: Gehörsinn & Nervensystem (NT)
+  // =========================================================================
+  '10-1': {
+    title: 'Weg des Schalls im Ohr',
+    emoji: '👂',
+    body: 'Schall breitet sich als Druckwellen in der Luft aus und wird im Ohr mechanisch verstärkt und in Nervensignale umgewandelt.',
+    latexExample: '',
+    breakdown: [
+      { label: '1. Aussenohr', value: 'Ohrmuschel & Gehörgang', desc: 'Fängt Schallwellen wie ein Trichter ein' },
+      { label: '2. Mittelohr', value: 'Trommelfell & Gehörknöchelchen', desc: 'Hammer, Amboss & Steigbügel verstärken die mechanische Schwingung' },
+      { label: '3. Innenohr', value: 'Hörschnecke & Hörnerv', desc: 'Haarsinneszellen in Flüssigkeit erzeugen elektrische Impulse' },
+    ],
+    rule: '💡 Prüfungsreihenfolge: Ohrmuschel → Gehörgang → Trommelfell → Hammer → Amboss → Steigbügel → Hörschnecke → Hörnerv!',
+  },
+  '10-2': {
+    title: 'Räumliches Hören & Gehörschutz',
+    emoji: '🎧',
+    body: 'Zwei Ohren ermöglichen dem Gehirn, Schallquellen im Raum durch Laufzeit- und Lautstärkeunterschiede präzise zu orten.',
+    latexExample: '',
+    breakdown: [
+      { label: 'Räumliches Hören', value: 'Zeit & Lautstärke', desc: 'Schall trifft das nähere Ohr wenige Millisekunden früher und lauter' },
+      { label: 'Trommelfellriss', value: 'Druck oder Fremdkörper', desc: 'Schall kann nicht mehr mechanisch auf die Knöchelchen übertragen werden' },
+      { label: 'Lärmschwerhörigkeit', value: 'Haarzellen zerstört', desc: 'Einmal zerstörte Sinneszellen in der Schnecke wachsen NIE nach!' },
+    ],
+    rule: '💡 80/20-Prüfungsfokus: Hörschäden entstehen in der Hörschnecke, wenn zu laute Musik die feinen Sinneshärchen dauerhaft abknickt.',
+  },
+  '10-3': {
+    title: 'Das Reiz-Reaktions-Schema',
+    emoji: '🧠',
+    body: 'Jede Reaktion auf unsere Umwelt folgt einer präzisen Kette von der Sinneszelle bis zum ausführenden Muskel.',
+    latexExample: '',
+    breakdown: [
+      { label: '1. Reiz', value: 'Licht, Schall, Druck, Geruch', desc: 'Wird von spezifischen Sinneszellen aufgenommen' },
+      { label: '2. Sensibler Nerv', value: 'Signal zum Zentrum', desc: 'Leitet elektrische Impulse zum Gehirn oder Rückenmark' },
+      { label: '3. Motorischer Nerv', value: 'Befehl zum Muskel', desc: 'Löst die Muskelbewegung oder Reaktion aus' },
+    ],
+    rule: '💡 Merksatz: Sensibel = hinführend (Sinnesorgan → Zentrum); Motorisch = wegführend (Zentrum → Muskel)!',
+  },
+  '10-4': {
+    title: 'Bewusste Reaktion vs. Reflex',
+    emoji: '⚡',
+    body: 'Nicht alle Reaktionen laufen über das denkende Grosshirn – unbewusste Schutzreflexe sparen lebensrettende Zeit.',
+    latexExample: '',
+    breakdown: [
+      { label: 'Bewusste Reaktion', value: 'Grosshirn beteiligt', desc: 'z.B. Torwart hechtet nach dem Ball (Verarbeitungszeit > 150 ms)' },
+      { label: 'Unbewusster Reflex', value: 'Rückenmark-Umschaltung', desc: 'z.B. Hand von heisser Herdplatte, Kniesehnenreflex (unter 50 ms)' },
+    ],
+    rule: '💡 80/20-Prüfungsfokus: Reflexe sind angeboren, unwillkürlich und laufen über das Rückenmark, um den Körper vor Gefahren zu schützen!',
+  },
 };
 
 export function renderTutorial(container, levelId, callbacks = {}) {
@@ -365,7 +466,8 @@ export function renderTutorial(container, levelId, callbacks = {}) {
 
   const ruleTextEl = screenEl.querySelector('#tutorial-rule-text');
   if (ruleTextEl) {
-    renderMathInText(ruleTextEl, data.rule);
+    const cleanRule = (data.rule || '').replace(/^💡\s*/, '');
+    renderMathInText(ruleTextEl, cleanRule);
   }
 
   const breakdownContainer = screenEl.querySelector('#tutorial-breakdown-container');
