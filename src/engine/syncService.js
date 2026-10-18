@@ -39,11 +39,11 @@ async function mockFetch(url, options = {}) {
       state_version: 1,
     };
   } else if (action === "lookup") {
-    const code = (body.recovery_code || "").trim().toUpperCase();
+    const code = normalizeRecoveryCode(body.recovery_code || "");
     const profiles = JSON.parse(localStorage.getItem("lottamath_profiles") || "[]");
     const match = profiles.find((p) => {
-      const stored = localStorage.getItem("lottamath_recovery_code_" + p.id);
-      return stored && stored.trim().toUpperCase() === code;
+      const stored = normalizeRecoveryCode(localStorage.getItem("lottamath_recovery_code_" + p.id) || "");
+      return stored && stored === code;
     });
     if (match) {
       const raw = localStorage.getItem("lottamath_profile_" + match.id + "_state");
@@ -185,6 +185,22 @@ export const RECOVERY_ALPHABET = 'ABCDEFGHJKMNPQRTUVWXYZ2346789';
  * Uses unambiguous uppercase letters and digits.
  * @returns {string}
  */
+
+/**
+ * Normalizes user input for recovery codes:
+ * Handles smart dashes, en-dashes, em-dashes, spaces, and formats 8 alphanumeric chars into XXXX-XXXX.
+ * @param {string} code
+ * @returns {string}
+ */
+export function normalizeRecoveryCode(code) {
+  if (!code || typeof code !== "string") return "";
+  const cleaned = code.replace(/[\s\u2010-\u2015\u2212-]+/g, "").toUpperCase();
+  if (cleaned.length === 8) {
+    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 8)}`;
+  }
+  return code.trim().toUpperCase();
+}
+
 export function generateClientRecoveryCode() {
   const getRandomChar = () => {
     if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
@@ -423,6 +439,7 @@ export async function pushState(profileId, gameState, retryOn401 = true) {
         sync_token: syncToken,
         state: gameState,
         state_version: currentVersion,
+        recovery_code: ensureLocalRecoveryCode(profileId),
       }),
     });
 
@@ -666,7 +683,7 @@ export async function linkProfile(syncToken) {
 export async function lookupByRecoveryCode(recoveryCode) {
   if (!recoveryCode) return null;
 
-  const cleanCode = recoveryCode.trim().toUpperCase();
+  const cleanCode = normalizeRecoveryCode(recoveryCode);
   const response = await mockFetch(`${API_BASE}/sync.php`, {
     method: 'POST',
     headers: {

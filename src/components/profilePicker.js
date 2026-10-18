@@ -23,7 +23,9 @@ import {
   setSyncVersion,
   lookupByRecoveryCode,
   setRecoveryCode,
+  getRecoveryCode,
   ensureLocalRecoveryCode,
+  normalizeRecoveryCode,
   syncNow,
   mergeStates,
   pushState,
@@ -237,8 +239,8 @@ export function renderProfilePicker(container, options = {}) {
     });
 
     const handleLink = async () => {
-      const rawInput = input.value.trim().toUpperCase();
-      if (!rawInput) {
+      const normalizedInput = normalizeRecoveryCode(input.value);
+      if (!normalizedInput) {
         statusEl.className = 'sync-link-status sync-link-status--error';
         statusEl.textContent = 'Bitte gib einen Code ein.';
         input.focus();
@@ -253,10 +255,10 @@ export function renderProfilePicker(container, options = {}) {
       try {
         let data;
         // Detect format: XXXX-XXXX (recovery code) vs 32-char hex (sync token)
-        if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
-          data = await lookupByRecoveryCode(rawInput);
+        if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedInput)) {
+          data = await lookupByRecoveryCode(normalizedInput);
         } else {
-          data = await linkProfile(rawInput.toLowerCase());
+          data = await linkProfile(normalizedInput.toLowerCase());
         }
 
         if (!data || !data.profile) {
@@ -275,14 +277,14 @@ export function renderProfilePicker(container, options = {}) {
         );
 
         // Store sync token and version
-        const tokenToStore = data.sync_token || (/^[a-f0-9]{32}$/i.test(rawInput) ? rawInput.toLowerCase() : null);
+        const tokenToStore = data.sync_token || (/^[a-f0-9]{32}$/i.test(normalizedInput) ? normalizedInput.toLowerCase() : null);
         if (tokenToStore) {
           setSyncToken(data.profile.profile_id, tokenToStore);
         }
         if (data.profile.recovery_code) {
           setRecoveryCode(data.profile.profile_id, data.profile.recovery_code);
-        } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
-          setRecoveryCode(data.profile.profile_id, rawInput);
+        } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedInput)) {
+          setRecoveryCode(data.profile.profile_id, normalizedInput);
         }
         if (data.state_version) {
           setSyncVersion(data.profile.profile_id, data.state_version);
@@ -758,6 +760,7 @@ export function openSyncAndLinkModal(profile, options = {}) {
 
   document.body.appendChild(overlay);
 
+  const codeDisplayEl = overlay.querySelector('.sync-code-display');
   const copyBtn = overlay.querySelector('#modal-copy-code-btn');
   const syncNowBtn = overlay.querySelector('#modal-sync-now-btn');
   const syncStatus = overlay.querySelector('#modal-sync-status');
@@ -765,6 +768,19 @@ export function openSyncAndLinkModal(profile, options = {}) {
   const linkConfirmBtn = overlay.querySelector('#modal-link-confirm-btn');
   const linkStatus = overlay.querySelector('#modal-link-status');
   const closeBtn = overlay.querySelector('#modal-close-btn');
+
+  // Automatically register and sync when opening the modal so the recovery code is immediately valid on the server
+  syncNow(profile.id).then((res) => {
+    if (res && res.success) {
+      const canonicalCode = getRecoveryCode(profile.id);
+      if (canonicalCode && codeDisplayEl) {
+        codeDisplayEl.textContent = canonicalCode;
+      }
+      syncStatus.className = 'sync-link-status sync-link-status--success';
+      syncStatus.textContent = 'Automatisch synchronisiert! ✅';
+      onStateChanged();
+    }
+  }).catch(() => {});
 
   closeBtn.addEventListener('click', () => {
     overlay.remove();
@@ -779,12 +795,13 @@ export function openSyncAndLinkModal(profile, options = {}) {
   });
 
   copyBtn.addEventListener('click', async () => {
+    const currentCode = (codeDisplayEl && codeDisplayEl.textContent.trim()) || recoveryCode;
     try {
-      await navigator.clipboard.writeText(recoveryCode);
+      await navigator.clipboard.writeText(currentCode);
       copyBtn.textContent = 'Kopiert! ✅';
       setTimeout(() => { copyBtn.textContent = 'Code kopieren 📋'; }, 1500);
     } catch {
-      prompt('Dein Sync-Code:', recoveryCode);
+      prompt('Dein Sync-Code:', currentCode);
     }
   });
 
@@ -799,6 +816,10 @@ export function openSyncAndLinkModal(profile, options = {}) {
     syncNowBtn.textContent = 'Jetzt synchronisieren 🔄';
 
     if (res.success) {
+      const canonicalCode = getRecoveryCode(profile.id);
+      if (canonicalCode && codeDisplayEl) {
+        codeDisplayEl.textContent = canonicalCode;
+      }
       syncStatus.className = 'sync-link-status sync-link-status--success';
       syncStatus.textContent = 'Erfolgreich synchronisiert! ✅';
       onStateChanged();
@@ -809,8 +830,8 @@ export function openSyncAndLinkModal(profile, options = {}) {
   });
 
   const handleLink = async () => {
-    const rawInput = linkInput.value.trim().toUpperCase();
-    if (!rawInput) {
+    const normalizedInput = normalizeRecoveryCode(linkInput.value);
+    if (!normalizedInput) {
       linkStatus.className = 'sync-link-status sync-link-status--error';
       linkStatus.textContent = 'Bitte gib einen Code ein.';
       linkInput.focus();
@@ -824,10 +845,10 @@ export function openSyncAndLinkModal(profile, options = {}) {
 
     try {
       let data;
-      if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
-        data = await lookupByRecoveryCode(rawInput);
+      if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedInput)) {
+        data = await lookupByRecoveryCode(normalizedInput);
       } else {
-        data = await linkProfile(rawInput.toLowerCase());
+        data = await linkProfile(normalizedInput.toLowerCase());
       }
 
       if (!data || !data.profile) {
@@ -844,14 +865,14 @@ export function openSyncAndLinkModal(profile, options = {}) {
         data.profile.avatar
       );
 
-      const tokenToStore = data.sync_token || (/^[a-f0-9]{32}$/i.test(rawInput) ? rawInput.toLowerCase() : null);
+      const tokenToStore = data.sync_token || (/^[a-f0-9]{32}$/i.test(normalizedInput) ? normalizedInput.toLowerCase() : null);
       if (tokenToStore) {
         setSyncToken(data.profile.profile_id, tokenToStore);
       }
       if (data.profile.recovery_code) {
         setRecoveryCode(data.profile.profile_id, data.profile.recovery_code);
-      } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(rawInput)) {
-        setRecoveryCode(data.profile.profile_id, rawInput);
+      } else if (/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normalizedInput)) {
+        setRecoveryCode(data.profile.profile_id, normalizedInput);
       }
       if (data.state_version) {
         setSyncVersion(data.profile.profile_id, data.state_version);
