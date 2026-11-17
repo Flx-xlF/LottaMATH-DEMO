@@ -1,7 +1,7 @@
 {
   "name": "lottamath-demo",
   "version": "1.0.0",
-  "description": "Interactive Demo of LottaMATH — Gamified Math Learning Platform for Swiss Secondary School (Sekundarstufe I)",
+  "description": "Interactive Demo of LottaLEARN (LottaMATH-DEMO) — Gamified, Privacy-First Multi-Subject Learning Platform for Swiss Secondary School (Sekundarstufe I, Niveau P)",
   "type": "module",
   "scripts": {
     "dev": "vite",

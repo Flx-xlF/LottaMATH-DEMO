@@ -2,9 +2,6 @@
 
 > **Gamified, Privacy-First Multi-Subject Learning Platform for Swiss Secondary School (*Sekundarstufe I, Niveau P*) & Gymnasium Preparation**  
 > *Built with Vanilla ES Modules, Vite, bundled KaTeX, Anime.js, SortableJS, and a Local-First PWA Architecture.*
->
-> Built with care (and a bit of madness) by [schema/f](https://github.com/Flx-xlF).  
-> Enjoy my work? [Tip me on Ko-fi](https://ko-fi.com/flxxlf)
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-F20587?style=flat-square&logo=github)](https://flx-xlf.github.io/LottaMATH-DEMO/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable-7c4dff?style=flat-square&logo=pwa)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
@@ -13,7 +10,6 @@
 [![KaTeX](https://img.shields.io/badge/KaTeX-LaTeX_Math-00d1b2?style=flat-square)](https://katex.org/)
 [![Curriculum](https://img.shields.io/badge/Curriculum-Lehrplan_21_%2F_Sek_P-10b981?style=flat-square)](https://v-ef.lehrplan.ch/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](./LICENSE)
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-Tip_Me-FF5E5B?style=flat-square&logo=kofi)](https://ko-fi.com/flxxlf)
 
 ---
 
